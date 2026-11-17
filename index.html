@@ -2,214 +2,216 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mon Garde-Manger • 223 recettes</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<meta name="theme-color" content="#FBF7F1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Garde-Manger">
+<title>Mon Garde-Manger</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%23E8613C'/><text x='50' y='68' font-size='56' text-anchor='middle'>🥘</text></svg>">
 <style>
-:root{--primary:#2A9D8F;--primary-dark:#21867A;--accent:#E9C46A;--danger:#E76F51;--bg:#F8F9FA;--surface:#FFF;--text:#2B2D42;--text-light:#6C757D;--radius:16px;--shadow:0 4px 20px rgba(0,0,0,.06);--transition:all .25s ease}
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:80px}
-header{background:var(--surface);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow);position:sticky;top:0;z-index:100}
-.logo{font-size:1.4rem;font-weight:800;color:var(--primary)}.logo span{color:var(--accent)}
-nav{display:flex;gap:6px;padding:12px 16px;background:var(--surface);border-bottom:1px solid #eee;overflow-x:auto}
-nav button{flex:1;padding:10px 12px;border:none;background:transparent;color:var(--text-light);font-weight:600;border-radius:10px;cursor:pointer;transition:var(--transition);white-space:nowrap;font-size:.9rem}
-nav button.active{background:var(--primary);color:#fff}nav button:hover:not(.active){background:#f1f3f5}
-main{padding:16px;max-width:1000px;margin:0 auto}
-.tab-content{display:none;animation:fadeIn .3s}.tab-content.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--surface);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
-.card h3{font-size:1.1rem;margin-bottom:12px}
-.form-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-.form-group input,.form-group select{flex:1;min-width:120px;padding:10px 12px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:.95rem}
-.form-group input:focus{border-color:var(--primary);outline:none}
-.btn{padding:10px 20px;border:none;border-radius:10px;font-weight:700;cursor:pointer;transition:var(--transition);font-size:.9rem}
-.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
-.btn-accent{background:var(--accent);color:var(--text)}.btn-accent:hover{filter:brightness(.95)}
-.btn-danger{background:var(--danger);color:#fff}
-.btn-outline{background:transparent;border:1.5px solid var(--primary);color:var(--primary)}.btn-outline:hover{background:#E0F2F1}
-.btn-sm{padding:6px 12px;font-size:.82rem}
-.inventory-list{list-style:none}
-.inventory-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f0f0f0}
-.item-name{font-weight:600}.item-meta{font-size:.8rem;color:var(--text-light)}
-.expiry-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.72rem;font-weight:700;margin-left:6px}
-.expiry-urgent{background:#FFE5E0;color:var(--danger)}.expiry-ok{background:#E0F2F1;color:var(--primary-dark)}
-.btn-icon{background:none;border:none;font-size:1.1rem;cursor:pointer;padding:4px 8px;border-radius:8px}.btn-icon:hover{background:#f1f3f5}
-.recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
-.recipe-card{background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:var(--transition);cursor:pointer;display:flex;flex-direction:column}
-.recipe-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
-.recipe-thumb{height:90px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:linear-gradient(135deg,#E0F2F1,#FFF3E0)}
-.recipe-card .info{padding:10px;flex:1}.recipe-card .title{font-size:.85rem;font-weight:700;margin-bottom:3px;line-height:1.3}
-.recipe-card .meta{font-size:.72rem;color:var(--text-light)}
-.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.filter-chip{padding:6px 12px;border-radius:20px;background:#f1f3f5;border:none;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--text-light)}
-.filter-chip.active{background:var(--primary);color:#fff}
-.planning-grid{display:grid;grid-template-columns:80px 1fr 1fr;gap:6px}
-.planning-header{font-weight:700;font-size:.8rem;color:var(--text-light);text-align:center;padding:8px 0;text-transform:uppercase}
-.planning-day{font-weight:700;padding:10px 6px;display:flex;align-items:center;justify-content:center;background:#f1f3f5;border-radius:10px;font-size:.85rem}
-.planning-slot{background:#FAFAFA;border:1.5px dashed #d0d0d0;border-radius:10px;padding:8px;min-height:60px;cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;font-size:.78rem}
-.planning-slot:hover{border-color:var(--primary);background:#F0FDFA}
-.planning-slot.filled{background:var(--primary);color:#fff;border-style:solid}
-.planning-slot.filled:hover{background:var(--primary-dark)}
-.planning-slot .slot-emoji{font-size:1.4rem}.planning-slot .slot-name{font-weight:700;line-height:1.15}
-.shopping-list{list-style:none}
-.shopping-list li{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0}
-.shopping-list li.checked .item-name{text-decoration:line-through;color:var(--text-light)}
-.shopping-list input[type="checkbox"]{width:20px;height:20px;accent-color:var(--primary);cursor:pointer}
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;justify-content:center;align-items:center;padding:20px}
-.modal-overlay.open{display:flex}
-.modal{background:var(--surface);border-radius:var(--radius);max-width:560px;width:100%;max-height:85vh;overflow-y:auto;padding:24px;position:relative}
-.modal-close{position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.4rem;cursor:pointer}
-.modal h2{margin-bottom:12px;padding-right:30px}.modal h4{margin:16px 0 8px;color:var(--primary-dark)}
-.modal ul,.modal ol{padding-left:20px;margin-bottom:12px}.modal li{margin-bottom:4px;font-size:.9rem}
-.recipe-picker-list{display:flex;flex-direction:column;gap:6px;max-height:50vh;overflow-y:auto;margin-top:12px}
-.recipe-picker-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;cursor:pointer;background:#FAFAFA}
-.recipe-picker-item:hover{background:#F0FDFA}
-.recipe-picker-item .emoji{font-size:1.4rem}
-.recipe-picker-item .name{font-weight:600;flex:1;font-size:.9rem}
-.empty-state{text-align:center;padding:30px 10px;color:var(--text-light)}
-.empty-state .icon{font-size:3rem;margin-bottom:10px;opacity:.5}
-.match-bar{height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-top:6px}
-.match-fill{height:100%;background:var(--primary);border-radius:3px;transition:width .5s}
-.scanner-area{border:2px dashed var(--primary);border-radius:var(--radius);padding:20px;text-align:center;cursor:pointer;background:#F0FDFA}
-.scanner-area:hover{background:#E0F2F1}.scanner-area input{display:none}
-.scanner-icon{font-size:2.5rem;margin-bottom:8px}
-.scan-tag{display:inline-block;background:var(--accent);color:var(--text);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600;margin:4px 4px 0 0;cursor:pointer}
-.shopping-gen-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f0}
-.shopping-gen-item label{flex:1;cursor:pointer;font-size:.9rem}
-.shopping-gen-item .qty{font-weight:700;color:var(--text-light);font-size:.8rem}
-@media(max-width:600px){.planning-grid{grid-template-columns:65px 1fr 1fr;gap:5px}.planning-slot{min-height:55px;padding:5px;font-size:.72rem}.recipe-grid{grid-template-columns:repeat(2,1fr)}}
-.recipe-thumb,.modal-photo,.slot-photo,.pick-photo{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#E0F2F1,#FFF3E0)}
-.recipe-thumb{height:110px}
-.recipe-thumb img,.modal-photo img,.slot-photo img,.pick-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:fadeIn .4s}
-.recipe-thumb img~.emo,.modal-photo img~.emo,.slot-photo img~.emo,.pick-photo img~.emo{display:none}
-.modal-photo{height:200px;margin:-24px -24px 6px;font-size:4rem}
-.modal-close{z-index:3;background:rgba(255,255,255,.9)!important;width:36px;height:36px;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-.badge{display:inline-block;background:#E0F2F1;color:var(--primary-dark);border-radius:999px;padding:2px 10px;margin:0 4px 4px 0;font-size:.78rem;font-weight:600}
-.credit{font-size:.7rem;color:var(--text-light);margin-bottom:10px}.credit a{color:var(--primary)}
-.slot-photo{height:46px;border-radius:8px;margin-bottom:4px;font-size:1.4rem}
-.pick-photo{width:46px;height:46px;flex:none;border-radius:10px;font-size:1.4rem}
+:root{--bg:#FBF7F1;--card:#fff;--ink:#1E1B18;--mu:#7A7068;--line:#EFE7DD;--soft:#F4EDE4;--pri:#E8613C;--pri2:#F08A5D;--pri-soft:#FDEDE6;--ok:#2F9E6E;--ok-soft:#E3F4EC;--warn:#E9A23B;--dan:#D9483B;
+--r:20px;--sh:0 1px 2px rgba(60,40,20,.05),0 8px 24px rgba(60,40,20,.07);--sh2:0 18px 50px rgba(40,25,10,.18);--ease:cubic-bezier(.2,.8,.2,1);
+--safe-b:env(safe-area-inset-bottom,0px);--safe-t:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{background:var(--bg);overflow-x:hidden}
+main{overflow-x:clip}
+body{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Inter","Segoe UI",Roboto,sans-serif;color:var(--ink);font-size:15px;line-height:1.45;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+input,select{font:inherit;color:inherit}
+svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.top{position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--safe-t) + 12px) 18px 10px;background:rgba(251,247,241,.86);backdrop-filter:saturate(1.6) blur(16px);-webkit-backdrop-filter:saturate(1.6) blur(16px)}
+.brand{display:flex;align-items:center;gap:10px}.brand b{font-size:17px;letter-spacing:-.02em;display:block}.brand small{color:var(--mu);font-size:12.5px}
+.logo{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--pri),var(--pri2));display:grid;place-items:center;font-size:20px;box-shadow:0 6px 16px rgba(232,97,60,.35)}
+.iconbtn{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:var(--card);box-shadow:var(--sh);transition:transform .15s}
+.iconbtn:active{transform:scale(.92)}
+main{padding:4px 18px calc(110px + var(--safe-b));max-width:760px;margin:0 auto}
+.view{animation:viewIn .38s var(--ease)}
+@keyframes viewIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h1{font-size:28px;letter-spacing:-.03em;line-height:1.15;margin:6px 0 4px}
+h2{font-size:21px;letter-spacing:-.02em;line-height:1.2}
+.sec{display:flex;align-items:baseline;justify-content:space-between;margin:26px 0 12px}.sec h3{font-size:18px;letter-spacing:-.02em}.sec a{color:var(--pri);font-weight:650;font-size:14px;cursor:pointer}
+.mu{color:var(--mu)}.small{font-size:13px}
+/* tab bar */
+.tabbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(12px + var(--safe-b));z-index:30;display:flex;gap:2px;padding:6px;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:24px;box-shadow:var(--sh2);width:min(440px,calc(100% - 24px))}
+.tabbar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 0 6px;border-radius:18px;color:#9A9089;font-size:10.5px;font-weight:650;position:relative;transition:color .2s}
+.tabbar button.on{color:var(--pri)}
+.tabbar button.on:before{content:'';position:absolute;inset:0;border-radius:18px;background:var(--pri-soft);z-index:-1;animation:pop .35s var(--ease)}
+.tabbar .badge{position:absolute;top:3px;right:calc(50% - 20px);min-width:17px;height:17px;padding:0 5px;border-radius:9px;background:var(--pri);color:#fff;font-size:10px;display:grid;place-items:center}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:none;opacity:1}}
+/* search */
+.search{min-width:0;display:flex;align-items:center;gap:10px;background:var(--card);border-radius:16px;padding:0 6px 0 14px;box-shadow:var(--sh);height:52px}
+.search input{flex:1;border:0;outline:0;background:none;font-size:16px;min-width:0}
+.search svg{color:var(--mu)}
+.fbtn{height:40px;padding:0 12px;border-radius:12px;background:var(--ink);color:#fff;display:flex;align-items:center;gap:6px;font-weight:650;font-size:14px;position:relative;transition:transform .15s}
+.fbtn svg{width:18px;height:18px}.fbtn:active{transform:scale(.94)}
+.fbtn i{position:absolute;top:-5px;right:-5px;background:var(--pri);color:#fff;font-style:normal;font-size:11px;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;border:2px solid var(--bg)}
+/* chips */
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 -18px;padding:2px 18px 4px}.chips::-webkit-scrollbar{display:none}
+.chips.wrap{flex-wrap:wrap;overflow:visible;margin:0;padding:0}
+.chip{flex:none;height:38px;padding:0 15px;border-radius:12px;background:var(--card);box-shadow:inset 0 0 0 1px var(--line);font-weight:600;font-size:14px;display:flex;align-items:center;gap:6px;transition:all .2s var(--ease);white-space:nowrap}
+.chip.on{background:var(--ink);color:#fff;box-shadow:none}
+.chip:active{transform:scale(.95)}
+.chip.x{background:var(--pri-soft);color:var(--pri);box-shadow:none;height:32px;font-size:13px;padding:0 10px}
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+@media(min-width:620px){.grid{grid-template-columns:repeat(3,1fr)}}
+.rc{background:var(--card);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);cursor:pointer;transition:transform .2s var(--ease);animation:cardIn .5s var(--ease) both;text-align:left;display:block;width:100%}
+.rc:active{transform:scale(.97)}
+@keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:none}}
+.rc .ph{aspect-ratio:4/3.3}
+.rc .bd{padding:10px 12px 12px}.rc .bd b{display:block;font-size:14.5px;line-height:1.25;letter-spacing:-.01em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rc .meta{display:flex;align-items:center;gap:8px;margin-top:5px;color:var(--mu);font-size:12.5px}
+.ph{position:relative;overflow:hidden;background:linear-gradient(110deg,#F1E8DD 30%,#F8F2EA 50%,#F1E8DD 70%);background-size:200% 100%;animation:shimmer 1.4s linear infinite;display:grid;place-items:center}
+.ph.done{animation:none;background:linear-gradient(135deg,#FCE9DD,#F7EFE3)}
+.ph .emo{font-size:42px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.08))}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .5s,transform .6s var(--ease);transform:scale(1.04)}
+.ph img.ok{opacity:1;transform:none}
+.ph img.ok~.emo{display:none}
+@keyframes shimmer{to{background-position:-200% 0}}
+.tag{position:absolute;z-index:2;top:8px;left:8px;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-radius:9px;padding:3px 8px;font-size:11.5px;font-weight:700;display:flex;align-items:center;gap:4px}
+.heart{position:absolute;z-index:2;top:6px;right:6px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;transition:transform .2s}
+.heart svg{width:18px;height:18px}.heart.on{color:var(--pri)}.heart.on svg{fill:currentColor;animation:beat .45s var(--ease)}
+@keyframes beat{30%{transform:scale(1.35)}}
+.dots{display:inline-flex;gap:2px}.dots i{width:6px;height:6px;border-radius:50%;background:#E5DCD1}.dots i.f{background:var(--pri)}
+.match{height:5px;border-radius:3px;background:var(--soft);margin-top:7px;overflow:hidden}.match i{display:block;height:100%;background:linear-gradient(90deg,var(--ok),#56C08E);border-radius:3px;transition:width .8s var(--ease)}
+/* carrousel */
+.rail{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -18px;padding:4px 18px 10px}.rail::-webkit-scrollbar{display:none}
+.rail .rc{flex:none;width:168px;scroll-snap-align:start}
+/* hero */
+.hero{position:relative;border-radius:26px;overflow:hidden;box-shadow:var(--sh2);cursor:pointer;margin-top:14px;animation:cardIn .6s var(--ease) both;color:#fff}
+.hero .ph{aspect-ratio:16/11}
+.hero .ov{position:absolute;inset:0;z-index:2;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(20,10,5,.78));display:flex;flex-direction:column;justify-content:flex-end;padding:18px}
+.hero small{text-transform:uppercase;letter-spacing:.12em;font-weight:800;font-size:11px;opacity:.9}
+.hero h2{font-size:26px;margin:4px 0 6px;color:#fff}
+.hero .pills{display:flex;gap:6px;flex-wrap:wrap}.hero .pills span{background:rgba(255,255,255,.2);backdrop-filter:blur(8px);border-radius:10px;padding:4px 10px;font-size:12.5px;font-weight:650}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.cat{background:var(--card);border-radius:18px;padding:12px 4px 10px;text-align:center;box-shadow:var(--sh);font-size:12px;font-weight:650;transition:transform .15s;animation:cardIn .5s var(--ease) both}
+.cat span{display:block;font-size:26px;margin-bottom:4px}.cat:active{transform:scale(.94)}
+/* boutons */
+.btn{height:52px;border-radius:16px;padding:0 20px;font-weight:700;font-size:15.5px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .15s,filter .2s;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn:active{transform:scale(.97)}
+.btn.pri{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;box-shadow:0 10px 24px rgba(232,97,60,.32)}
+.btn.dark{background:var(--ink);color:#fff;box-shadow:none}
+.btn.w{width:100%}.btn.sm{height:40px;border-radius:12px;font-size:14px;padding:0 14px}
+.btn.ghost{background:none;box-shadow:none;color:var(--mu)}
+.row{display:flex;align-items:center;gap:12px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:16px;animation:cardIn .45s var(--ease) both}
+.empty{text-align:center;padding:40px 20px;color:var(--mu)}.empty div{font-size:52px;margin-bottom:8px;animation:float 3s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-6px)}}
+/* feuilles */
+.sheet-bg{position:fixed;inset:0;z-index:50;background:rgba(25,15,8,.42);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);animation:fade .25s;display:flex;align-items:flex-end;justify-content:center}
+.sheet-bg.out{animation:fade .22s reverse forwards}
+@keyframes fade{from{opacity:0}}
+.sheet{background:var(--bg);width:100%;max-width:640px;max-height:92vh;overflow-y:auto;border-radius:28px 28px 0 0;padding:10px 20px calc(24px + var(--safe-b));animation:up .42s var(--ease);position:relative;overscroll-behavior:contain}
+.sheet-bg.out .sheet{animation:up .25s reverse forwards}
+@keyframes up{from{transform:translateY(100%)}}
+.grab{width:42px;height:5px;border-radius:3px;background:#DDD3C7;margin:0 auto 12px}
+.sheet .close{position:absolute;top:14px;right:14px;z-index:5;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.94);box-shadow:var(--sh);display:grid;place-items:center}
+.sheet .close svg{width:18px;height:18px}
+.sheet.full{padding-top:0}
+.sheet.full .cover{margin:0 -20px;height:300px;border-radius:28px 28px 0 0}
+.sheet.full .grab{position:absolute;top:8px;left:50%;margin-left:-21px;z-index:5;background:rgba(255,255,255,.8)}
+.cover.ph .emo{font-size:84px}
+.dt{position:relative;margin-top:-26px;background:var(--bg);border-radius:26px 26px 0 0;padding-top:20px;z-index:3}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.stat{background:var(--card);border-radius:16px;padding:10px;text-align:center;box-shadow:var(--sh)}.stat b{display:block;font-size:16px}.stat small{color:var(--mu);font-size:11.5px}
+.stepper{display:flex;align-items:center;gap:4px;background:var(--card);border-radius:14px;box-shadow:var(--sh);padding:4px}
+.stepper button{width:34px;height:34px;border-radius:10px;background:var(--soft);font-size:18px;font-weight:700}.stepper b{min-width:64px;text-align:center;font-size:14px}
+.ing{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line)}
+.ing .q{margin-left:auto;color:var(--mu);font-size:14px;font-weight:600;white-space:nowrap}
+.ing .st{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;background:var(--soft);font-size:12px}.ing .st.ok{background:var(--ok-soft);color:var(--ok)}
+.step{display:flex;gap:14px;padding:12px;border-radius:16px;background:var(--card);margin-bottom:8px;box-shadow:var(--sh);cursor:pointer;transition:all .25s}
+.step .n{width:30px;height:30px;border-radius:10px;background:var(--pri-soft);color:var(--pri);font-weight:800;display:grid;place-items:center;flex:none;transition:all .25s}
+.step.done{opacity:.55}.step.done .n{background:var(--ok);color:#fff}.step.done p{text-decoration:line-through}
+.tools{display:flex;gap:8px;flex-wrap:wrap}.tools span{background:var(--card);box-shadow:inset 0 0 0 1px var(--line);border-radius:12px;padding:6px 10px;font-size:13px;font-weight:600}
+.tools span.miss{background:#FDECEA;color:var(--dan);box-shadow:none}
+.bar-actions{position:sticky;bottom:calc(-24px - var(--safe-b));margin:18px -20px calc(-24px - var(--safe-b));padding:12px 20px calc(14px + var(--safe-b));background:linear-gradient(180deg,rgba(251,247,241,0),var(--bg) 30%);display:grid;grid-template-columns:1fr 1fr;gap:10px}
+/* formulaires */
+.lbl{font-weight:700;font-size:14px;margin:18px 0 10px;display:flex;justify-content:space-between}
+.inp{width:100%;height:50px;border-radius:14px;border:0;background:var(--card);box-shadow:inset 0 0 0 1.5px var(--line);padding:0 14px;font-size:16px;outline:0;transition:box-shadow .2s}
+.inp:focus{box-shadow:inset 0 0 0 2px var(--pri)}
+.seg{display:flex;background:var(--soft);border-radius:14px;padding:4px;gap:4px}
+.seg button{flex:1;height:38px;border-radius:11px;font-weight:650;font-size:13.5px;color:var(--mu);transition:all .2s var(--ease)}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.switch{display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;padding:14px;box-shadow:var(--sh);cursor:pointer}
+.switch .t{flex:1}.switch .t small{display:block;color:var(--mu);font-size:12.5px}
+.tg{width:50px;height:30px;border-radius:15px;background:#E2D9CE;position:relative;transition:background .25s;flex:none}.tg:after{content:'';position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.18);transition:transform .25s var(--ease)}
+.tg.on{background:var(--ok)}.tg.on:after{transform:translateX(20px)}
+/* ustensiles */
+.tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:520px){.tiles{grid-template-columns:repeat(3,1fr)}}
+.tile{background:var(--card);border-radius:18px;padding:14px 12px;text-align:left;box-shadow:inset 0 0 0 1.5px var(--line);transition:all .22s var(--ease);position:relative;animation:cardIn .45s var(--ease) both}
+.tile .e{font-size:30px;display:block;margin-bottom:6px;transition:transform .3s var(--ease)}
+.tile b{display:block;font-size:14.5px}.tile small{color:var(--mu);font-size:12px;line-height:1.3;display:block;margin-top:2px}
+.tile.on{box-shadow:inset 0 0 0 2px var(--pri),0 8px 20px rgba(232,97,60,.15);background:#FFF8F5}
+.tile.on .e{transform:scale(1.12) rotate(-6deg)}
+.tile:after{content:'✓';position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;background:var(--pri);color:#fff;font-size:12px;font-weight:800;display:grid;place-items:center;transform:scale(0);transition:transform .25s var(--ease)}
+.tile.on:after{transform:scale(1)}
+/* onboarding */
+.ob{position:fixed;inset:0;z-index:60;background:var(--bg);overflow-y:auto;padding:calc(var(--safe-t) + 24px) 22px calc(30px + var(--safe-b));animation:fade .3s}
+.ob .in{max-width:560px;margin:0 auto}
+.ob .big{font-size:76px;text-align:center;margin:40px 0 10px;animation:float 3s ease-in-out infinite}
+.ob h1{font-size:32px;text-align:center}
+.ob p.lead{text-align:center;color:var(--mu);font-size:16px;margin:8px auto 28px;max-width:400px}
+.ob .prog{display:flex;gap:6px;justify-content:center;margin-bottom:18px}.ob .prog i{width:26px;height:6px;border-radius:3px;background:#E6DCD0;transition:all .3s}.ob .prog i.on{background:var(--pri);width:40px}
+.feat{display:flex;gap:12px;align-items:center;background:var(--card);border-radius:18px;padding:14px;box-shadow:var(--sh);margin-bottom:10px;animation:cardIn .5s var(--ease) both}
+.feat span{font-size:26px;width:46px;height:46px;border-radius:14px;background:var(--pri-soft);display:grid;place-items:center;flex:none}
+.foot{position:sticky;bottom:0;padding-top:16px;background:linear-gradient(180deg,rgba(251,247,241,0),var(--bg) 35%)}
+/* planning */
+.day{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:14px;margin-bottom:12px;animation:cardIn .45s var(--ease) both}
+.day.today{box-shadow:inset 0 0 0 2px var(--pri),var(--sh)}
+.day h4{display:flex;align-items:center;gap:8px;font-size:15.5px;margin-bottom:10px;text-transform:capitalize}.day h4 em{font-style:normal;background:var(--pri);color:#fff;font-size:11px;padding:2px 8px;border-radius:8px;text-transform:none}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.slot{border-radius:16px;overflow:hidden;background:var(--soft);min-height:118px;text-align:left;position:relative;transition:transform .15s;display:flex;flex-direction:column}
+.slot:active{transform:scale(.97)}
+.slot .ph{height:74px}.slot .ph .emo{font-size:30px}
+.slot .sn{padding:7px 10px 9px;font-size:12.5px;font-weight:650;line-height:1.25}.slot .sn small{display:block;color:var(--mu);font-weight:600;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em}
+.slot.empty{border:2px dashed #E3D8CB;background:none;align-items:center;justify-content:center;color:var(--mu);font-size:13px;font-weight:650;gap:2px}
+.slot.empty b{font-size:24px;color:#CBBDAE;font-weight:400}
+/* liste */
+.li{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border-radius:16px;box-shadow:var(--sh);margin-bottom:8px;animation:cardIn .4s var(--ease) both;transition:opacity .3s,transform .3s}
+.li .t{flex:1;min-width:0}.li .t b{display:block;font-size:15px;font-weight:650}.li .t small{color:var(--mu);font-size:12.5px}
+.ck{width:26px;height:26px;border-radius:9px;box-shadow:inset 0 0 0 2px #D8CCBE;display:grid;place-items:center;flex:none;transition:all .25s var(--ease)}
+.ck.on{background:var(--ok);box-shadow:none;color:#fff}.ck svg{width:16px;height:16px;stroke-width:3;opacity:0;transform:scale(.4);transition:all .25s var(--ease)}.ck.on svg{opacity:1;transform:none}
+.li.done .t b{text-decoration:line-through;color:var(--mu)}
+.del{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#B9AEA2}.del svg{width:18px;height:18px}
+.qbtn{width:30px;height:30px;border-radius:9px;background:var(--soft);font-weight:800}
+.badge-exp{font-size:11px;font-weight:750;padding:2px 7px;border-radius:7px;margin-left:6px}.badge-exp.u{background:#FDECEA;color:var(--dan)}.badge-exp.s{background:#FFF4DF;color:#B7791F}.badge-exp.k{background:var(--ok-soft);color:var(--ok)}
+.progress{height:8px;border-radius:4px;background:var(--soft);overflow:hidden;margin-top:8px}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--ok),#56C08E);border-radius:4px;transition:width .6s var(--ease)}
+.aisle{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--mu);margin:18px 4px 8px}
+.add{display:flex;gap:8px}.add .inp{flex:1}
+.addbtn{width:50px;height:50px;border-radius:14px;background:var(--ink);color:#fff;display:grid;place-items:center;flex:none;transition:transform .15s}.addbtn:active{transform:scale(.92)}
+.scan{display:flex;align-items:center;gap:14px;padding:16px;border-radius:var(--r);background:linear-gradient(135deg,#2B2420,#433630);color:#fff;cursor:pointer;box-shadow:var(--sh2)}
+.scan span{font-size:30px;width:52px;height:52px;border-radius:16px;background:rgba(255,255,255,.12);display:grid;place-items:center}
+.scan small{opacity:.75}
+.stag{display:inline-flex;align-items:center;gap:6px;margin:4px;padding:8px 12px;border-radius:12px;background:var(--card);box-shadow:var(--sh);font-weight:600;font-size:14px;cursor:pointer}
+.stag.added{background:var(--ok-soft);color:var(--ok)}
+.credit{font-size:11px;color:var(--mu);margin-top:6px}.credit a{color:var(--mu)}
+#toast{position:fixed;left:50%;bottom:calc(100px + var(--safe-b));transform:translate(-50%,20px);background:var(--ink);color:#fff;padding:12px 18px;border-radius:14px;font-weight:650;font-size:14px;opacity:0;pointer-events:none;transition:all .35s var(--ease);z-index:80;max-width:calc(100% - 40px);text-align:center;box-shadow:var(--sh2)}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+.count{color:var(--mu);font-size:13.5px;margin:14px 2px 10px}
+.pickrow{display:flex;align-items:center;gap:12px;padding:8px;border-radius:16px;background:var(--card);box-shadow:var(--sh);margin-bottom:8px;width:100%;text-align:left;animation:cardIn .35s var(--ease) both}
+.pickrow .ph{width:58px;height:58px;border-radius:12px;flex:none}.pickrow .ph .emo{font-size:26px}
+.pickrow b{font-size:14.5px;display:block}.pickrow small{color:var(--mu);font-size:12.5px}
+.confetti{position:fixed;top:-10px;width:9px;height:14px;z-index:90;pointer-events:none;animation:fall linear forwards;border-radius:2px}
+@keyframes fall{to{transform:translateY(105vh) rotate(720deg)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
 </style>
 </head>
 <body>
-
-<header>
-  <div class="logo">Mon <span>Garde-Manger</span></div>
-  <div style="font-size:.8rem;color:var(--text-light)" id="recipe-count">200 recettes</div>
-</header>
-
-<nav>
-  <button class="active" data-tab="tab-inventory">📦 Inventaire</button>
-  <button data-tab="tab-recipes">🍳 Recettes</button>
-  <button data-tab="tab-planning">📅 Planning</button>
-  <button data-tab="tab-shopping">🛒 Courses</button>
-  <button data-tab="tab-ai">🤖 Scanner</button>
-</nav>
-
-<main>
-  <section id="tab-inventory" class="tab-content active">
-    <div class="card">
-      <h3>➕ Ajouter un produit</h3>
-      <div class="form-group">
-        <input type="text" id="item-name" placeholder="Nom du produit">
-        <input type="number" id="item-qty" placeholder="Qté" min="1" value="1" style="max-width:80px">
-        <input type="date" id="item-expiry">
-        <button class="btn btn-primary" onclick="addItem()">Ajouter</button>
-      </div>
-    </div>
-    <div class="card">
-      <h3>📋 Mon inventaire</h3>
-      <ul id="inventory-list" class="inventory-list"></ul>
-      <div id="inventory-empty" class="empty-state"><div class="icon">🥫</div><p>Votre inventaire est vide.</p></div>
-    </div>
-  </section>
-
-  <section id="tab-recipes" class="tab-content">
-    <div class="card">
-      <h3>✨ Suggérées par mon inventaire</h3>
-      <button class="btn btn-primary btn-sm" onclick="renderSuggestions()" style="margin-bottom:12px">🔄 Actualiser</button>
-      <div id="recipe-suggestions" class="recipe-grid"></div>
-      <div id="suggestions-empty" class="empty-state" style="display:none"><div class="icon">🍽️</div><p>Ajoutez des produits à votre inventaire.</p></div>
-    </div>
-    <div class="card">
-      <h3>📚 Bibliothèque (<span id="lib-count">223</span> recettes)</h3>
-      <div class="form-group"><input type="text" id="library-search" placeholder="Rechercher une recette..." oninput="renderLibrary()"></div>
-      <div class="filter-bar" id="category-filters"></div>
-      <div id="library-grid" class="recipe-grid"></div>
-    </div>
-    <div class="card">
-      <h3>🌍 Recherche en ligne (TheMealDB)</h3>
-      <div class="form-group">
-        <input type="text" id="search-query" placeholder="Ex: chicken, pasta...">
-        <button class="btn btn-accent" onclick="searchMealDB()">Chercher</button>
-      </div>
-      <div id="search-results" class="recipe-grid"></div>
-    </div>
-  </section>
-
-  <section id="tab-planning" class="tab-content">
-    <div class="card">
-      <h3>📅 Ma semaine</h3>
-      <p style="font-size:.85rem;color:var(--text-light);margin-bottom:12px">Cliquez sur une case pour choisir une recette.</p>
-      <div class="planning-grid" id="planning-grid"></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
-        <button class="btn btn-primary" onclick="generateShoppingFromPlanning()">🛒 Générer ma liste</button>
-        <button class="btn btn-outline" onclick="clearPlanning()">🗑️ Vider la semaine</button>
-      </div>
-    </div>
-  </section>
-
-  <section id="tab-shopping" class="tab-content">
-    <div class="card">
-      <h3>🛒 Ma liste de courses</h3>
-      <div class="form-group">
-        <input type="text" id="shop-item" placeholder="Ajouter un article...">
-        <button class="btn btn-primary" onclick="addShoppingItem()">Ajouter</button>
-      </div>
-      <ul id="shopping-list" class="shopping-list"></ul>
-      <div id="shopping-empty" class="empty-state"><div class="icon">📝</div><p>Votre liste est vide.</p></div>
-      <button class="btn btn-danger btn-sm" style="margin-top:12px" onclick="clearShoppingList()">🗑️ Vider</button>
-    </div>
-  </section>
-
-  <section id="tab-ai" class="tab-content">
-    <div class="card">
-      <h3>🤖 Scanner d'ingrédients</h3>
-      <label class="scanner-area" for="image-upload">
-        <div class="scanner-icon">📷</div>
-        <p><strong>Prendre ou importer une photo</strong></p>
-        <input type="file" id="image-upload" accept="image/*" capture="environment">
-      </label>
-      <div id="scan-result" style="margin-top:12px"></div>
-    </div>
-  </section>
-</main>
-
-<div class="modal-overlay" id="recipe-modal">
-  <div class="modal"><button class="modal-close" onclick="closeModal('recipe-modal')">✕</button><div id="modal-content"></div></div>
+<div id="app">
+  <header class="top">
+    <div class="brand"><span class="logo">🥘</span><div><b>Garde-Manger</b><small id="hello"></small></div></div>
+    <button class="iconbtn" onclick="openSettings()" aria-label="Réglages"><svg viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg></button>
+  </header>
+  <main id="view"></main>
+  <nav class="tabbar" id="tabbar"></nav>
 </div>
-<div class="modal-overlay" id="picker-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('picker-modal')">✕</button>
-    <h2 id="picker-title">Choisir une recette</h2>
-    <input type="text" id="picker-search" placeholder="Rechercher..." oninput="renderPickerList()" style="width:100%;padding:10px;border:1.5px solid #e0e0e0;border-radius:10px;margin-bottom:8px">
-    <button class="btn btn-outline btn-sm" onclick="removeFromSlot()" style="width:100%;margin-bottom:8px">🗑️ Vider cette case</button>
-    <div class="recipe-picker-list" id="picker-list"></div>
-  </div>
-</div>
-<div class="modal-overlay" id="gen-modal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal('gen-modal')">✕</button>
-    <h2>🛒 Ingrédients pour la semaine</h2>
-    <p style="font-size:.85rem;color:var(--text-light);margin-bottom:12px">Décochez ce que vous ne voulez pas ajouter. Les produits déjà en stock sont marqués ✅.</p>
-    <div id="gen-content"></div>
-  </div>
-</div>
-
-
+<div id="sheets"></div>
+<div id="toast"></div>
 <script>
-// ============================================================
-// BIBLIOTHÈQUE DE 200 RECETTES
-// Format: [nom, emoji, catégorie, minutes, difficulté, portions, tags, ingrédients[[nom,qty,unité]], étapes[]]
-// ============================================================
 const RAW=[
 // ===== PÂTES (20) =====
 ['Carbonara','🍝','Pâtes',25,'Facile',4,['italien','rapide'],[['Spaghetti',400,'g'],['Lardons',200,'g'],['Œufs',4,''],['Parmesan',100,'g'],['Ail',2,'gousse']],['Cuire pâtes al dente','Saisir lardons + ail','Mélanger œufs + parmesan hors feu','Servir poivré']],
@@ -447,32 +449,79 @@ const RAW=[
 ['Légumes grillés','🥔','Grillade',20,'Facile',4,['végétarien'],[['Courgette',2,''],['Aubergine',1,''],['Poivron',2,''],['Huile olive',4,'c. à soupe']],['Trancher','Huile','Griller 5 min chaque côté']],
 ['Poulet BBQ','🍗','Grillade',30,'Facile',4,['été'],[['Poulet',4,'filets'],['Sauce BBQ',150,'ml'],['Ail',2,'gousse'],['Paprika',1,'c. à café']],['Mariner 15 min','Griller 6 min chaque côté']]
 ];
-
-// Termes de recherche des photos (Wikipédia FR | Wikipédia EN), dans l'ordre des recettes
 const PHOTOQ = [["Spaghetti alla carbonara", "Spaghetti alla carbonara"], ["Spaghetti bolognaise", "Spaghetti bolognese"], ["Pesto alla genovese", "Trenette al pesto"], ["Pasta al pomodoro", "Pasta al pomodoro"], ["Pâtes au saumon", "Salmon pasta"], ["Lasagnes", "Lasagne"], ["Lasagnes aux légumes", "Vegetable lasagne"], ["Pâtes aux quatre fromages", "Quattro formaggi"], ["Spaghetti alla puttanesca", "Spaghetti alla puttanesca"], ["Pâtes aux courgettes", "Pasta with zucchini"], ["Pâtes aux champignons", "Mushroom pasta"], ["Spaghetti aglio e olio", "Spaghetti aglio e olio"], ["Penne all'arrabbiata", "Penne all'arrabbiata"], ["Tagliatelles au saumon", "Salmon tagliatelle"], ["Macaroni au fromage", "Macaroni and cheese"], ["Pâtes au thon", "Tuna pasta"], ["Nouilles sautées", "Chow mein"], ["Pasta primavera", "Pasta primavera"], ["Raviolis ricotta épinards", "Ravioli"], ["Carbonara végétarienne", "Spaghetti alla carbonara"], ["Riz sauté aux légumes", "Fried rice"], ["Risotto aux champignons", "Mushroom risotto"], ["Risotto aux crevettes", "Risotto"], ["Riz au curry", "Curry rice"], ["Riz cantonais", "Yangzhou fried rice"], ["Paella", "Paella"], ["Riz pilaf", "Pilaf"], ["Riz aux haricots rouges", "Rice and beans"], ["Riz à la tomate", "Arroz a la mexicana"], ["Riz aux herbes", "Herbed rice"], ["Riz sauté à l'ananas", "Pineapple fried rice"], ["Riz créole", "Arroz blanco"], ["Risotto alla parmigiana", "Risotto"], ["Risotto alla milanese", "Risotto alla milanese"], ["Riz au lait de coco", "Coconut rice"], ["Poulet rôti", "Roast chicken"], ["Steak frites", "Steak frites"], ["Poulet basquaise", "Poulet basquaise"], ["Bœuf bourguignon", "Beef bourguignon"], ["Blanquette de veau", "Blanquette de veau"], ["Curry de poulet", "Chicken curry"], ["Poulet au citron", "Lemon chicken"], ["Escalope milanaise", "Cotoletta alla milanese"], ["Côtelette d'agneau", "Lamb chop"], ["Rôti de porc", "Roast pork"], ["Choucroute garnie", "Choucroute garnie"], ["Cassoulet", "Cassoulet"], ["Chili con carne", "Chili con carne"], ["Taco", "Taco"], ["Hamburger", "Hamburger"], ["Poulet au miel", "Honey chicken"], ["Katsu", "Chicken katsu"], ["Brochette de poulet", "Chicken kebab"], ["Porc sauté", "Stir-fried pork"], ["Cuisse de poulet", "Chicken leg"], ["Poulet tandoori", "Tandoori chicken"], ["Boulette de viande", "Meatball"], ["Bifteck", "Steak"], ["Magret de canard", "Magret"], ["Confit de canard", "Duck confit"], ["Poulet yassa", "Chicken yassa"], ["Poulet Marengo", "Chicken Marengo"], ["Bœuf Stroganov", "Beef Stroganoff"], ["Paprikás csirke", "Chicken paprikash"], ["Saumon grillé", "Grilled salmon"], ["Cabillaud rôti", "Baked cod"], ["Papillote de saumon", "En papillote"], ["Steak de thon", "Tuna steak"], ["Gambas a la plancha", "Gambas al ajillo"], ["Moules marinières", "Moules marinières"], ["Sole meunière", "Sole meunière"], ["Bar en papillote", "European seabass"], ["Sardines grillées", "Grilled sardines"], ["Gravlax", "Gravlax"], ["Curry de crevettes", "Shrimp curry"], ["Cabillaud en papillote", "En papillote"], ["Gratin de poisson", "Fish pie"], ["Poisson pané", "Fish fingers"], ["Tartare de saumon", "Salmon tartare"], ["Croquette de poisson", "Fish cake"], ["Truite aux amandes", "Trout amandine"], ["Coquilles Saint-Jacques", "Scallop"], ["Calamars frits", "Fried calamari"], ["Saumon teriyaki", "Teriyaki"], ["Ratatouille", "Ratatouille"], ["Quiche lorraine", "Quiche Lorraine"], ["Quiche aux légumes", "Quiche"], ["Flamiche", "Leek tart"], ["Gratin dauphinois", "Gratin dauphinois"], ["Gratin de courgettes", "Zucchini gratin"], ["Chana masala", "Chana masala"], ["Dal", "Dal"], ["Falafel", "Falafel"], ["Houmous", "Hummus"], ["Poêlée de légumes", "Stir-fried vegetables"], ["Légumes rôtis", "Roasted vegetables"], ["Chili sin carne", "Vegetarian chili"], ["Burger végétarien", "Veggie burger"], ["Galette de sarrasin", "Galette"], ["Crêpe salée", "Crêpe"], ["Pizza Margherita", "Pizza Margherita"], ["Pizza aux légumes", "Vegetable pizza"], ["Soufflé au fromage", "Cheese soufflé"], ["Tarte à l'oignon", "Onion tart"], ["Crumble de légumes", "Vegetable crumble"], ["Moussaka végétarienne", "Moussaka"], ["Lasagnes végétariennes", "Vegetable lasagne"], ["Bourguignon végétarien", "Mushroom bourguignon"], ["Chou de Bruxelles rôti", "Brussels sprout"], ["Purée de pommes de terre", "Mashed potato"], ["Pommes de terre rôties", "Roast potatoes"], ["Endive braisée", "Braised endive"], ["Gratin de chou-fleur", "Cauliflower cheese"], ["Soupe à l'oignon", "French onion soup"], ["Soupe de légumes", "Vegetable soup"], ["Velouté de potiron", "Pumpkin soup"], ["Velouté de courgettes", "Zucchini soup"], ["Soupe à la tomate", "Tomato soup"], ["Gaspacho", "Gazpacho"], ["Soupe de poisson", "Fish soup"], ["Sopa de ajo", "Garlic soup"], ["Velouté de champignons", "Cream of mushroom soup"], ["Soupe de lentilles", "Lentil soup"], ["Minestrone", "Minestrone"], ["Tom kha kai", "Tom kha kai"], ["Soupe au brocoli", "Broccoli soup"], ["Soupe de citrouille", "Pumpkin soup"], ["Soupe aux pois cassés", "Pea soup"], ["Bouillon de poulet", "Chicken soup"], ["Bortsch", "Borscht"], ["Soupe de carottes", "Carrot soup"], ["Salade niçoise", "Salade niçoise"], ["Salade César", "Caesar salad"], ["Salade de tomates", "Tomato salad"], ["Salade grecque", "Greek salad"], ["Salade de pâtes", "Pasta salad"], ["Salade de riz", "Rice salad"], ["Salade de lentilles", "Lentil salad"], ["Salade de quinoa", "Quinoa salad"], ["Taboulé", "Tabbouleh"], ["Salade de chèvre chaud", "Goat cheese salad"], ["Salade de poulet", "Chicken salad"], ["Salade au thon", "Tuna salad"], ["Mâche", "Valerianella locusta"], ["Salade de fruits de mer", "Seafood salad"], ["Salade de pommes de terre", "Potato salad"], ["Salade Waldorf", "Waldorf salad"], ["Salade de concombre", "Cucumber salad"], ["Salade de pois chiches", "Chickpea salad"], ["Omelette", "Omelette"], ["Omelette aux champignons", "Mushroom omelette"], ["Œufs brouillés", "Scrambled eggs"], ["Œuf poché", "Poached egg"], ["Œuf mimosa", "Deviled egg"], ["Chakchouka", "Shakshouka"], ["Croque-madame", "Croque-madame"], ["Pain perdu", "French toast"], ["Pancake", "Pancake"], ["Gaufre", "Waffle"], ["Crêpe", "Crêpe"], ["Porridge", "Porridge"], ["Muesli", "Muesli"], ["Avocado toast", "Avocado toast"], ["Croque-monsieur", "Croque monsieur"], ["Jambon-beurre", "Jambon-beurre"], ["Sandwich au thon", "Tuna sandwich"], ["Sandwich au poulet", "Chicken sandwich"], ["Wrap au poulet", "Wrap (food)"], ["Wrap végétarien", "Wrap (food)"], ["Panini", "Panini (sandwich)"], ["Bagel saumon", "Lox"], ["Club sandwich", "Club sandwich"], ["BLT", "BLT"], ["Sandwich aux œufs", "Egg sandwich"], ["Burrito", "Burrito"], ["Quesadilla", "Quesadilla"], ["Fajitas", "Fajita"], ["Couscous royal", "Couscous"], ["Tajine de poulet au citron", "Tajine"], ["Tajine d'agneau aux pruneaux", "Tajine"], ["Couscous aux légumes", "Couscous"], ["Pad thaï", "Pad thai"], ["Bún bò Nam Bộ", "Bún bò Nam Bộ"], ["Nem rán", "Chả giò"], ["Sushi", "Sushi"], ["Makizushi", "Makizushi"], ["Onigiri", "Onigiri"], ["Rāmen", "Ramen"], ["Poulet tikka masala", "Chicken tikka masala"], ["Biryani", "Biryani"], ["Naan au fromage", "Naan"], ["Curry vert", "Green curry"], ["Saté", "Satay"], ["Nasi goreng", "Nasi goreng"], ["Moussaka", "Moussaka"], ["Empanada", "Empanada"], ["Taco", "Taco"], ["Tarte aux pommes", "Apple pie"], ["Clafoutis", "Clafoutis"], ["Crumble aux pommes", "Apple crumble"], ["Mousse au chocolat", "Chocolate mousse"], ["Crème brûlée", "Crème brûlée"], ["Tiramisu", "Tiramisu"], ["Fondant au chocolat", "Chocolate lava cake"], ["Brownie", "Chocolate brownie"], ["Cookie", "Chocolate chip cookie"], ["Muffin", "Muffin"], ["Madeleine (gâteau)", "Madeleine (cake)"], ["Cake au citron", "Lemon cake"], ["Charlotte aux fraises", "Charlotte (cake)"], ["Île flottante", "Floating island (dessert)"], ["Riz au lait", "Rice pudding"], ["Panna cotta", "Panna cotta"], ["Banana bread", "Banana bread"], ["Cheesecake", "Cheesecake"], ["Brochette de bœuf", "Shish kebab"], ["Merguez", "Merguez"], ["Côtelette d'agneau grillée", "Lamb chop"], ["Saucisse grillée", "Grilled sausage"], ["Travers de porc", "Spare ribs"], ["Halloumi", "Halloumi"], ["Légumes grillés", "Grilled vegetables"], ["Poulet barbecue", "Barbecue chicken"]];
-// Conversion format compact → objets
-const RECIPES = RAW.map((r, i) => ({
-  id: 'r' + (i + 1),
-  name: r[0], emoji: r[1], category: r[2], time: r[3], difficulty: r[4], servings: r[5], tags: r[6],
-  ingredients: r[7].map(x => ({ name: x[0], qty: x[1], unit: x[2] })),
-  steps: r[8], q: PHOTOQ[i] || [r[0], r[0]]
-}));
 
-// ============================================================
-// UTILITAIRES
-// ============================================================
+// =====================================================================
+// MON GARDE-MANGER — application
+// =====================================================================
+const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
+const load = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
+const store = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+const haptic = (n = 8) => { try { navigator.vibrate && navigator.vibrate(n); } catch (e) {} };
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const num = n => (Math.round(n * 10) / 10).toString().replace('.', ',');
+const I = {
+  search: '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>',
+  filter: '<svg viewBox="0 0 24 24"><path d="M4 6h16M7 12h10M10 18h4"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" style="width:14px;height:14px"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  heart: '<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>',
+  x: '<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  check: '<svg viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></svg>',
+  trash: '<svg viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg>',
+  plus: '<svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>',
+  home: '<svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/></svg>',
+  book: '<svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2Z"/><path d="M4 5v16M9 8h6"/></svg>',
+  cal: '<svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
+  cart: '<svg viewBox="0 0 24 24"><path d="M3 4h2l2.4 11.2a1 1 0 0 0 1 .8h9.2a1 1 0 0 0 1-.8L21 8H6"/><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/></svg>',
+  fridge: '<svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M5 10h14M9 5v2M9 13v3"/></svg>',
+  wand: '<svg viewBox="0 0 24 24"><path d="m4 20 10-10M15 4v3M18.5 5.5l-2 2M20 9h-3M13 7l4 4"/></svg>'
+};
 
-// ============================================================
-// PHOTOS DES RECETTES (Wikipédia / Wikimedia Commons, licences libres)
-// 1) titre exact FR puis EN, par lots de 50  2) sinon recherche  — résultat gardé en mémoire
-// ============================================================
-const PH_V = 2;
-let photos = load('recipePhotos', {});
-if (photos._v !== PH_V) photos = { _v: PH_V };
-const savePhotos = () => { try { localStorage.setItem('recipePhotos', JSON.stringify(photos)); } catch (e) {} };
-const WIKI = l => `https://${l}.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail&pithumbsize=480&pilicense=any`;
+// ---------------------------------------------------------------- données
+const RECIPES = RAW.map((r, i) => ({ id: 'r' + (i + 1), name: r[0], emoji: r[1], category: r[2], time: r[3], difficulty: r[4], servings: r[5], tags: r[6],
+  ingredients: r[7].map(x => ({ name: x[0], qty: x[1], unit: x[2] })), steps: r[8], q: PHOTOQ[i] || [r[0], r[0]] }));
+const DIFF = { Facile: 1, Moyen: 2, Difficile: 3 };
+const CAT_IC = { 'Pâtes': '🍝', 'Riz': '🍚', 'Viande': '🍗', 'Poisson': '🐟', 'Légumes': '🥕', 'Soupe': '🥣', 'Salade': '🥗', 'Œufs': '🍳', 'Sandwich': '🥪', 'Monde': '🌍', 'Dessert': '🍰', 'Grillade': '🔥' };
+const CATS = [...new Set(RECIPES.map(r => r.category))];
+
+// ---------------------------------------------------------------- ustensiles
+const EQUIP = {
+  plaque: ['🔥', 'Plaques de cuisson', 'Poêle, casserole, cocotte'],
+  four: ['♨️', 'Four', 'Gratins, rôtis, gâteaux'],
+  mixeur: ['🌀', 'Mixeur / blender', 'Soupes, veloutés, houmous'],
+  batteur: ['🥚', 'Batteur électrique', 'Mousses, blancs en neige'],
+  grill: ['🍢', 'Barbecue / plancha', 'Grillades en extérieur'],
+  gaufrier: ['🧇', 'Gaufrier', 'Gaufres maison']
+};
+const OVEN = /four|°c|enfourn|gratiner/i, STOVE = /cuire|cuit|poêl|saisir|mijot|bouill|revenir|frire|frit|sauter|fondre|dorer|chauff|blanchir|caramél|braiser|poch|brouill|œufs durs|toast|griller|grillé|réduire|porter à ébullition/i;
+RECIPES.forEach(r => {
+  const n = new Set(), st = r.steps;
+  if (r.category === 'Grillade') n.add('grill');
+  if (st.some(s => OVEN.test(s)) || /chèvre chaud/i.test(r.name)) n.add('four');
+  if (r.category !== 'Grillade' && st.some(s => !OVEN.test(s) && STOVE.test(s))) n.add('plaque');
+  if (st.some(s => /mix|blend/i.test(s))) n.add('mixeur');
+  if (/mousse chocolat|île flottante|soufflé/i.test(r.name)) n.add('batteur');
+  if (/gaufre/i.test(r.name)) { n.add('gaufrier'); n.delete('plaque'); }
+  r.needs = [...n];
+});
+
+// ---------------------------------------------------------------- état
+let inv = load('myInventory', []), shop = load('myShoppingList', []), plan = load('myPlanning', {});
+let favs = load('myFavs', []), prefs = load('myPrefs', null);
+const DAYS = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'], MEALS = ['Déjeuner', 'Dîner'];
+let tab = 'home';
+const F = { q: '', time: 0, diff: '', cat: '', tools: true, fav: false, stock: false };
+const saveAll = () => { store('myInventory', inv); store('myShoppingList', shop); store('myPlanning', plan); store('myFavs', favs); if (prefs) store('myPrefs', prefs); };
+const canMake = r => !prefs || r.needs.every(n => prefs.equip.includes(n));
+const todayName = () => DAYS[(new Date().getDay() + 6) % 7];
+const invHas = name => { const n = name.toLowerCase(); return inv.some(i => { const m = i.name.toLowerCase(); return m.includes(n) || n.includes(m); }); };
+const stockPct = r => Math.round(r.ingredients.filter(i => invHas(i.name)).length / r.ingredients.length * 100);
+
+// ---------------------------------------------------------------- photos (Wikipédia, licences libres)
+const PH_V = 2; let photos = load('recipePhotos', {}); if (photos._v !== PH_V) photos = { _v: PH_V };
+const savePhotos = () => store('recipePhotos', photos);
+const WIKI = l => `https://${l}.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail&pithumbsize=640&pilicense=any`;
 async function wikiTitles(lang, titles) {
   const out = {};
   for (let i = 0; i < titles.length; i += 50) {
@@ -480,8 +529,7 @@ async function wikiTitles(lang, titles) {
     try {
       const d = await (await fetch(WIKI(lang) + '&titles=' + encodeURIComponent(part.join('|')))).json();
       const map = {}; part.forEach(t => map[t] = t);
-      (d.query.normalized || []).forEach(n => Object.keys(map).forEach(k => { if (map[k] === n.from) map[k] = n.to; }));
-      (d.query.redirects || []).forEach(n => Object.keys(map).forEach(k => { if (map[k] === n.from) map[k] = n.to; }));
+      [...(d.query.normalized || []), ...(d.query.redirects || [])].forEach(n => Object.keys(map).forEach(k => { if (map[k] === n.from) map[k] = n.to; }));
       const pages = Object.values(d.query.pages || {});
       part.forEach(t => { const p = pages.find(x => x.title === map[t]); if (p && p.thumbnail) out[t] = { src: p.thumbnail.source, url: `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(p.title)}` }; });
     } catch (e) { return null; }
@@ -497,491 +545,384 @@ async function wikiSearch(lang, q) {
 }
 let photoBusy = false;
 async function loadPhotos() {
-  if (photoBusy || !navigator.onLine) return; photoBusy = true;
+  if (photoBusy || navigator.onLine === false) return; photoBusy = true;
   try {
     let todo = RECIPES.filter(r => !(r.id in photos));
     for (const [lang, k] of [['fr', 0], ['en', 1]]) {
       if (!todo.length) break;
-      const got = await wikiTitles(lang, [...new Set(todo.map(r => r.q[k]))]);
-      if (!got) break;
+      const got = await wikiTitles(lang, [...new Set(todo.map(r => r.q[k]))]); if (!got) break;
       todo.forEach(r => { if (got[r.q[k]]) photos[r.id] = got[r.q[k]]; });
       todo = todo.filter(r => !(r.id in photos)); savePhotos(); refreshPhotos();
     }
-    for (const r of todo) { // recherche plein texte pour les dernières
+    for (const r of todo) {
       let p = await wikiSearch('fr', r.q[0]); if (p === false) p = await wikiSearch('en', r.q[1]);
       if (p === null) continue; photos[r.id] = p || ''; savePhotos(); refreshPhotos();
     }
   } finally { photoBusy = false; }
 }
-function thumbHTML(r, cls = 'recipe-thumb') {
-  const p = photos[r.id];
-  return `<div class="${cls}" data-rid="${r.id}">${p && p.src ? `<img src="${esc(p.src)}" alt="${esc(r.name)}" loading="lazy" onerror="this.remove()">` : ''}<span class="emo">${r.emoji}</span></div>`;
+const imgTag = src => `<img src="${esc(src)}" alt="" loading="lazy" onload="this.classList.add('ok');this.parentNode.classList.add('done')" onerror="this.parentNode.classList.add('done');this.remove()">`;
+function ph(r, cls = '') {
+  const p = photos[r.id], has = p && p.src, known = r.id in photos;
+  return `<div class="ph ${cls} ${known && !has ? 'done' : ''}" data-rid="${r.id}">${has ? imgTag(p.src) : ''}<span class="emo">${r.emoji}</span></div>`;
 }
 function refreshPhotos() {
-  document.querySelectorAll('[data-rid]').forEach(el => {
-    const p = photos[el.dataset.rid];
-    if (p && p.src && !el.querySelector('img')) el.insertAdjacentHTML('afterbegin', `<img src="${esc(p.src)}" alt="" loading="lazy" onerror="this.remove()">`);
-  });
+  $$('[data-rid]').forEach(el => { const p = photos[el.dataset.rid]; if (p && p.src && !el.querySelector('img')) el.insertAdjacentHTML('afterbegin', imgTag(p.src)); else if (p === '') el.classList.add('done'); });
 }
 window.addEventListener('online', loadPhotos);
 
-// ============================================================
-// ÉTAT GLOBAL
-// ============================================================
-let inventory = load('myInventory', []);
-let shoppingList = load('myShoppingList', []);
-let planning = load('myPlanning', {});
-let currentFilter = 'Toutes';
-let currentSlotKey = null;
-
-const DAYS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
-const MEALS = ['Déjeuner','Dîner'];
-
-// ============================================================
-// ONGLETS
-// ============================================================
-document.querySelectorAll('nav button').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    btn.classList.add('active');
-    document.getElementById(btn.dataset.tab).classList.add('active');
-    if (btn.dataset.tab === 'tab-planning') renderPlanning();
-    if (btn.dataset.tab === 'tab-recipes') { renderLibrary(); renderSuggestions(); }
-  });
-});
-
-// ============================================================
-// INVENTAIRE
-// ============================================================
-function saveInventory() { localStorage.setItem('myInventory', JSON.stringify(inventory)); renderInventory(); }
-function addItem(name, qty, expiry = null) {
-  const fromForm = !name;
-  name = name || document.getElementById('item-name').value;
-  qty = qty || (fromForm && parseInt(document.getElementById('item-qty').value)) || 1;
-  expiry = expiry || document.getElementById('item-expiry').value || null;
-  if (!name || !name.trim()) return;
-  const existing = inventory.find(i => i.name.toLowerCase() === name.toLowerCase().trim());
-  if (existing) { existing.qty += parseInt(qty); if (expiry) existing.expiry = expiry; }
-  else inventory.push({ id: Date.now() + Math.random(), name: name.trim(), qty: parseInt(qty), expiry });
-  saveInventory();
-  if (fromForm) { document.getElementById('item-name').value = ''; document.getElementById('item-qty').value = 1; document.getElementById('item-expiry').value = ''; }
+// ---------------------------------------------------------------- composants
+const dots = d => `<span class="dots">${[1, 2, 3].map(i => `<i class="${i <= (DIFF[d] || 1) ? 'f' : ''}"></i>`).join('')}</span>`;
+function card(r, i = 0, extra = '') {
+  return `<button class="rc" style="animation-delay:${Math.min(i, 12) * 40}ms" onclick="openRecipe('${r.id}')">
+    <div style="position:relative">${ph(r)}<span class="tag">${I.clock}${r.time} min</span>
+    <span class="heart ${favs.includes(r.id) ? 'on' : ''}" onclick="event.stopPropagation();toggleFav('${r.id}',this)">${I.heart}</span></div>
+    <div class="bd"><b>${esc(r.name)}</b><div class="meta">${dots(r.difficulty)}<span>${r.difficulty}</span>${!canMake(r) ? '<span title="Ustensile manquant">🚫</span>' : ''}</div>${extra}</div></button>`;
 }
-function removeItem(id) { inventory = inventory.filter(i => i.id !== id); saveInventory(); }
-function updateQty(id, delta) {
-  const item = inventory.find(i => i.id === id);
-  if (item) { item.qty += delta; if (item.qty <= 0) return removeItem(id); saveInventory(); }
+function toggleFav(id, el) {
+  haptic(); const i = favs.indexOf(id); i < 0 ? favs.push(id) : favs.splice(i, 1); saveAll();
+  if (el) el.classList.toggle('on', i < 0); else render();
+  toast(i < 0 ? '❤️ Ajouté aux favoris' : 'Retiré des favoris');
 }
-function getDaysUntilExpiry(expiry) { if (!expiry) return Infinity; const [y, m, d] = expiry.split('-').map(Number), t = new Date(); t.setHours(0, 0, 0, 0); return Math.round((new Date(y, m - 1, d) - t) / 86400000); }
-function renderInventory() {
-  const list = document.getElementById('inventory-list');
-  const empty = document.getElementById('inventory-empty');
-  list.innerHTML = '';
-  if (inventory.length === 0) { empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  inventory.sort((a, b) => getDaysUntilExpiry(a.expiry) - getDaysUntilExpiry(b.expiry));
-  inventory.forEach(item => {
-    const li = document.createElement('li');
-    li.className = 'inventory-item';
-    const days = getDaysUntilExpiry(item.expiry);
-    let badge = '';
-    if (item.expiry) {
-      if (days <= 2) badge = `<span class="expiry-badge expiry-urgent">⚠️ ${days < 0 ? 'Expiré' : days === 0 ? 'Aujourd’hui' : 'J-' + days}</span>`;
-      else badge = `<span class="expiry-badge expiry-ok">✅ ${days}j</span>`;
-    }
-    li.innerHTML = `<div style="flex:1"><span class="item-name">${esc(item.name)}</span>${badge}<div class="item-meta">${item.expiry ? 'Périme le ' + item.expiry.split('-').reverse().join('/') : 'Pas de date'}</div></div>
-      <div style="display:flex;align-items:center;gap:4px">
-      <button class="btn-icon" onclick="updateQty(${item.id},-1)">➖</button>
-      <span style="font-weight:700;min-width:20px;text-align:center">${item.qty}</span>
-      <button class="btn-icon" onclick="updateQty(${item.id},1)">➕</button>
-      <button class="btn-icon" onclick="removeItem(${item.id})">🗑️</button></div>`;
-    list.appendChild(li);
-  });
+let toastT;
+function toast(t) { const e = $('#toast'); e.textContent = t; e.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => e.classList.remove('show'), 2200); }
+function confetti() { const c = ['#E8613C', '#F0B44C', '#2F9E6E', '#5B8DEF', '#F08A5D']; for (let i = 0; i < 40; i++) { const d = document.createElement('i'); d.className = 'confetti'; d.style.cssText = `left:${Math.random() * 100}vw;background:${c[i % 5]};animation-duration:${1.4 + Math.random() * 1.4}s;animation-delay:${Math.random() * .3}s`; document.body.appendChild(d); setTimeout(() => d.remove(), 3200); } }
+
+// ---------------------------------------------------------------- feuilles (bottom sheets)
+function sheet(html, cls = '') {
+  const bg = document.createElement('div'); bg.className = 'sheet-bg';
+  bg.innerHTML = `<div class="sheet ${cls}"><div class="grab"></div><button class="close" onclick="closeSheet(this)">${I.x}</button>${html}</div>`;
+  bg.addEventListener('click', e => { if (e.target === bg) closeSheet(bg); });
+  const sh = bg.firstChild; let y0 = null, dy = 0;
+  sh.addEventListener('touchstart', e => { y0 = sh.scrollTop <= 0 ? e.touches[0].clientY : null; dy = 0; }, { passive: true });
+  sh.addEventListener('touchmove', e => { if (y0 == null) return; dy = e.touches[0].clientY - y0; if (dy > 0) sh.style.transform = `translateY(${dy}px)`; }, { passive: true });
+  sh.addEventListener('touchend', () => { if (y0 == null) return; if (dy > 110) closeSheet(bg); else sh.style.transform = ''; y0 = null; });
+  $('#sheets').appendChild(bg); document.body.style.overflow = 'hidden'; return sh;
+}
+function closeSheet(el) {
+  const bg = el && el.closest ? el.closest('.sheet-bg') : $$('.sheet-bg').pop(); if (!bg || bg.classList.contains('out')) return;
+  bg.classList.add('out'); bg.firstChild.style.transform = '';
+  setTimeout(() => { bg.remove(); if (!$('.sheet-bg')) document.body.style.overflow = ''; }, 230);
+}
+const closeAll = () => $$('.sheet-bg').forEach(b => closeSheet(b));
+
+// ---------------------------------------------------------------- navigation
+const TABS = [['home', 'Accueil', I.home], ['recipes', 'Recettes', I.book], ['plan', 'Planning', I.cal], ['shop', 'Courses', I.cart], ['fridge', 'Frigo', I.fridge]];
+function go(t) { if (t !== tab) haptic(5); tab = t; render(); window.scrollTo(0, 0); }
+function renderTabs() {
+  const left = shop.filter(s => !s.checked).length;
+  $('#tabbar').innerHTML = TABS.map(([k, l, ic]) => `<button class="${tab === k ? 'on' : ''}" onclick="go('${k}')">${ic}<span>${l}</span>${k === 'shop' && left ? `<span class="badge">${left}</span>` : ''}</button>`).join('');
+}
+function render() {
+  const h = new Date().getHours();
+  $('#hello').textContent = (h < 6 ? 'Bonne nuit' : h < 12 ? 'Bonjour' : h < 18 ? 'Bon après-midi' : 'Bonsoir') + ' 👋';
+  renderTabs();
+  const v = $('#view'); v.className = 'view'; void v.offsetWidth;
+  v.innerHTML = ({ home: vHome, recipes: vRecipes, plan: vPlan, shop: vShop, fridge: vFridge })[tab]();
+  v.classList.add('view');
+  if (tab === 'recipes') { const s = $('#q'); if (s && F.q) { s.focus(); s.setSelectionRange(F.q.length, F.q.length); } }
 }
 
-// ============================================================
-// BIBLIOTHÈQUE DE RECETTES
-// ============================================================
-function getAllCategories() {
-  const cats = new Set(RECIPES.map(r => r.category));
-  return ['Toutes', ...Array.from(cats).sort()];
-}
-
-function renderCategoryFilters() {
-  const bar = document.getElementById('category-filters');
-  bar.innerHTML = '';
-  getAllCategories().forEach(cat => {
-    const b = document.createElement('button');
-    b.className = 'filter-chip' + (cat === currentFilter ? ' active' : '');
-    b.textContent = cat;
-    b.onclick = () => { currentFilter = cat; renderCategoryFilters(); renderLibrary(); };
-    bar.appendChild(b);
-  });
-}
-
-function renderLibrary() {
-  const grid = document.getElementById('library-grid');
-  const q = (document.getElementById('library-search').value || '').toLowerCase().trim();
-  let list = RECIPES.filter(r => currentFilter === 'Toutes' || r.category === currentFilter);
-  if (q) list = list.filter(r => r.name.toLowerCase().includes(q) || r.tags.some(t => t.includes(q)));
-  document.getElementById('lib-count').textContent = list.length;
-  grid.innerHTML = '';
-  if (list.length === 0) { grid.innerHTML = '<p style="color:var(--text-light); padding:20px;">Aucune recette trouvée.</p>'; return; }
-  list.forEach(r => grid.appendChild(createRecipeCard(r)));
-}
-
-function createRecipeCard(r) {
-  const card = document.createElement('div');
-  card.className = 'recipe-card';
-  card.onclick = () => openRecipeModal(r);
-  const ings = r.ingredients.slice(0, 3).map(i => i.name).join(', ');
-  card.innerHTML = `${thumbHTML(r)}
-    <div class="info"><div class="title">${r.name}</div>
-    <div class="meta">⏱ ${r.time} min • ${r.ingredients.length} ingr.</div></div>`;
-  return card;
-}
-
-function openRecipeModal(r) {
-  const content = document.getElementById('modal-content');
-  const ph = photos[r.id];
-  content.innerHTML = `${thumbHTML(r, 'modal-photo')}${ph && ph.src ? `<p class="credit">Photo d’illustration : <a href="${esc(ph.url)}" target="_blank" rel="noopener">Wikipédia</a> (licence libre)</p>` : ''}
-    <h2>${r.emoji} ${r.name}</h2>
-    <p style="color:var(--text-light); font-size:.9rem; margin-bottom:12px;">
-      <span class="badge">${r.category}</span>
-      <span class="badge">⏱ ${r.time} min</span>
-      <span class="badge">${r.difficulty}</span>
-      <span class="badge">${r.servings} pers.</span>
-    </p>
-    <h4>🧾 Ingrédients</h4>
-    <ul>${r.ingredients.map(i => `<li>${i.qty}${i.unit ? ' ' + i.unit : ''} ${i.name}</li>`).join('')}</ul>
-    <h4>👨‍🍳 Préparation</h4>
-    <ol>${r.steps.map(s => `<li>${s}</li>`).join('')}</ol>
-    <button class="btn btn-primary" style="margin-top:16px; width:100%;" onclick="addMissingToShopping('${r.id}')">
-      🛒 Ajouter les ingrédients manquants aux courses
-    </button>`;
-  document.getElementById('recipe-modal').classList.add('open');
-}
-
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(o => {
-  o.addEventListener('click', e => { if (e.target === e.currentTarget) o.classList.remove('open'); });
-});
-
-function addMissingToShopping(ingredients) {
-  if (typeof ingredients === 'string') ingredients = RECIPES.find(x => x.id === ingredients).ingredients;
-  const inv = inventory.map(i => i.name.toLowerCase());
-  let added = 0;
-  ingredients.forEach(ing => {
-    const name = ing.name.toLowerCase();
-    const inStock = inv.some(n => n.includes(name) || name.includes(n));
-    if (!inStock && !shoppingList.some(s => s.name.toLowerCase() === name)) {
-      shoppingList.push({ id: Date.now() + Math.random(), name: ing.name, qty: ing.qty + (ing.unit ? ' ' + ing.unit : ''), checked: false });
-      added++;
-    }
-  });
-  saveShoppingList();
-  closeModal('recipe-modal');
-  alert(added > 0 ? `✅ ${added} ingrédient(s) ajouté(s).` : '⚠️ Tous les ingrédients sont déjà en stock !');
-  if (added > 0) document.querySelector('[data-tab="tab-shopping"]').click();
-}
-
-// ============================================================
-// SUGGESTIONS BASÉES SUR L'INVENTAIRE
-// ============================================================
-function renderSuggestions() {
-  const grid = document.getElementById('recipe-suggestions');
-  const empty = document.getElementById('suggestions-empty');
-  if (inventory.length === 0) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  const invNames = inventory.map(i => i.name.toLowerCase());
-  const scored = RECIPES.map(r => {
-    const owned = r.ingredients.filter(ing => invNames.some(n => n.includes(ing.name.toLowerCase()) || ing.name.toLowerCase().includes(n))).length;
-    const pct = Math.round((owned / r.ingredients.length) * 100);
-    return { r, pct };
-  }).filter(x => x.pct > 0).sort((a, b) => b.pct - a.pct).slice(0, 8);
-
-  grid.innerHTML = '';
-  if (scored.length === 0) { grid.innerHTML = '<p style="color:var(--text-light)">Aucune correspondance trouvée. Ajoutez plus de produits.</p>'; return; }
-  scored.forEach(({ r, pct }) => {
-    const card = document.createElement('div');
-    card.className = 'recipe-card';
-    card.onclick = () => openRecipeModal(r);
-    card.innerHTML = `${thumbHTML(r)}
-      <div class="info"><div class="title">${r.name}</div>
-      <div class="meta">${pct}% d'ingrédients en stock</div>
-      <div class="match-bar"><div class="match-fill" style="width:${pct}%"></div></div></div>`;
-    grid.appendChild(card);
-  });
-}
-
-// ============================================================
-// RECHERCHE EN LIGNE (TheMealDB)
-// ============================================================
-async function searchMealDB() {
-  const q = document.getElementById('search-query').value.trim();
-  const out = document.getElementById('search-results');
-  if (!q) return;
-  out.innerHTML = '<p style="color:var(--text-light)">Chargement...</p>';
-  try {
-    const res = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(q)}`);
-    const data = await res.json();
-    if (!data.meals) { out.innerHTML = '<p style="color:var(--text-light)">Aucune recette trouvée.</p>'; return; }
-    out.innerHTML = '';
-    data.meals.forEach(m => {
-      const card = document.createElement('div');
-      card.className = 'recipe-card';
-      card.onclick = () => openMealDBModal(m.idMeal);
-      card.innerHTML = `<img src="${m.strMealThumb}" style="width:100%;height:90px;object-fit:cover"><div class="info"><div class="title">${m.strMeal}</div><div class="meta">${m.strCategory || ''}</div></div>`;
-      out.appendChild(card);
-    });
-  } catch (e) { out.innerHTML = '<p style="color:var(--danger)">Erreur réseau.</p>'; }
-}
-
-async function openMealDBModal(id) {
-  const content = document.getElementById('modal-content');
-  content.innerHTML = '<p>Chargement...</p>';
-  document.getElementById('recipe-modal').classList.add('open');
-  let m;
-  try { const data = await (await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)).json(); m = data.meals && data.meals[0]; } catch (e) {}
-  if (!m) { content.innerHTML = '<p style="color:var(--danger)">Impossible de charger la recette (connexion ?).</p>'; return; }
-  const ingredients = [];
-  for (let i = 1; i <= 20; i++) {
-    const ing = m[`strIngredient${i}`]; const meas = m[`strMeasure${i}`];
-    if (ing && ing.trim()) ingredients.push(`${meas || ''} ${ing}`.trim());
+// ---------------------------------------------------------------- ACCUEIL
+function vHome() {
+  const ok = RECIPES.filter(canMake), main = ok.filter(r => !['Dessert', 'Œufs'].includes(r.category));
+  const d = new Date(), seed = d.getFullYear() * 400 + d.getMonth() * 32 + d.getDate(), hero = main[(seed * 7919) % main.length] || RECIPES[0];
+  const tonight = plan[todayName() + '|' + (d.getHours() < 15 ? 'Déjeuner' : 'Dîner')];
+  let h = `<h1>Qu’est-ce qu’on mange ${d.getHours() < 15 ? 'ce midi' : 'ce soir'} ?</h1>
+    <div class="search" style="margin-top:14px" onclick="go('recipes');setTimeout(()=>$('#q')&&$('#q').focus(),60)">${I.search}<input placeholder="${ok.length} recettes faisables chez vous" readonly style="pointer-events:none"></div>`;
+  if (tonight) { const r = RECIPES.find(x => x.id === tonight); if (r) h += `<div class="sec"><h3>${d.getHours() < 15 ? 'Ce midi' : 'Ce soir'} au menu</h3><a onclick="go('plan')">Planning</a></div>
+      <button class="pickrow" onclick="openRecipe('${r.id}')">${ph(r)}<span><b>${esc(r.name)}</b><small>${r.time} min · ${r.difficulty}</small></span></button>`; }
+  h += `<div class="hero" onclick="openRecipe('${hero.id}')">${ph(hero)}<div class="ov"><small>✨ L’idée du jour</small><h2>${esc(hero.name)}</h2><div class="pills"><span>⏱ ${hero.time} min</span><span>${hero.difficulty}</span><span>${CAT_IC[hero.category] || ''} ${hero.category}</span></div></div></div>`;
+  if (inv.length) {
+    const s = ok.map(r => ({ r, p: stockPct(r) })).filter(x => x.p > 0).sort((a, b) => b.p - a.p).slice(0, 10);
+    if (s.length) h += `<div class="sec"><h3>Avec ce que vous avez</h3><a onclick="Object.assign(F,{stock:true});go('recipes')">Tout voir</a></div><div class="rail">${s.map((x, i) => card(x.r, i, `<div class="match"><i style="width:${x.p}%"></i></div><div class="meta">${x.p} % en stock</div>`)).join('')}</div>`;
   }
-  const steps = (m.strInstructions || '').split(/\r?\n/).filter(s => s.trim());
-  content.innerHTML = `<h2>${m.strMeal}</h2>
-    <img src="${m.strMealThumb}" style="width:100%;border-radius:12px;margin-bottom:12px">
-    <p style="color:var(--text-light);font-size:.85rem">${m.strCategory||''} • ${m.strArea||''}</p>
-    <h4>🧾 Ingrédients</h4><ul>${ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
-    <h4>👨‍🍳 Préparation</h4><ol>${steps.map(s => `<li>${s}</li>`).join('')}</ol>`;
+  const quick = main.filter(r => r.time <= 15).sort(() => .5 - Math.random()).slice(0, 10);
+  if (quick.length) h += `<div class="sec"><h3>⚡ Prêt en 15 minutes</h3><a onclick="Object.assign(F,{time:15,cat:'',diff:''});go('recipes')">Tout voir</a></div><div class="rail">${quick.map((r, i) => card(r, i)).join('')}</div>`;
+  h += `<div class="sec"><h3>Catégories</h3></div><div class="cats">${CATS.map((c, i) => `<button class="cat" style="animation-delay:${i * 30}ms" onclick="Object.assign(F,{cat:'${c}'});go('recipes')"><span>${CAT_IC[c] || '🍽️'}</span>${c}</button>`).join('')}</div>`;
+  const fv = favs.map(id => RECIPES.find(r => r.id === id)).filter(Boolean);
+  if (fv.length) h += `<div class="sec"><h3>❤️ Vos favoris</h3><a onclick="Object.assign(F,{fav:true});go('recipes')">Tout voir</a></div><div class="rail">${fv.map((r, i) => card(r, i)).join('')}</div>`;
+  const easy = main.filter(r => r.difficulty === 'Facile' && r.time <= 30 && r.time > 15).sort(() => .5 - Math.random()).slice(0, 10);
+  h += `<div class="sec"><h3>👌 Facile et rapide</h3><a onclick="Object.assign(F,{time:30,diff:'Facile',cat:''});go('recipes')">Tout voir</a></div><div class="rail">${easy.map((r, i) => card(r, i)).join('')}</div>`;
+  return h;
 }
 
-// ============================================================
-// PLANNING
-// ============================================================
-function savePlanning() { localStorage.setItem('myPlanning', JSON.stringify(planning)); }
-
-function renderPlanning() {
-  const grid = document.getElementById('planning-grid');
-  grid.innerHTML = '';
-  // En-tête
-  grid.appendChild(Object.assign(document.createElement('div'), { className: 'planning-header', textContent: '' }));
-  MEALS.forEach(m => grid.appendChild(Object.assign(document.createElement('div'), { className: 'planning-header', textContent: m })));
-  // Jours
-  DAYS.forEach(day => {
-    grid.appendChild(Object.assign(document.createElement('div'), { className: 'planning-day', textContent: day }));
-    MEALS.forEach(meal => {
-      const key = `${day}|${meal}`;
-      const slot = document.createElement('div');
-      slot.className = 'planning-slot';
-      const recipeId = planning[key];
-      if (recipeId) {
-        const r = RECIPES.find(x => x.id === recipeId);
-        if (r) {
-          slot.classList.add('filled');
-          slot.innerHTML = `${thumbHTML(r, 'slot-photo')}<div class="slot-name">${r.name}</div>`;
-        }
-      } else {
-        slot.innerHTML = '<div class="slot-empty">＋</div>';
-      }
-      slot.onclick = () => openPicker(key);
-      grid.appendChild(slot);
-    });
-  });
+// ---------------------------------------------------------------- RECETTES + FILTRES
+const TIMES = [[0, 'Tous'], [15, '≤ 15 min'], [30, '≤ 30 min'], [45, '≤ 45 min'], [60, '≤ 1 h']];
+function filtered() {
+  const q = F.q.toLowerCase().trim();
+  let L = RECIPES.filter(r => (!F.cat || r.category === F.cat) && (!F.time || r.time <= F.time) && (!F.diff || r.difficulty === F.diff) && (!F.tools || canMake(r)) && (!F.fav || favs.includes(r.id)));
+  if (q) L = L.filter(r => (r.name + ' ' + r.category + ' ' + r.tags.join(' ') + ' ' + r.ingredients.map(i => i.name).join(' ')).toLowerCase().includes(q));
+  if (F.stock) L = L.map(r => ({ r, p: stockPct(r) })).filter(x => x.p > 0).sort((a, b) => b.p - a.p).map(x => x.r);
+  return L;
+}
+const nFilters = () => (F.time ? 1 : 0) + (F.diff ? 1 : 0) + (F.cat ? 1 : 0) + (F.fav ? 1 : 0) + (F.stock ? 1 : 0) + (!F.tools ? 0 : 0);
+function vRecipes() {
+  const L = filtered();
+  let h = `<h1>Recettes</h1><div class="row" style="margin-top:12px;gap:10px"><div class="search" style="flex:1">${I.search}<input id="q" type="search" placeholder="Plat, ingrédient…" value="${esc(F.q)}" oninput="F.q=this.value;updList()" enterkeyhint="search"></div>
+    <button class="fbtn" onclick="openFilters()">${I.filter}Filtres${nFilters() ? `<i>${nFilters()}</i>` : ''}</button></div>`;
+  h += `<div class="chips" style="margin-top:14px">${TIMES.map(([v, l]) => `<button class="chip ${F.time === v ? 'on' : ''}" onclick="F.time=${v};haptic();render()">${v ? '⏱ ' : ''}${l}</button>`).join('')}</div>`;
+  h += `<div class="chips" style="margin-top:8px"><button class="chip ${!F.cat ? 'on' : ''}" onclick="F.cat='';render()">Toutes</button>${CATS.map(c => `<button class="chip ${F.cat === c ? 'on' : ''}" onclick="F.cat='${c}';haptic();render()">${CAT_IC[c] || ''} ${c}</button>`).join('')}</div>`;
+  const act = [F.diff && [`${F.diff}`, "F.diff=''"], F.fav && ['❤️ Favoris', 'F.fav=false'], F.stock && ['🧊 Avec mon frigo', 'F.stock=false'], !F.tools && ['Tous ustensiles', 'F.tools=true']].filter(Boolean);
+  if (act.length) h += `<div class="chips wrap" style="margin-top:10px">${act.map(([l, a]) => `<button class="chip x" onclick="${a};render()">${l} ✕</button>`).join('')}</div>`;
+  h += `<div id="list">${listHTML(L)}</div>`;
+  return h;
+}
+function listHTML(L) {
+  let h = `<div class="count">${L.length} recette${L.length > 1 ? 's' : ''}${F.tools && prefs ? ' faisable' + (L.length > 1 ? 's' : '') + ' avec vos ustensiles' : ''}</div>`;
+  h += L.length ? `<div class="grid">${L.map((r, i) => card(r, i, F.stock ? `<div class="match"><i style="width:${stockPct(r)}%"></i></div>` : '')).join('')}</div>`
+    : `<div class="empty"><div>🔍</div><b>Aucune recette</b><p class="small">Essayez d’enlever un filtre${F.tools ? ' ou d’afficher les recettes demandant d’autres ustensiles' : ''}.</p>${F.tools ? `<button class="btn sm" style="margin-top:12px" onclick="F.tools=false;render()">Voir tous les ustensiles</button>` : ''}</div>`;
+  if (F.q.trim().length > 2) h += `<button class="btn w" style="margin-top:18px" onclick="searchOnline()">🌍 Chercher « ${esc(F.q)} » en ligne</button><div id="online"></div>`;
+  return h;
+}
+let updT; function updList() { clearTimeout(updT); updT = setTimeout(() => { const l = $('#list'); if (l) l.innerHTML = listHTML(filtered()); }, 120); }
+function openFilters() {
+  haptic();
+  const body = () => `<h2>Filtres</h2>
+    <div class="lbl">Temps de préparation</div><div class="chips wrap">${TIMES.map(([v, l]) => `<button class="chip ${F.time === v ? 'on' : ''}" onclick="F.time=${v};refreshF()">${l}</button>`).join('')}</div>
+    <div class="lbl">Difficulté</div><div class="seg">${[['', 'Toutes'], ['Facile', '● Facile'], ['Moyen', '●● Moyen'], ['Difficile', '●●● Difficile']].map(([v, l]) => `<button class="${F.diff === v ? 'on' : ''}" onclick="F.diff='${v}';refreshF()">${l}</button>`).join('')}</div>
+    <div class="lbl">Catégorie</div><div class="chips wrap"><button class="chip ${!F.cat ? 'on' : ''}" onclick="F.cat='';refreshF()">Toutes</button>${CATS.map(c => `<button class="chip ${F.cat === c ? 'on' : ''}" onclick="F.cat='${c}';refreshF()">${CAT_IC[c] || ''} ${c}</button>`).join('')}</div>
+    <div class="lbl">Préférences</div>
+    <div class="switch" onclick="F.tools=!F.tools;refreshF()"><span style="font-size:22px">🍳</span><div class="t"><b>Avec mes ustensiles</b><small>${prefs ? prefs.equip.map(e => EQUIP[e][0]).join(' ') : ''} · <a style="color:var(--pri)" onclick="event.stopPropagation();openEquip()">modifier</a></small></div><div class="tg ${F.tools ? 'on' : ''}"></div></div>
+    <div class="switch" style="margin-top:8px" onclick="F.stock=!F.stock;refreshF()"><span style="font-size:22px">🧊</span><div class="t"><b>Avec ce qu’il y a dans mon frigo</b><small>Trie par ingrédients en stock</small></div><div class="tg ${F.stock ? 'on' : ''}"></div></div>
+    <div class="switch" style="margin-top:8px" onclick="F.fav=!F.fav;refreshF()"><span style="font-size:22px">❤️</span><div class="t"><b>Favoris uniquement</b></div><div class="tg ${F.fav ? 'on' : ''}"></div></div>
+    <div class="bar-actions"><button class="btn" onclick="Object.assign(F,{time:0,diff:'',cat:'',fav:false,stock:false,tools:true});refreshF()">Réinitialiser</button><button class="btn pri" onclick="closeSheet();render()">Voir ${(n => n + ' recette' + (n > 1 ? 's' : ''))(filtered().length)}</button></div>`;
+  const sh = sheet(body()); window.refreshF = () => { haptic(4); const st = sh.scrollTop; sh.innerHTML = `<div class="grab"></div><button class="close" onclick="closeSheet(this)">${I.x}</button>` + body(); sh.scrollTop = st; render(); };
 }
 
-function openPicker(key) {
-  currentSlotKey = key;
-  document.getElementById('picker-title').textContent = 'Choisir pour ' + key.replace('|', ' – ');
-  document.getElementById('picker-search').value = '';
-  renderPickerList();
-  document.getElementById('picker-modal').classList.add('open');
+// ---------------------------------------------------------------- FICHE RECETTE
+function fmtQty(q, unit, f) {
+  let v = q * f; if (/^(g|ml)$/.test(unit)) v = v >= 20 ? Math.round(v / 5) * 5 : Math.round(v); else if (/^(kg|l|cl)$/.test(unit)) v = Math.round(v * 10) / 10; else v = Math.max(.5, Math.round(v * 2) / 2);
+  return num(v) + (unit ? ' ' + unit : '');
+}
+function openRecipe(id, keep) {
+  const r = RECIPES.find(x => x.id === id); if (!r) return; haptic();
+  let pers = (prefs && prefs.people) || r.servings; const p = photos[r.id];
+  const miss = r.needs.filter(n => prefs && !prefs.equip.includes(n));
+  const ings = () => r.ingredients.map(i => { const ok = invHas(i.name); return `<div class="ing"><span class="st ${ok ? 'ok' : ''}">${ok ? '✓' : '•'}</span><span>${esc(i.name)}</span><span class="q">${fmtQty(i.qty, i.unit, pers / r.servings)}</span></div>`; }).join('');
+  const html = `${ph(r, 'cover')}<div class="dt">
+    <div class="row" style="justify-content:space-between;align-items:flex-start"><div><span class="mu small" style="font-weight:700">${CAT_IC[r.category] || ''} ${r.category.toUpperCase()}</span><h2 style="font-size:26px;margin-top:2px">${esc(r.name)}</h2></div>
+    <button class="iconbtn heart-big ${favs.includes(r.id) ? 'on' : ''}" style="color:${favs.includes(r.id) ? 'var(--pri)' : 'inherit'}" onclick="toggleFav('${r.id}');this.style.color=favs.includes('${r.id}')?'var(--pri)':'inherit';this.querySelector('svg').style.fill=favs.includes('${r.id}')?'currentColor':'none'">${I.heart.replace('<svg', `<svg style="fill:${favs.includes(r.id) ? 'currentColor' : 'none'}"`)}</button></div>
+    ${p && p.src ? `<p class="credit">Photo d’illustration : <a href="${esc(p.url)}" target="_blank" rel="noopener">Wikipédia</a> · licence libre</p>` : ''}
+    <div class="stats"><div class="stat"><b>${r.time} min</b><small>Préparation</small></div><div class="stat"><b>${dots(r.difficulty)}</b><small>${r.difficulty}</small></div><div class="stat"><b>${r.ingredients.length}</b><small>Ingrédients</small></div></div>
+    ${r.needs.length ? `<div class="lbl">Ustensiles</div><div class="tools">${r.needs.map(n => `<span class="${miss.includes(n) ? 'miss' : ''}">${EQUIP[n][0]} ${EQUIP[n][1]}${miss.includes(n) ? ' — vous n’en avez pas' : ''}</span>`).join('')}</div>` : `<div class="lbl">Ustensiles</div><div class="tools"><span>🔪 Aucun appareil, sans cuisson</span></div>`}
+    <div class="lbl" style="align-items:center">Ingrédients<div class="stepper"><button onclick="chgPers(-1)">−</button><b id="pers">${pers} pers.</b><button onclick="chgPers(1)">+</button></div></div>
+    <div id="ings">${ings()}</div>
+    <div class="lbl">Préparation <span class="mu small" style="font-weight:600">Touchez une étape terminée</span></div>
+    ${r.steps.map((s, i) => `<div class="step" onclick="this.classList.toggle('done');haptic(6);checkSteps(this)"><span class="n">${i + 1}</span><p>${esc(s)}</p></div>`).join('')}
+    <div class="bar-actions"><button class="btn">🛒 Courses</button><button class="btn pri" onclick="pickSlot('${r.id}')">📅 Planifier</button></div></div>`;
+  const sh = sheet(html, 'full');
+  sh.querySelector('.bar-actions .btn').onclick = () => addMissing(r.id, pers / r.servings);
+  window.chgPers = d => { pers = Math.max(1, Math.min(20, pers + d)); haptic(4); $('#pers').textContent = pers + ' pers.'; $('#ings').innerHTML = ings(); };
+  window.checkSteps = el => { const all = [...el.parentNode.querySelectorAll('.step')]; if (all.every(s => s.classList.contains('done'))) { confetti(); toast('Bon appétit ! 🍽️'); } };
+}
+function addMissing(id, f = 1) {
+  const r = RECIPES.find(x => x.id === id); let n = 0;
+  r.ingredients.forEach(i => { if (!invHas(i.name) && !shop.some(s => !s.checked && s.name.toLowerCase() === i.name.toLowerCase())) { shop.push({ id: uid(), name: i.name, qty: fmtQty(i.qty, i.unit, f), checked: false, from: r.name }); n++; } });
+  saveAll(); renderTabs(); haptic(15);
+  toast(n ? `🛒 ${n} ingrédient${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''} aux courses` : '✅ Tout est déjà en stock ou dans la liste');
+}
+function pickSlot(id) {
+  const r = RECIPES.find(x => x.id === id); let meal = new Date().getHours() < 15 ? 'Déjeuner' : 'Dîner';
+  const body = () => `<h2>Planifier</h2><p class="mu small" style="margin:4px 0 14px">${esc(r.name)}</p><div class="seg">${MEALS.map(m => `<button class="${meal === m ? 'on' : ''}" onclick="setMeal('${m}')">${m === 'Déjeuner' ? '☀️' : '🌙'} ${m}</button>`).join('')}</div>
+    <div style="margin-top:12px">${DAYS.map(d => { const cur = RECIPES.find(x => x.id === plan[d + '|' + meal]); return `<button class="pickrow" onclick="plan['${d}|'+'${meal}']='${r.id}';saveAll();closeSheet(this);toast('📅 Ajouté : ${d} ${meal.toLowerCase()}');haptic(15)"><span style="width:46px;height:46px;border-radius:14px;background:${d === todayName() ? 'var(--pri)' : 'var(--soft)'};color:${d === todayName() ? '#fff' : 'inherit'};display:grid;place-items:center;font-weight:800;flex:none">${d.slice(0, 3)}</span><span><b>${d}${d === todayName() ? ' · aujourd’hui' : ''}</b><small>${cur ? 'Remplace : ' + esc(cur.name) : 'Libre'}</small></span></button>`; }).join('')}</div>`;
+  const sh = sheet(body()); window.setMeal = m => { meal = m; sh.innerHTML = `<div class="grab"></div><button class="close" onclick="closeSheet(this)">${I.x}</button>` + body(); };
 }
 
-function renderPickerList() {
-  const q = document.getElementById('picker-search').value.toLowerCase().trim();
-  const list = document.getElementById('picker-list');
-  list.innerHTML = '';
-  let filtered = RECIPES;
-  if (q) filtered = filtered.filter(r => r.name.toLowerCase().includes(q) || r.category.toLowerCase().includes(q) || r.tags.some(t => t.includes(q)));
-  filtered.forEach(r => {
-    const item = document.createElement('div');
-    item.className = 'recipe-picker-item';
-    item.innerHTML = `${thumbHTML(r, 'pick-photo')}<span class="name">${r.name}<small style="display:block;color:var(--text-light);font-size:.72rem">${r.category}</small></span><span style="font-size:.75rem;color:var(--text-light)">${r.time} min</span>`;
-    item.onclick = () => {
-      planning[currentSlotKey] = r.id;
-      savePlanning();
-      closeModal('picker-modal');
-      renderPlanning();
-    };
-    list.appendChild(item);
-  });
+// ---------------------------------------------------------------- RECHERCHE EN LIGNE (TheMealDB)
+async function searchOnline() {
+  const out = $('#online'); if (!out) return; out.innerHTML = '<p class="count">Recherche…</p>';
+  try {
+    const d = await (await fetch('https://www.themealdb.com/api/json/v1/1/search.php?s=' + encodeURIComponent(F.q.trim()))).json();
+    if (!d.meals) { out.innerHTML = '<p class="count">Rien trouvé en ligne (essayez en anglais : chicken, pasta…).</p>'; return; }
+    out.innerHTML = `<div class="count">${d.meals.length} résultat(s) en ligne (en anglais)</div><div class="grid">${d.meals.map((m, i) => `<button class="rc" style="animation-delay:${i * 40}ms" onclick="openOnline('${m.idMeal}')"><div class="ph" style="aspect-ratio:4/3.3">${imgTag(m.strMealThumb + '/medium')}<span class="emo">🍽️</span></div><div class="bd"><b>${esc(m.strMeal)}</b><div class="meta">${esc(m.strArea || '')} · ${esc(m.strCategory || '')}</div></div></button>`).join('')}</div>`;
+  } catch (e) { out.innerHTML = '<p class="count">Connexion impossible.</p>'; }
+}
+async function openOnline(id) {
+  const sh = sheet('<p class="count">Chargement…</p>', 'full');
+  try {
+    const m = (await (await fetch('https://www.themealdb.com/api/json/v1/1/lookup.php?i=' + id)).json()).meals[0];
+    const ing = []; for (let i = 1; i <= 20; i++) if (m['strIngredient' + i] && m['strIngredient' + i].trim()) ing.push([m['strIngredient' + i], m['strMeasure' + i] || '']);
+    sh.innerHTML = `<div class="grab"></div><button class="close" onclick="closeSheet(this)">${I.x}</button><div class="ph cover">${imgTag(m.strMealThumb)}<span class="emo">🍽️</span></div><div class="dt"><span class="mu small" style="font-weight:700">${esc((m.strArea || '') + ' · ' + (m.strCategory || ''))}</span><h2 style="font-size:26px">${esc(m.strMeal)}</h2>
+      <div class="lbl">Ingrédients</div>${ing.map(([n, q]) => `<div class="ing"><span class="st">•</span><span>${esc(n)}</span><span class="q">${esc(q)}</span></div>`).join('')}
+      <div class="lbl">Préparation</div>${(m.strInstructions || '').split(/\r?\n/).filter(s => s.trim()).map((s, i) => `<div class="step" onclick="this.classList.toggle('done')"><span class="n">${i + 1}</span><p>${esc(s)}</p></div>`).join('')}
+      <p class="credit">Source : TheMealDB</p></div>`;
+  } catch (e) { sh.innerHTML = `<div class="grab"></div><button class="close" onclick="closeSheet(this)">${I.x}</button><div class="empty"><div>📡</div>Impossible de charger la recette.</div>`; }
 }
 
-function removeFromSlot() {
-  if (currentSlotKey) { delete planning[currentSlotKey]; savePlanning(); closeModal('picker-modal'); renderPlanning(); }
+// ---------------------------------------------------------------- PLANNING
+function vPlan() {
+  const n = Object.keys(plan).filter(k => RECIPES.find(r => r.id === plan[k])).length, td = todayName();
+  let h = `<h1>Ma semaine</h1><p class="mu">${n} repas planifié${n > 1 ? 's' : ''} sur 14</p>
+    <div class="row" style="margin:14px 0 18px;gap:10px"><button class="btn dark" style="flex:1" onclick="autoPlan()">${I.wand}Remplir la semaine</button><button class="btn" style="flex:1" onclick="genShop()" ${n ? '' : 'disabled style="flex:1;opacity:.5"'}>${I.cart}Liste de courses</button></div>`;
+  const order = [...DAYS.slice(DAYS.indexOf(td)), ...DAYS.slice(0, DAYS.indexOf(td))];
+  h += order.map((d, i) => `<div class="day ${d === td ? 'today' : ''}" style="animation-delay:${i * 50}ms"><h4>${d}${d === td ? '<em>Aujourd’hui</em>' : ''}</h4><div class="slots">${MEALS.map(m => {
+    const r = RECIPES.find(x => x.id === plan[d + '|' + m]);
+    return r ? `<button class="slot" onclick="slotMenu('${d}','${m}')">${ph(r)}<div class="sn"><small>${m === 'Déjeuner' ? '☀️ Midi' : '🌙 Soir'}</small>${esc(r.name)}</div></button>`
+      : `<button class="slot empty" onclick="pickRecipe('${d}','${m}')"><b>+</b>${m === 'Déjeuner' ? '☀️ Midi' : '🌙 Soir'}</button>`; }).join('')}</div></div>`).join('');
+  if (n) h += `<button class="btn ghost w" style="margin-top:6px" onclick="if(confirm('Vider toute la semaine ?')){plan={};saveAll();render();toast('Semaine vidée')}">${I.trash}Vider la semaine</button>`;
+  return h;
+}
+function slotMenu(d, m) {
+  const r = RECIPES.find(x => x.id === plan[d + '|' + m]); haptic();
+  sheet(`<h2>${d} · ${m.toLowerCase()}</h2><button class="pickrow" style="margin-top:14px" onclick="closeSheet(this);openRecipe('${r.id}')">${ph(r)}<span><b>${esc(r.name)}</b><small>${r.time} min · ${r.difficulty} · voir la recette</small></span></button>
+    <div style="display:grid;gap:8px;margin-top:10px"><button class="btn w" onclick="closeSheet(this);pickRecipe('${d}','${m}')">🔄 Changer de recette</button><button class="btn w" onclick="plan['${d}|${m}']=pickAuto('${m}',${['Samedi', 'Dimanche'].includes(d)});saveAll();closeSheet(this);render();haptic(12)">🎲 Une autre idée au hasard</button><button class="btn ghost w" style="color:var(--dan)" onclick="delete plan['${d}|${m}'];saveAll();closeSheet(this);render()">Retirer</button></div>`);
+}
+function pickRecipe(d, m) {
+  let q = '';
+  const list = () => { const L = RECIPES.filter(r => canMake(r) && (!q || (r.name + ' ' + r.category).toLowerCase().includes(q.toLowerCase()))); return L.slice(0, 80).map((r, i) => `<button class="pickrow" style="animation-delay:${Math.min(i, 10) * 25}ms" onclick="plan['${d}|${m}']='${r.id}';saveAll();closeSheet(this);render();haptic(12)">${ph(r)}<span><b>${esc(r.name)}</b><small>${CAT_IC[r.category] || ''} ${r.category} · ${r.time} min · ${r.difficulty}</small></span></button>`).join('') || '<div class="empty"><div>🔍</div>Aucune recette</div>'; };
+  const sh = sheet(`<h2>${d} · ${m.toLowerCase()}</h2><div class="search" style="margin:14px 0">${I.search}<input placeholder="Rechercher une recette" oninput="pickQ(this.value)"></div><div id="pl">${list()}</div>`);
+  window.pickQ = v => { q = v; sh.querySelector('#pl').innerHTML = list(); };
+}
+const MAINCATS = ['Pâtes', 'Riz', 'Viande', 'Poisson', 'Légumes', 'Monde', 'Grillade', 'Salade', 'Soupe'];
+function pickAuto(m, weekend, used = new Set()) {
+  let L = RECIPES.filter(r => canMake(r) && MAINCATS.includes(r.category) && !used.has(r.id) && (weekend || r.time <= 45) && (m === 'Dîner' || r.category !== 'Soupe'));
+  const fav = L.filter(r => favs.includes(r.id)); if (fav.length && Math.random() < .3) L = fav;
+  return (L[Math.floor(Math.random() * L.length)] || RECIPES[0]).id;
+}
+function autoPlan() {
+  const used = new Set(Object.values(plan)); let n = 0, lastCat = '';
+  DAYS.forEach(d => MEALS.forEach(m => { const k = d + '|' + m; if (plan[k]) { lastCat = (RECIPES.find(r => r.id === plan[k]) || {}).category; return; }
+    let id, t = 0; do { id = pickAuto(m, ['Samedi', 'Dimanche'].includes(d), used); t++; } while (RECIPES.find(r => r.id === id).category === lastCat && t < 6);
+    plan[k] = id; used.add(id); lastCat = RECIPES.find(r => r.id === id).category; n++; }));
+  saveAll(); render(); haptic(20);
+  if (n) { confetti(); toast(`✨ ${n} repas ajoutés, variés et faisables avec vos ustensiles`); } else toast('La semaine est déjà complète');
+}
+// liste de courses depuis le planning (quantités par unité, adaptées au nombre de personnes)
+function genShop() {
+  const agg = {}; Object.values(plan).forEach(id => { const r = RECIPES.find(x => x.id === id); if (!r) return; const f = ((prefs && prefs.people) || r.servings) / r.servings;
+    r.ingredients.forEach(i => { const k = i.name.toLowerCase() + '|' + (i.unit || ''); (agg[k] = agg[k] || { name: i.name, unit: i.unit, qty: 0 }).qty += i.qty * f; }); });
+  const L = Object.values(agg).sort((a, b) => aisle(a.name).localeCompare(aisle(b.name)) || a.name.localeCompare(b.name));
+  if (!L.length) return toast('Le planning est vide');
+  const sh = sheet(`<h2>Courses de la semaine</h2><p class="mu small" style="margin:4px 0 12px">Décochez ce que vous avez déjà. Les produits de votre frigo sont décochés.</p>
+    ${L.map((i, k) => { const has = invHas(i.name); return `<div class="li" style="animation-delay:${Math.min(k, 15) * 20}ms;cursor:pointer" onclick="const c=this.querySelector('.ck');c.classList.toggle('on')"><span class="ck ${has ? '' : 'on'}" data-k="${k}">${I.check}</span><div class="t"><b>${esc(i.name)}</b><small>${fmtQty(i.qty, i.unit, 1)}${has ? ' · déjà au frigo' : ''}</small></div></div>`; }).join('')}
+    <div class="bar-actions" style="grid-template-columns:1fr"><button class="btn pri" id="addAll">Ajouter à ma liste</button></div>`);
+  sh.querySelector('#addAll').onclick = () => { let n = 0; sh.querySelectorAll('.ck.on').forEach(c => { const i = L[c.dataset.k]; if (!shop.some(s => !s.checked && s.name.toLowerCase() === i.name.toLowerCase())) { shop.push({ id: uid(), name: i.name, qty: fmtQty(i.qty, i.unit, 1), checked: false }); n++; } }); saveAll(); closeSheet(sh); go('shop'); toast(`🛒 ${n} article${n > 1 ? 's' : ''} ajouté${n > 1 ? 's' : ''}`); };
 }
 
-function clearPlanning() {
-  if (confirm('Vider tout le planning ?')) { planning = {}; savePlanning(); renderPlanning(); }
+// ---------------------------------------------------------------- COURSES
+const AISLES = [['🥬 Fruits & légumes', /tomate|oignon|ail|carotte|courgette|aubergine|poivron|salade|laitue|citron|pomme|banane|fraise|champignon|poireau|épinard|concombre|avocat|brocoli|chou|potiron|citrouille|betterave|échalote|basilic|persil|menthe|coriandre|ciboulette|aneth|thym|gingembre|céleri|endive|mâche|fruit|légume|herbe|haricot vert|petits pois|patate|pomme de terre|ananas|mangue|radis|fenouil/i],
+  ['🥩 Viandes & poissons', /poulet|bœuf|boeuf|porc|veau|agneau|lardon|jambon|saucisse|merguez|steak|canard|dinde|bacon|chorizo|viande|saumon|thon|cabillaud|crevette|moule|poisson|sardine|truite|sole|bar|calamar|saint-jacques|anchois|fruits de mer/i],
+  ['🧀 Crèmerie & œufs', /lait|crème|beurre|fromage|parmesan|mozzarella|emmental|gruyère|feta|chèvre|yaourt|œuf|oeuf|mascarpone|ricotta|gorgonzola|halloumi|comté|raclette/i],
+  ['🥖 Boulangerie', /pain|baguette|bagel|tortilla|wrap|brioche|naan|pita/i],
+  ['🧊 Surgelés', /surgel|glace/i],
+  ['🥫 Épicerie', /./]];
+const aisle = n => (AISLES.find(([, re]) => re.test(n)) || AISLES[5])[0];
+function vShop() {
+  const done = shop.filter(s => s.checked).length;
+  let h = `<h1>Courses</h1>${shop.length ? `<p class="mu">${shop.length - done} article${shop.length - done > 1 ? 's' : ''} restant${shop.length - done > 1 ? 's' : ''}</p><div class="progress"><i style="width:${shop.length ? done / shop.length * 100 : 0}%"></i></div>` : ''}
+    <div class="add" style="margin-top:16px"><input class="inp" id="shopIn" placeholder="Ajouter un article…" enterkeyhint="done" onkeydown="if(event.key==='Enter')addShop()"><button class="addbtn" onclick="addShop()">${I.plus}</button></div>`;
+  if (!shop.length) return h + `<div class="empty"><div>🛒</div><b>Votre liste est vide</b><p class="small">Ajoutez des articles, ou générez-la depuis votre planning.</p><button class="btn pri" style="margin-top:16px" onclick="go('plan')">Ouvrir le planning</button></div>`;
+  const groups = {}; shop.forEach(s => (groups[s.checked ? '✅ Dans le panier' : aisle(s.name)] = groups[s.checked ? '✅ Dans le panier' : aisle(s.name)] || []).push(s));
+  const keys = Object.keys(groups).sort((a, b) => (a.startsWith('✅') ? 1 : 0) - (b.startsWith('✅') ? 1 : 0) || a.localeCompare(b));
+  h += keys.map(k => `<div class="aisle">${k}</div>` + groups[k].map((s, i) => `<div class="li ${s.checked ? 'done' : ''}" style="animation-delay:${i * 25}ms" data-id="${s.id}"><button class="ck ${s.checked ? 'on' : ''}" onclick="tickShop('${s.id}',this)">${I.check}</button><div class="t" onclick="tickShop('${s.id}',this.previousElementSibling)"><b>${esc(s.name)}</b>${s.qty ? `<small>${esc(s.qty)}${s.from ? ' · ' + esc(s.from) : ''}</small>` : ''}</div><button class="del" onclick="delShop('${s.id}')">${I.x}</button></div>`).join('')).join('');
+  h += `<div class="row" style="margin-top:16px;gap:10px">${done ? `<button class="btn" style="flex:1" onclick="toFridge()">🧊 Ranger au frigo (${done})</button>` : ''}<button class="btn ghost" style="flex:1" onclick="if(confirm('Vider la liste ?')){shop=[];saveAll();render()}">${I.trash}Vider</button></div>`;
+  return h;
 }
+function addShop() { const i = $('#shopIn'), v = i.value.trim(); if (!v) return; shop.unshift({ id: uid(), name: v, qty: '', checked: false }); saveAll(); haptic(); render(); setTimeout(() => $('#shopIn') && $('#shopIn').focus(), 50); }
+function tickShop(id, el) { const s = shop.find(x => String(x.id) === id); if (!s) return; s.checked = !s.checked; haptic(10); el.classList.toggle('on', s.checked); saveAll(); setTimeout(() => { render(); if (shop.length && shop.every(x => x.checked)) { confetti(); toast('Courses terminées ! 🎉'); } }, 260); }
+function delShop(id) { const el = $(`.li[data-id="${id}"]`); if (el) { el.style.opacity = 0; el.style.transform = 'translateX(40px)'; } setTimeout(() => { shop = shop.filter(x => String(x.id) !== id); saveAll(); render(); }, 220); }
+function toFridge() { const d = shop.filter(s => s.checked); d.forEach(s => addInv(s.name, 1, null, true)); shop = shop.filter(s => !s.checked); saveAll(); render(); toast(`🧊 ${d.length} produit${d.length > 1 ? 's' : ''} rangé${d.length > 1 ? 's' : ''} au frigo`); }
 
-// ============================================================
-// GÉNÉRATION LISTE DE COURSES DEPUIS PLANNING
-// ============================================================
-function generateShoppingFromPlanning() {
-  const keys = Object.keys(planning);
-  if (keys.length === 0) { alert('Le planning est vide.'); return; }
-  // Agréger les ingrédients
-  const agg = {};
-  keys.forEach(k => {
-    const r = RECIPES.find(x => x.id === planning[k]);
-    if (!r) return;
-    r.ingredients.forEach(ing => {
-      const key = ing.name.toLowerCase().trim() + '|' + (ing.unit || '');
-      if (!agg[key]) agg[key] = { name: ing.name, qty: 0, unit: ing.unit };
-      agg[key].qty += ing.qty;
-    });
-  });
-  // Afficher modale
-  const invNames = inventory.map(i => i.name.toLowerCase());
-  const container = document.getElementById('gen-content');
-  container.innerHTML = '';
-  const list = Object.values(agg).sort((a, b) => a.name.localeCompare(b.name));
-  list.forEach((ing, gi) => {
-    const inStock = invNames.some(n => n.includes(ing.name.toLowerCase()) || ing.name.toLowerCase().includes(n));
-    const div = document.createElement('div');
-    div.className = 'shopping-gen-item';
-    div.innerHTML = `<input type="checkbox" ${inStock ? '' : 'checked'} id="gen-${gi}">
-      <label for="gen-${gi}">${inStock ? '✅ ' : ''}${esc(ing.name)}</label>
-      <span class="qty">${Math.round(ing.qty * 100) / 100}${ing.unit ? ' ' + ing.unit : ''}</span>`;
-    div.dataset.name = ing.name;
-    div.dataset.qty = Math.round(ing.qty * 100) / 100 + (ing.unit ? ' ' + ing.unit : '');
-    container.appendChild(div);
-  });
-  // Bouton valider
-  const btn = document.createElement('button');
-  btn.className = 'btn btn-primary';
-  btn.style.marginTop = '16px';
-  btn.style.width = '100%';
-  btn.textContent = '✅ Ajouter les articles cochés à ma liste';
-  btn.onclick = () => {
-    let added = 0;
-    container.querySelectorAll('.shopping-gen-item').forEach(row => {
-      const cb = row.querySelector('input[type="checkbox"]');
-      if (cb.checked && !shoppingList.some(s => !s.checked && s.name.toLowerCase() === row.dataset.name.toLowerCase())) {
-        shoppingList.push({ id: Date.now() + Math.random(), name: row.dataset.name, qty: row.dataset.qty, checked: false });
-        added++;
-      }
-    });
-    saveShoppingList();
-    closeModal('gen-modal');
-    alert(`✅ ${added} article(s) ajouté(s) à la liste.`);
-    document.querySelector('[data-tab="tab-shopping"]').click();
-  };
-  container.appendChild(btn);
-  document.getElementById('gen-modal').classList.add('open');
+// ---------------------------------------------------------------- FRIGO (inventaire + scanner)
+function daysLeft(e) { if (!e) return Infinity; const [y, m, d] = e.split('-').map(Number), t = new Date(); t.setHours(0, 0, 0, 0); return Math.round((new Date(y, m - 1, d) - t) / 864e5); }
+function addInv(name, qty = 1, exp = null, silent) {
+  name = (name || '').trim(); if (!name) return; qty = Math.max(1, parseInt(qty) || 1);
+  const ex = inv.find(i => i.name.toLowerCase() === name.toLowerCase());
+  if (ex) { ex.qty += qty; if (exp) ex.expiry = exp; } else inv.push({ id: uid(), name: name[0].toUpperCase() + name.slice(1), qty, expiry: exp || null });
+  saveAll(); if (!silent) { haptic(); toast(`🧊 ${name} ajouté`); }
 }
-
-// ============================================================
-// LISTE DE COURSES
-// ============================================================
-function saveShoppingList() { localStorage.setItem('myShoppingList', JSON.stringify(shoppingList)); renderShoppingList(); }
-function addShoppingItem() {
-  const input = document.getElementById('shop-item');
-  const name = input.value.trim();
-  if (!name) return;
-  shoppingList.push({ id: Date.now() + Math.random(), name, checked: false });
-  input.value = '';
-  saveShoppingList();
+function vFridge() {
+  const L = [...inv].sort((a, b) => daysLeft(a.expiry) - daysLeft(b.expiry)), urgent = L.filter(i => daysLeft(i.expiry) <= 2);
+  let h = `<h1>Mon frigo</h1><p class="mu">${inv.length} produit${inv.length > 1 ? 's' : ''}${urgent.length ? ` · <b style="color:var(--dan)">${urgent.length} à consommer vite</b>` : ''}</p>
+    <div class="card" style="margin-top:14px"><div class="add"><input class="inp" id="invN" placeholder="Produit (ex. tomates)" enterkeyhint="done" onkeydown="if(event.key==='Enter')addInvForm()"><button class="addbtn" onclick="addInvForm()">${I.plus}</button></div>
+    <div class="row" style="margin-top:10px;gap:10px"><div class="stepper"><button onclick="const e=$('#invQ');e.textContent=Math.max(1,+e.textContent-1)">−</button><b id="invQ">1</b><button onclick="const e=$('#invQ');e.textContent=+e.textContent+1">+</button></div><input class="inp" id="invE" type="date" style="flex:1;height:44px" aria-label="Date de péremption"></div>
+    <p class="mu small" style="margin-top:6px">Quantité · date de péremption (facultative)</p></div>
+    <label class="scan" style="margin-top:14px"><span>📷</span><div style="flex:1"><b>Scanner mes produits</b><br><small>Photographiez un aliment, l’IA le reconnaît</small></div><input type="file" accept="image/*" capture="environment" style="display:none" onchange="scanImg(this)"></label><div id="scanOut" style="margin-top:8px"></div>`;
+  if (inv.length) h += `<button class="btn pri w" style="margin-top:16px" onclick="Object.assign(F,{stock:true,cat:'',time:0,diff:''});go('recipes')">🍳 Que cuisiner avec mon frigo ?</button>`;
+  h += L.length ? `<div class="aisle">Mes produits</div>` + L.map((i, k) => { const d = daysLeft(i.expiry); const b = i.expiry ? (d < 0 ? `<span class="badge-exp u">Périmé</span>` : d === 0 ? `<span class="badge-exp u">Aujourd’hui</span>` : d <= 2 ? `<span class="badge-exp s">J-${d}</span>` : `<span class="badge-exp k">${d} j</span>`) : '';
+      return `<div class="li" style="animation-delay:${Math.min(k, 15) * 25}ms" data-id="${i.id}"><div class="t"><b>${esc(i.name)}${b}</b><small>${i.expiry ? 'À consommer avant le ' + i.expiry.split('-').reverse().join('/') : 'Sans date'}</small></div>
+      <button class="qbtn" onclick="qtyInv('${i.id}',-1)">−</button><b style="min-width:22px;text-align:center">${i.qty}</b><button class="qbtn" onclick="qtyInv('${i.id}',1)">+</button><button class="del" onclick="qtyInv('${i.id}',-999)">${I.trash}</button></div>`; }).join('')
+    : `<div class="empty"><div>🧊</div><b>Votre frigo est vide</b><p class="small">Ajoutez vos produits pour recevoir des idées de recettes qui les utilisent.</p></div>`;
+  return h;
 }
-function toggleShoppingItem(id) {
-  const item = shoppingList.find(i => i.id === id);
-  if (item) { item.checked = !item.checked; saveShoppingList(); }
-}
-function removeShoppingItem(id) { shoppingList = shoppingList.filter(i => i.id !== id); saveShoppingList(); }
-function clearShoppingList() { if (confirm('Vider la liste ?')) { shoppingList = []; saveShoppingList(); } }
-function renderShoppingList() {
-  const list = document.getElementById('shopping-list');
-  const empty = document.getElementById('shopping-empty');
-  list.innerHTML = '';
-  if (shoppingList.length === 0) { empty.style.display = 'block'; return; }
-  empty.style.display = 'none';
-  shoppingList.forEach(item => {
-    const li = document.createElement('li');
-    li.className = item.checked ? 'checked' : '';
-    li.innerHTML = `<input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleShoppingItem(${item.id})">
-      <span class="item-name" style="flex:1">${esc(item.name)}${item.qty ? ' <em style="color:var(--text-light); font-size:.85rem">(' + esc(item.qty) + ')</em>' : ''}</span>
-      <button class="btn-icon" onclick="removeShoppingItem(${item.id})">✕</button>`;
-    list.appendChild(li);
-  });
-}
-
-// ============================================================
-// SCANNER IA (TensorFlow.js)
-// ============================================================
+function addInvForm() { const n = $('#invN').value; addInv(n, $('#invQ').textContent, $('#invE').value || null); render(); setTimeout(() => $('#invN') && $('#invN').focus(), 50); }
+function qtyInv(id, d) { const i = inv.find(x => String(x.id) === id); if (!i) return; haptic(5); i.qty += d; if (i.qty <= 0) { inv = inv.filter(x => x !== i); toast(`${i.name} retiré`); } saveAll(); render(); }
+// scanner : TensorFlow chargé uniquement à la demande
 let model = null;
 const loadScript = src => new Promise((ok, ko) => { if (document.querySelector(`script[src="${src}"]`)) return ok(); const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = ko; document.head.appendChild(s); });
-document.getElementById('image-upload').addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const out = document.getElementById('scan-result');
-  out.innerHTML = '<p style="color:var(--text-light)">⏳ Analyse...</p>';
-  const img = new Image();
-  img.src = URL.createObjectURL(file);
+const FR = { banana: 'Banane', orange: 'Orange', lemon: 'Citron', 'Granny Smith': 'Pomme', strawberry: 'Fraise', pineapple: 'Ananas', broccoli: 'Brocoli', cauliflower: 'Chou-fleur', cucumber: 'Concombre', zucchini: 'Courgette', 'bell pepper': 'Poivron', mushroom: 'Champignons', 'head cabbage': 'Chou', artichoke: 'Artichaut', corn: 'Maïs', pomegranate: 'Grenade', fig: 'Figue', 'butternut squash': 'Courge', 'spaghetti squash': 'Courge', 'French loaf': 'Baguette', bagel: 'Bagel', pretzel: 'Bretzel', 'cheeseburger': 'Burger', pizza: 'Pizza', 'hotdog': 'Saucisse', eggnog: 'Lait', 'carbonara': 'Pâtes', 'guacamole': 'Avocat', 'meat loaf': 'Viande', 'potpie': 'Tourte', 'ice cream': 'Glace', 'chocolate sauce': 'Chocolat', 'red wine': 'Vin rouge', 'wine bottle': 'Vin', 'beer bottle': 'Bière' };
+async function scanImg(input) {
+  const f = input.files[0], out = $('#scanOut'); if (!f) return;
+  out.innerHTML = '<div class="card"><b>⏳ Analyse en cours…</b><p class="mu small">Le premier scan télécharge le modèle d’IA (quelques secondes).</p></div>';
+  const img = new Image(); img.src = URL.createObjectURL(f);
   img.onload = async () => {
     try {
-      if (!model) { out.innerHTML = '<p style="color:var(--text-light)">⏳ Chargement du modèle (la première fois seulement)…</p>'; await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1'); await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0'); model = await mobilenet.load(); out.innerHTML = '<p style="color:var(--text-light)">⏳ Analyse...</p>'; }
-      const preds = await model.classify(img, 5);
-      out.innerHTML = '<p style="font-weight:600; margin-bottom:8px">Objets détectés (cliquez pour ajouter) :</p>';
-      preds.forEach(p => {
-        const name = p.className.split(',')[0].trim();
-        const conf = Math.round(p.probability * 100);
-        if (conf < 15) return;
-        const tag = document.createElement('span');
-        tag.className = 'scan-tag';
-        tag.textContent = `${name} (${conf}%)`;
-        tag.onclick = () => { addItem(name, 1); tag.style.opacity = '.4'; tag.style.pointerEvents = 'none'; };
-        out.appendChild(tag);
-      });
-    } catch (err) { out.innerHTML = '<p style="color:var(--danger)">Erreur d\'analyse (connexion internet nécessaire la première fois).</p>'; }
+      if (!model) { await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1'); await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0'); model = await mobilenet.load(); }
+      const P = (await model.classify(img, 5)).filter(p => p.probability > .1);
+      out.innerHTML = P.length ? `<div class="card"><b>Produits détectés</b><p class="mu small">Touchez pour ajouter au frigo</p><div style="margin-top:6px">${P.map(p => { const en = p.className.split(',')[0].trim(), n = FR[en] || en; return `<span class="stag" onclick="addInv('${esc(n).replace(/'/g, '&#39;')}');this.classList.add('added');this.onclick=null">${esc(n)} <small class="mu">${Math.round(p.probability * 100)} %</small></span>`; }).join('')}</div></div>`
+        : '<div class="card">🤔 Rien de reconnu. Essayez une photo plus nette d’un seul produit.</div>';
+    } catch (e) { out.innerHTML = '<div class="card" style="color:var(--dan)">Analyse impossible : une connexion internet est nécessaire la première fois.</div>'; }
+    input.value = '';
   };
-});
+}
 
-// ============================================================
-// INITIALISATION
-// ============================================================
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('recipe-count').textContent = RECIPES.length + ' recettes';
-  renderInventory();
-  renderShoppingList();
-  renderCategoryFilters();
-  renderLibrary();
-  if (inventory.length > 0) renderSuggestions();
-  [['item-name', () => addItem()], ['shop-item', addShoppingItem], ['search-query', searchMealDB]].forEach(([id, f]) => { const el = document.getElementById(id); if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') f(); }); });
-  loadPhotos();
-});
+// ---------------------------------------------------------------- RÉGLAGES & USTENSILES
+function tiles(sel) { return `<div class="tiles">${Object.entries(EQUIP).map(([k, [e, n, d]], i) => `<button class="tile ${sel.includes(k) ? 'on' : ''}" style="animation-delay:${i * 50}ms" data-k="${k}" onclick="this.classList.toggle('on');haptic(6);tileCount&&tileCount()"><span class="e">${e}</span><b>${n}</b><small>${d}</small></button>`).join('')}</div>`; }
+const tileSel = root => [...root.querySelectorAll('.tile.on')].map(t => t.dataset.k);
+let tileCount = null;
+function openEquip() {
+  const sh = sheet(`<h2>Mes ustensiles</h2><p class="mu small" style="margin:4px 0 14px">Les recettes sont filtrées selon ce que vous avez.</p>${tiles(prefs.equip)}
+    <p class="count" id="eqc"></p><div class="bar-actions" style="grid-template-columns:1fr"><button class="btn pri" id="eqs">Enregistrer</button></div>`);
+  tileCount = () => { const s = tileSel(sh), n = RECIPES.filter(r => r.needs.every(x => s.includes(x))).length; sh.querySelector('#eqc').textContent = `${n} recettes réalisables sur ${RECIPES.length}`; }; tileCount();
+  sh.querySelector('#eqs').onclick = () => { prefs.equip = tileSel(sh); saveAll(); closeAll(); render(); toast('🍳 Ustensiles enregistrés'); };
+}
+function openSettings() {
+  haptic();
+  sheet(`<h2>Réglages</h2>
+    <div class="switch" style="margin-top:16px" onclick="closeSheet(this);setTimeout(openEquip,240)"><span style="font-size:22px">🍳</span><div class="t"><b>Mes ustensiles</b><small>${prefs.equip.map(e => EQUIP[e][1]).join(', ') || 'Aucun'}</small></div><span class="mu">›</span></div>
+    <div class="switch" style="margin-top:8px"><span style="font-size:22px">👥</span><div class="t"><b>Nombre de personnes</b><small>Quantités des recettes et des courses</small></div><div class="stepper"><button onclick="prefs.people=Math.max(1,prefs.people-1);saveAll();this.nextElementSibling.textContent=prefs.people">−</button><b style="min-width:30px">${prefs.people}</b><button onclick="prefs.people=Math.min(20,prefs.people+1);saveAll();this.previousElementSibling.textContent=prefs.people">+</button></div></div>
+    <div class="switch" style="margin-top:8px" onclick="photos={_v:${PH_V}};savePhotos();loadPhotos();render();toast('Recherche des photos relancée')"><span style="font-size:22px">🖼️</span><div class="t"><b>Recharger les photos</b><small>${Object.values(photos).filter(p => p && p.src).length} / ${RECIPES.length} photos trouvées</small></div><span class="mu">↻</span></div>
+    <button class="btn ghost w" style="margin-top:16px;color:var(--dan)" onclick="if(confirm('Effacer toutes vos données (frigo, courses, planning, favoris) ?')){['myInventory','myShoppingList','myPlanning','myFavs','myPrefs'].forEach(k=>localStorage.removeItem(k));location.reload()}">Réinitialiser l’application</button>
+    <p class="credit" style="text-align:center;margin-top:10px">Mon Garde-Manger · ${RECIPES.length} recettes · données enregistrées sur cet appareil<br>Photos : Wikipédia / Wikimedia Commons (licences libres) · recherche en ligne : TheMealDB</p>`);
+}
 
-// Exposition globale
-window.addItem = addItem;
-window.removeItem = removeItem;
-window.updateQty = updateQty;
-window.renderLibrary = renderLibrary;
-window.renderSuggestions = renderSuggestions;
-window.openRecipeModal = openRecipeModal;
-window.closeModal = closeModal;
-window.addMissingToShopping = addMissingToShopping;
-window.searchMealDB = searchMealDB;
-window.renderPickerList = renderPickerList;
-window.removeFromSlot = removeFromSlot;
-window.clearPlanning = clearPlanning;
-window.generateShoppingFromPlanning = generateShoppingFromPlanning;
-window.addShoppingItem = addShoppingItem;
-window.toggleShoppingItem = toggleShoppingItem;
-window.removeShoppingItem = removeShoppingItem;
-window.clearShoppingList = clearShoppingList;
-window.addItemDirect = (n, q) => addItem(n, q);
+// ---------------------------------------------------------------- ACCUEIL AU PREMIER LANCEMENT
+function onboarding() {
+  const ob = document.createElement('div'); ob.className = 'ob'; document.body.appendChild(ob);
+  let step = 0, equip = ['plaque', 'four'], people = 2;
+  const prog = () => `<div class="prog">${[0, 1, 2].map(i => `<i class="${i <= step ? 'on' : ''}"></i>`).join('')}</div>`;
+  const draw = () => {
+    if (step === 0) ob.innerHTML = `<div class="in"><div class="big">🥘</div><h1>Bienvenue !</h1><p class="lead">Votre cuisine organisée : des idées de repas adaptées à votre équipement, à votre frigo et à votre temps.</p>
+      ${[['📚', `${RECIPES.length} recettes avec photos`, 'Filtrez par temps, difficulté et ustensiles'], ['📅', 'Planning de la semaine', 'Rempli automatiquement en un geste'], ['🛒', 'Liste de courses intelligente', 'Rangée par rayon, quantités calculées'], ['🧊', 'Anti-gaspi', 'Recettes avec ce qu’il reste dans le frigo']].map(([e, t, s], i) => `<div class="feat" style="animation-delay:${150 + i * 90}ms"><span>${e}</span><div><b>${t}</b><div class="mu small">${s}</div></div></div>`).join('')}
+      <div class="foot"><button class="btn pri w" onclick="obNext()">Commencer</button></div></div>`;
+    if (step === 1) ob.innerHTML = `<div class="in">${prog()}<h1>Votre cuisine</h1><p class="lead">Quels ustensiles avez-vous ? Nous ne vous proposerons que des recettes réalisables.</p>${tiles(equip)}
+      <p class="count" id="eqc" style="text-align:center"></p><div class="foot"><button class="btn pri w" onclick="obNext()">Continuer</button></div></div>`;
+    if (step === 2) ob.innerHTML = `<div class="in">${prog()}<h1>Vous êtes combien ?</h1><p class="lead">Les quantités des recettes et des courses seront calculées pour vous.</p>
+      <div style="display:flex;justify-content:center;align-items:center;gap:22px;margin:30px 0"><button class="iconbtn" style="width:58px;height:58px;font-size:26px" onclick="obP(-1)">−</button><div style="text-align:center"><div id="pp" style="font-size:64px;font-weight:800;letter-spacing:-.04em;line-height:1">${people}</div><div class="mu">personne${people > 1 ? 's' : ''}</div></div><button class="iconbtn" style="width:58px;height:58px;font-size:26px" onclick="obP(1)">+</button></div>
+      <div style="font-size:40px;text-align:center;min-height:50px" id="ppl">${'🧑'.repeat(Math.min(people, 8))}</div>
+      <div class="foot"><button class="btn pri w" onclick="obNext()">C’est parti !</button><button class="btn ghost w" onclick="obBack()">Retour</button></div></div>`;
+    ob.scrollTop = 0;
+    if (step === 1) { tileCount = () => { const s = tileSel(ob), n = RECIPES.filter(r => r.needs.every(x => s.includes(x))).length; $('#eqc').textContent = `👉 ${n} recettes réalisables avec cet équipement`; }; tileCount(); }
+  };
+  window.obBack = () => { step = 1; draw(); };
+  window.obP = d => { people = Math.max(1, Math.min(12, people + d)); haptic(6); $('#pp').textContent = people; $('#pp').nextElementSibling.textContent = 'personne' + (people > 1 ? 's' : ''); $('#ppl').textContent = '🧑'.repeat(Math.min(people, 8)); };
+  window.obNext = () => {
+    haptic(10);
+    if (step === 1) { equip = tileSel(ob); if (!equip.length) return toast('Choisissez au moins un ustensile'); }
+    if (step === 2) { prefs = { equip, people, v: 1 }; saveAll(); ob.style.transition = 'opacity .35s,transform .35s'; ob.style.opacity = 0; ob.style.transform = 'scale(1.03)'; setTimeout(() => ob.remove(), 350); render(); confetti(); toast('Tout est prêt 🎉'); return; }
+    step++; draw();
+  };
+  draw();
+}
+
+// ---------------------------------------------------------------- démarrage
+// migration : anciens identifiants numériques
+inv.forEach(i => i.id = String(i.id)); shop.forEach(s => s.id = String(s.id));
+if (!prefs) { prefs = { equip: Object.keys(EQUIP), people: 2, v: 0 }; onboarding(); }
+render();
+loadPhotos();
+Object.assign(window, { go, openRecipe, toggleFav, openFilters, pickSlot, slotMenu, pickRecipe, autoPlan, genShop, addShop, tickShop, delShop, toFridge, addInvForm, qtyInv, addInv, scanImg, openEquip, openSettings, searchOnline, openOnline, closeSheet, haptic, updList, render });
+
 </script>
 </body>
-</html>e
+</html>
