@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mon Garde-Manger • 200 recettes</title>
+<title>Mon Garde-Manger • 223 recettes</title>
 <style>
 :root{--primary:#2A9D8F;--primary-dark:#21867A;--accent:#E9C46A;--danger:#E76F51;--bg:#F8F9FA;--surface:#FFF;--text:#2B2D42;--text-light:#6C757D;--radius:16px;--shadow:0 4px 20px rgba(0,0,0,.06);--transition:all .25s ease}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -77,6 +77,16 @@ main{padding:16px;max-width:1000px;margin:0 auto}
 .shopping-gen-item label{flex:1;cursor:pointer;font-size:.9rem}
 .shopping-gen-item .qty{font-weight:700;color:var(--text-light);font-size:.8rem}
 @media(max-width:600px){.planning-grid{grid-template-columns:65px 1fr 1fr;gap:5px}.planning-slot{min-height:55px;padding:5px;font-size:.72rem}.recipe-grid{grid-template-columns:repeat(2,1fr)}}
+.recipe-thumb,.modal-photo,.slot-photo,.pick-photo{position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#E0F2F1,#FFF3E0)}
+.recipe-thumb{height:110px}
+.recipe-thumb img,.modal-photo img,.slot-photo img,.pick-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;animation:fadeIn .4s}
+.recipe-thumb img~.emo,.modal-photo img~.emo,.slot-photo img~.emo,.pick-photo img~.emo{display:none}
+.modal-photo{height:200px;margin:-24px -24px 6px;font-size:4rem}
+.modal-close{z-index:3;background:rgba(255,255,255,.9)!important;width:36px;height:36px;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.badge{display:inline-block;background:#E0F2F1;color:var(--primary-dark);border-radius:999px;padding:2px 10px;margin:0 4px 4px 0;font-size:.78rem;font-weight:600}
+.credit{font-size:.7rem;color:var(--text-light);margin-bottom:10px}.credit a{color:var(--primary)}
+.slot-photo{height:46px;border-radius:8px;margin-bottom:4px;font-size:1.4rem}
+.pick-photo{width:46px;height:46px;flex:none;border-radius:10px;font-size:1.4rem}
 </style>
 </head>
 <body>
@@ -120,7 +130,7 @@ main{padding:16px;max-width:1000px;margin:0 auto}
       <div id="suggestions-empty" class="empty-state" style="display:none"><div class="icon">🍽️</div><p>Ajoutez des produits à votre inventaire.</p></div>
     </div>
     <div class="card">
-      <h3>📚 Bibliothèque (<span id="lib-count">200</span> recettes)</h3>
+      <h3>📚 Bibliothèque (<span id="lib-count">223</span> recettes)</h3>
       <div class="form-group"><input type="text" id="library-search" placeholder="Rechercher une recette..." oninput="renderLibrary()"></div>
       <div class="filter-bar" id="category-filters"></div>
       <div id="library-grid" class="recipe-grid"></div>
@@ -194,8 +204,6 @@ main{padding:16px;max-width:1000px;margin:0 auto}
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1"></script>
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"></script>
 
 <script>
 // ============================================================
@@ -206,20 +214,20 @@ const RAW=[
 // ===== PÂTES (20) =====
 ['Carbonara','🍝','Pâtes',25,'Facile',4,['italien','rapide'],[['Spaghetti',400,'g'],['Lardons',200,'g'],['Œufs',4,''],['Parmesan',100,'g'],['Ail',2,'gousse']],['Cuire pâtes al dente','Saisir lardons + ail','Mélanger œufs + parmesan hors feu','Servir poivré']],
 ['Bolognaise','🍝','Pâtes',40,'Facile',4,['italien','familial'],[['Spaghetti',400,'g'],['Bœuf haché',400,'g'],['Tomates concassées',400,'g'],['Oignon',1,''],['Ail',2,'gousse'],['Carotte',1,'']],['Saisir viande','Ajouter oignon ail carotte','Tomates, mijoter 20 min','Servir sur pâtes']],
-['Pesto','🍝','Pâtes',15,'Facile',4,['végétarien','rapide'],[['Pâtes',400,'g'],['Basilic',50,'g'],['Pignons',50,'g'],['Parmesan',50,'g'],['Ail',1,'gousse'],['Huile olive',100,'ml']],['Mixer basilic pignons parmesan ail huile','Cuire pâtes','Mélanger']],
-['Tomates cerises','🍝','Pâtes',20,'Facile',4,['végétarien','été'],[['Pâtes',400,'g'],['Tomates cerises',300,'g'],['Ail',2,'gousse'],['Basilic',10,'feuilles'],['Huile olive',3,'c. à soupe']],['Cuire pâtes','Poêler ail + tomates 10 min','Mélanger, ajouter basilic']],
-['Saumon crème','🍝','Pâtes',25,'Facile',4,['rapide'],[['Tagliatelles',400,'g'],['Saumon',300,'g'],['Crème',200,'ml'],['Oignon',1,''],['Ciboulette',1,'c. à soupe']],['Cuire pâtes','Saisir saumon + oignon','Ajouter crème, mijoter','Mélanger pâtes']],
+['Pâtes au pesto','🍝','Pâtes',15,'Facile',4,['végétarien','rapide'],[['Pâtes',400,'g'],['Basilic',50,'g'],['Pignons',50,'g'],['Parmesan',50,'g'],['Ail',1,'gousse'],['Huile olive',100,'ml']],['Mixer basilic pignons parmesan ail huile','Cuire pâtes','Mélanger']],
+['Pâtes aux tomates cerises','🍝','Pâtes',20,'Facile',4,['végétarien','été'],[['Pâtes',400,'g'],['Tomates cerises',300,'g'],['Ail',2,'gousse'],['Basilic',10,'feuilles'],['Huile olive',3,'c. à soupe']],['Cuire pâtes','Poêler ail + tomates 10 min','Mélanger, ajouter basilic']],
+['Pâtes saumon crème','🍝','Pâtes',25,'Facile',4,['rapide'],[['Tagliatelles',400,'g'],['Saumon',300,'g'],['Crème',200,'ml'],['Oignon',1,''],['Ciboulette',1,'c. à soupe']],['Cuire pâtes','Saisir saumon + oignon','Ajouter crème, mijoter','Mélanger pâtes']],
 ['Lasagnes bolognaise','🍝','Pâtes',60,'Moyen',6,['familial','italien'],[['Lasagnes',12,'feuilles'],['Bœuf haché',500,'g'],['Tomates concassées',800,'g'],['Oignon',1,''],['Lait',500,'ml'],['Beurre',50,'g'],['Farine',50,'g'],['Fromage râpé',150,'g']],['Préparer bolognaise 20 min','Béchamel: beurre+farine+lait','Monter lasagnes','Cuire 35 min 180°C']],
 ['Lasagnes légumes','🍝','Pâtes',60,'Moyen',6,['végétarien'],[['Lasagnes',12,'feuilles'],['Courgettes',2,''],['Aubergines',1,''],['Tomates concassées',600,'g'],['Lait',500,'ml'],['Beurre',50,'g'],['Farine',50,'g'],['Fromage râpé',150,'g']],['Griller légumes','Béchamel','Monter lasagnes','35 min 180°C']],
-['4 fromages','🍝','Pâtes',20,'Facile',4,['végétarien'],[['Pâtes',400,'g'],['Crème',200,'ml'],['Mozzarella',100,'g'],['Gorgonzola',100,'g'],['Parmesan',80,'g'],['Emmental',80,'g']],['Cuire pâtes','Fondre fromages + crème','Mélanger']],
+['Pâtes 4 fromages','🍝','Pâtes',20,'Facile',4,['végétarien'],[['Pâtes',400,'g'],['Crème',200,'ml'],['Mozzarella',100,'g'],['Gorgonzola',100,'g'],['Parmesan',80,'g'],['Emmental',80,'g']],['Cuire pâtes','Fondre fromages + crème','Mélanger']],
 ['Puttanesca','🍝','Pâtes',25,'Facile',4,['italien'],[['Spaghetti',400,'g'],['Tomates concassées',400,'g'],['Olives noires',80,'g'],['Câpres',30,'g'],['Anchois',4,''],['Ail',2,'gousse']],['Cuire pâtes','Poêler ail anchois','Ajouter tomates olives câpres','Mélanger']],
-['Courgettes','🍝','Pâtes',25,'Facile',4,['végétarien'],[['Pâtes',400,'g'],['Courgettes',3,''],['Ail',2,'gousse'],['Parmesan',60,'g'],['Huile olive',3,'c. à soupe']],['Cuire pâtes','Poêler courgettes + ail','Mélanger, parmesan']],
-['Champignons','🍝','Pâtes',25,'Facile',4,['végétarien'],[['Pâtes',400,'g'],['Champignons',300,'g'],['Crème',200,'ml'],['Ail',1,'gousse'],['Persil',1,'c. à soupe']],['Cuire pâtes','Sauter champignons','Ajouter crème','Mélanger']],
+['Pâtes aux courgettes','🍝','Pâtes',25,'Facile',4,['végétarien'],[['Pâtes',400,'g'],['Courgettes',3,''],['Ail',2,'gousse'],['Parmesan',60,'g'],['Huile olive',3,'c. à soupe']],['Cuire pâtes','Poêler courgettes + ail','Mélanger, parmesan']],
+['Pâtes aux champignons','🍝','Pâtes',25,'Facile',4,['végétarien'],[['Pâtes',400,'g'],['Champignons',300,'g'],['Crème',200,'ml'],['Ail',1,'gousse'],['Persil',1,'c. à soupe']],['Cuire pâtes','Sauter champignons','Ajouter crème','Mélanger']],
 ['Aglio e olio','🍝','Pâtes',15,'Facile',4,['végétarien','rapide'],[['Spaghetti',400,'g'],['Ail',4,'gousse'],['Huile olive',6,'c. à soupe'],['Persil',2,'c. à soupe'],['Piment',1,'pincée']],['Cuire pâtes','Faire dorer ail dans huile','Mélanger, persil']],
 ['Arrabbiata','🍝','Pâtes',20,'Facile',4,['italien','épicé'],[['Penne',400,'g'],['Tomates concassées',400,'g'],['Ail',3,'gousse'],['Piment',1,'c. à café'],['Huile olive',3,'c. à soupe']],['Cuire pâtes','Saisir ail piment','Tomates 10 min','Mélanger']],
 ['Tagliatelles saumon','🍝','Pâtes',25,'Facile',4,['rapide'],[['Tagliatelles',400,'g'],['Saumon fumé',200,'g'],['Crème',200,'ml'],['Citron',1,''],['Aneth',1,'c. à soupe']],['Cuire pâtes','Chauffer crème + citron','Ajouter saumon fumé','Mélanger']],
 ['Macaroni gratinés','🍝','Pâtes',35,'Facile',4,['familial'],[['Macaroni',400,'g'],['Lait',500,'ml'],['Beurre',50,'g'],['Farine',50,'g'],['Fromage râpé',150,'g']],['Cuire macaroni','Béchamel','Mélanger','Gratiner 15 min 200°C']],
-['Thon','🍝','Pâtes',20,'Facile',4,['rapide'],[['Pâtes',400,'g'],['Thon',2,'boîte'],['Tomates concassées',400,'g'],['Oignon',1,''],['Ail',1,'gousse']],['Cuire pâtes','Saisir oignon ail','Ajouter thon + tomates','Mélanger']],
+['Pâtes au thon','🍝','Pâtes',20,'Facile',4,['rapide'],[['Pâtes',400,'g'],['Thon',2,'boîte'],['Tomates concassées',400,'g'],['Oignon',1,''],['Ail',1,'gousse']],['Cuire pâtes','Saisir oignon ail','Ajouter thon + tomates','Mélanger']],
 ['Nouilles sautées','🍝','Pâtes',15,'Facile',4,['asiatique','rapide'],[['Nouilles',300,'g'],['Carotte',2,''],['Chou',200,'g'],['Sauce soja',3,'c. à soupe'],['Huile sésame',1,'c. à soupe']],['Cuire nouilles','Sauter légumes','Ajouter nouilles + soja']],
 ['Primavera','🍝','Pâtes',25,'Facile',4,['végétarien','printemps'],[['Pâtes',400,'g'],['Petits pois',150,'g'],['Courgettes',1,''],['Carotte',1,''],['Crème',150,'ml'],['Parmesan',50,'g']],['Cuire pâtes','Blanchir légumes','Mélanger crème + parmesan']],
 ['Raviolis ricotta épinards','🍝','Pâtes',30,'Moyen',4,['végétarien'],[['Raviolis',400,'g'],['Ricotta',250,'g'],['Épinards',200,'g'],['Beurre',30,'g'],['Parmesan',50,'g'],['Muscade',1,'pincée']],['Mélanger ricotta épinards muscade','Garnir raviolis','Cuire 3 min','Beurre + parmesan']],
@@ -341,24 +349,24 @@ const RAW=[
 ['Soupe betterave','🥣','Soupe',30,'Facile',4,['végétarien'],[['Betteraves cuites',500,'g'],['Pommes de terre',2,''],['Oignon',1,''],['Bouillon',800,'ml'],['Crème',100,'ml']],['Cuire légumes','Mixer','Crème']],
 ['Soupe carottes gingembre','🥕','Soupe',30,'Facile',4,['végétarien'],[['Carottes',800,'g'],['Oignon',1,''],['Gingembre',1,'c. à soupe'],['Bouillon',1,'L'],['Crème',80,'ml']],['Cuire carottes + oignon','Gingembre + bouillon','Mixer + crème']],
 // ===== SALADES (18) =====
-['Niçoise','🥗','Salade',15,'Facile',2,['été'],[['Tomates',4,''],['Thon',1,'boîte'],['Œufs',2,''],['Olives noires',50,'g'],['Haricots verts',150,'g'],['Huile olive',2,'c. à soupe']],['Cuire œufs durs','Blanchir haricots','Assembler']],
-['César','🥗','Salade',20,'Facile',2,['classique'],[['Laitue',1,''],['Poulet',200,'g'],['Croûtons',100,'g'],['Parmesan',50,'g'],['Sauce césar',3,'c. à soupe']],['Griller poulet','Assembler laitue + poulet','Croûtons + parmesan + sauce']],
+['Salade niçoise','🥗','Salade',15,'Facile',2,['été'],[['Tomates',4,''],['Thon',1,'boîte'],['Œufs',2,''],['Olives noires',50,'g'],['Haricots verts',150,'g'],['Huile olive',2,'c. à soupe']],['Cuire œufs durs','Blanchir haricots','Assembler']],
+['Salade César','🥗','Salade',20,'Facile',2,['classique'],[['Laitue',1,''],['Poulet',200,'g'],['Croûtons',100,'g'],['Parmesan',50,'g'],['Sauce césar',3,'c. à soupe']],['Griller poulet','Assembler laitue + poulet','Croûtons + parmesan + sauce']],
 ['Salade tomates','🍅','Salade',10,'Facile',2,['été','rapide'],[['Tomates',4,''],['Oignon',1,''],['Basilic',10,'feuilles'],['Huile olive',2,'c. à soupe']],['Trancher tomates + oignon','Basilic + huile']],
-['Grecque','🥗','Salade',10,'Facile',4,['grec'],[['Tomates',3,''],['Concombre',1,''],['Feta',200,'g'],['Olives',80,'g'],['Oignon rouge',1,''],['Huile olive',3,'c. à soupe']],['Couper légumes','Ajouter feta + olives','Huile']],
+['Salade grecque','🥗','Salade',10,'Facile',4,['grec'],[['Tomates',3,''],['Concombre',1,''],['Feta',200,'g'],['Olives',80,'g'],['Oignon rouge',1,''],['Huile olive',3,'c. à soupe']],['Couper légumes','Ajouter feta + olives','Huile']],
 ['Salade pâtes','🍝','Salade',20,'Facile',4,['été'],[['Pâtes',300,'g'],['Tomates cerises',200,'g'],['Mozzarella',150,'g'],['Basilic',10,'feuilles'],['Huile olive',3,'c. à soupe']],['Cuire pâtes','Refroidir','Mélanger tous']],
 ['Salade riz','🍚','Salade',20,'Facile',4,['été'],[['Riz',250,'g'],['Thon',1,'boîte'],['Maïs',150,'g'],['Tomates',2,''],['Huile olive',2,'c. à soupe']],['Cuire riz','Refroidir','Mélanger']],
-['Lentilles','🥗','Salade',25,'Facile',4,['végétarien'],[['Lentilles',250,'g'],['Échalote',1,''],['Carotte',1,''],['Vinaigre',2,'c. à soupe'],['Huile olive',3,'c. à soupe']],['Cuire lentilles','Refroidir','Assaisonner']],
-['Quinoa','🥗','Salade',25,'Facile',4,['végétarien','healthy'],[['Quinoa',250,'g'],['Concombre',1,''],['Tomates',2,''],['Feta',100,'g'],['Huile olive',3,'c. à soupe']],['Cuire quinoa','Refroidir','Mélanger']],
-['Taboulé','🥗','Salade',20,'Facile',4,['libanais','été'],[['Semoule',250,'g'],['Tomates',3,''],['Concombre',1,''],['Menthe',50,'g'],['Citron',2,''],['Huile olive',3,'c. à soupe']],['Hydrater semoule','Couper légumes','Menthe + citron + huile']],
-['Chèvre chaud','🥗','Salade',15,'Facile',2,['français'],[['Mesclun',100,'g'],['Chèvre',2,'crottes'],['Pain',2,'tranches'],['Miel',1,'c. à café'],['Huile olive',2,'c. à soupe']],['Toaster pain + chèvre','Miel','Assembler']],
-['Poulet','🥗','Salade',20,'Facile',2,['rapide'],[['Salade',1,''],['Poulet',300,'g'],['Tomates',2,''],['Maïs',100,'g'],['Huile olive',2,'c. à soupe']],['Griller poulet','Mélanger légumes','Assembler']],
-['Thon','🥗','Salade',10,'Facile',2,['rapide'],[['Salade',1,''],['Thon',1,'boîte'],['Tomates',2,''],['Oignon',1,''],['Olives',50,'g']],['Égoutter thon','Mélanger']],
-['Mâche','🥗','Salade',10,'Facile',2,['végétarien'],[['Mâche',100,'g'],['Noix',50,'g'],['Betterave',1,''],['Vinaigre balsamique',2,'c. à soupe'],['Huile noix',3,'c. à soupe']],['Mélanger','Assaisonner']],
-['Fruits de mer','🦐','Salade',25,'Facile',2,['mer'],[['Crevettes',200,'g'],['Moules',300,'g'],['Salade',1,''],['Citron',1,''],['Huile olive',2,'c. à soupe']],['Cuire fruits de mer','Refroidir','Mélanger']],
-['Pommes de terre','🥔','Salade',25,'Facile',4,['classique'],[['Pommes de terre',800,'g'],['Échalote',1,''],['Moutarde',1,'c. à soupe'],['Vinaigre',2,'c. à soupe'],['Huile olive',4,'c. à soupe']],['Cuire patates','Refroidir','Vinaigrette']],
-['Waldorf','🥗','Salade',15,'Facile',4,['classique'],[['Pomme',3,''],['Céleri',2,'branches'],['Noix',80,'g'],['Mayonnaise',3,'c. à soupe'],['Citron',1,'']],['Couper pommes + céleri','Noix','Mayonnaise']],
-['Concombre','🥒','Salade',10,'Facile',4,['rapide','été'],[['Concombre',2,''],['Yaourt',200,'g'],['Menthe',2,'c. à soupe'],['Ail',1,'gousse'],['Huile olive',1,'c. à soupe']],['Trancher concombre','Yaourt + menthe + ail','Mélanger']],
-['Pois chiches','🥗','Salade',15,'Facile',4,['végétarien'],[['Pois chiches',400,'g'],['Tomates',2,''],['Concombre',1,''],['Feta',100,'g'],['Huile olive',3,'c. à soupe']],['Mélanger tous','Assaisonner']],
+['Salade de lentilles','🥗','Salade',25,'Facile',4,['végétarien'],[['Lentilles',250,'g'],['Échalote',1,''],['Carotte',1,''],['Vinaigre',2,'c. à soupe'],['Huile olive',3,'c. à soupe']],['Cuire lentilles','Refroidir','Assaisonner']],
+['Salade de quinoa','🥗','Salade',25,'Facile',4,['végétarien','healthy'],[['Quinoa',250,'g'],['Concombre',1,''],['Tomates',2,''],['Feta',100,'g'],['Huile olive',3,'c. à soupe']],['Cuire quinoa','Refroidir','Mélanger']],
+['Salade de taboulé','🥗','Salade',20,'Facile',4,['libanais','été'],[['Semoule',250,'g'],['Tomates',3,''],['Concombre',1,''],['Menthe',50,'g'],['Citron',2,''],['Huile olive',3,'c. à soupe']],['Hydrater semoule','Couper légumes','Menthe + citron + huile']],
+['Salade de chèvre chaud','🥗','Salade',15,'Facile',2,['français'],[['Mesclun',100,'g'],['Chèvre',2,'crottes'],['Pain',2,'tranches'],['Miel',1,'c. à café'],['Huile olive',2,'c. à soupe']],['Toaster pain + chèvre','Miel','Assembler']],
+['Salade au poulet','🥗','Salade',20,'Facile',2,['rapide'],[['Salade',1,''],['Poulet',300,'g'],['Tomates',2,''],['Maïs',100,'g'],['Huile olive',2,'c. à soupe']],['Griller poulet','Mélanger légumes','Assembler']],
+['Salade au thon','🥗','Salade',10,'Facile',2,['rapide'],[['Salade',1,''],['Thon',1,'boîte'],['Tomates',2,''],['Oignon',1,''],['Olives',50,'g']],['Égoutter thon','Mélanger']],
+['Salade de mâche','🥗','Salade',10,'Facile',2,['végétarien'],[['Mâche',100,'g'],['Noix',50,'g'],['Betterave',1,''],['Vinaigre balsamique',2,'c. à soupe'],['Huile noix',3,'c. à soupe']],['Mélanger','Assaisonner']],
+['Salade de fruits de mer','🦐','Salade',25,'Facile',2,['mer'],[['Crevettes',200,'g'],['Moules',300,'g'],['Salade',1,''],['Citron',1,''],['Huile olive',2,'c. à soupe']],['Cuire fruits de mer','Refroidir','Mélanger']],
+['Salade de pommes de terre','🥔','Salade',25,'Facile',4,['classique'],[['Pommes de terre',800,'g'],['Échalote',1,''],['Moutarde',1,'c. à soupe'],['Vinaigre',2,'c. à soupe'],['Huile olive',4,'c. à soupe']],['Cuire patates','Refroidir','Vinaigrette']],
+['Salade Waldorf','🥗','Salade',15,'Facile',4,['classique'],[['Pomme',3,''],['Céleri',2,'branches'],['Noix',80,'g'],['Mayonnaise',3,'c. à soupe'],['Citron',1,'']],['Couper pommes + céleri','Noix','Mayonnaise']],
+['Salade de concombre','🥒','Salade',10,'Facile',4,['rapide','été'],[['Concombre',2,''],['Yaourt',200,'g'],['Menthe',2,'c. à soupe'],['Ail',1,'gousse'],['Huile olive',1,'c. à soupe']],['Trancher concombre','Yaourt + menthe + ail','Mélanger']],
+['Salade de pois chiches','🥗','Salade',15,'Facile',4,['végétarien'],[['Pois chiches',400,'g'],['Tomates',2,''],['Concombre',1,''],['Feta',100,'g'],['Huile olive',3,'c. à soupe']],['Mélanger tous','Assaisonner']],
 // ===== ŒUFS / PETIT-DÉJ (14) =====
 ['Omelette nature','🍳','Œufs',10,'Facile',2,['rapide'],[['Œufs',6,''],['Beurre',20,'g'],['Persil',1,'c. à soupe'],['Sel',1,'pincée']],['Battre œufs','Beurre chaud','Cuire 4 min']],
 ['Omelette champignons','🍳','Œufs',15,'Facile',2,['végétarien'],[['Œufs',6,''],['Champignons',250,'g'],['Beurre',20,'g'],['Persil',1,'c. à soupe']],['Sauter champignons','Battre œufs','Cuire ensemble']],
@@ -376,9 +384,9 @@ const RAW=[
 ['Avocado toast','🥑','Œufs',10,'Facile',2,['rapide','healthy'],[['Pain',2,'tranches'],['Avocat',1,''],['Citron',1,''],['Œuf',2,''],['Piment',1,'pincée']],['Toaster pain','Écraser avocat + citron','Œufs pochés dessus','Piment']],
 // ===== SANDWICHS / WRAPS (14) =====
 ['Croque-monsieur','🥪','Sandwich',15,'Facile',2,['classique','rapide'],[['Pain mie',4,'tranches'],['Jambon',2,'tranches'],['Fromage râpé',100,'g'],['Beurre',30,'g']],['Beurrer','Garnir','Cuire 5 min']],
-['Jambon','🥪','Sandwich',5,'Facile',2,['rapide'],[['Baguette',1,''],['Jambon',2,'tranches'],['Beurre',30,'g'],['Cornichons',4,'']],['Couper baguette','Beurre + jambon','Cornichons']],
-['Thon','🥪','Sandwich',10,'Facile',2,['rapide'],[['Pain',4,'tranches'],['Thon',1,'boîte'],['Mayonnaise',3,'c. à soupe'],['Salade',4,'feuilles']],['Mélanger thon + mayo','Garnir']],
-['Poulet','🥪','Sandwich',15,'Facile',2,['rapide'],[['Pain',4,'tranches'],['Poulet',200,'g'],['Salade',4,'feuilles'],['Tomate',1,''],['Mayonnaise',2,'c. à soupe']],['Griller poulet','Assembler']],
+['Sandwich jambon-beurre','🥪','Sandwich',5,'Facile',2,['rapide'],[['Baguette',1,''],['Jambon',2,'tranches'],['Beurre',30,'g'],['Cornichons',4,'']],['Couper baguette','Beurre + jambon','Cornichons']],
+['Sandwich au thon','🥪','Sandwich',10,'Facile',2,['rapide'],[['Pain',4,'tranches'],['Thon',1,'boîte'],['Mayonnaise',3,'c. à soupe'],['Salade',4,'feuilles']],['Mélanger thon + mayo','Garnir']],
+['Sandwich au poulet','🥪','Sandwich',15,'Facile',2,['rapide'],[['Pain',4,'tranches'],['Poulet',200,'g'],['Salade',4,'feuilles'],['Tomate',1,''],['Mayonnaise',2,'c. à soupe']],['Griller poulet','Assembler']],
 ['Wrap poulet','🌯','Sandwich',15,'Facile',2,['rapide','healthy'],[['Tortillas',2,''],['Poulet',200,'g'],['Salade',1,''],['Tomate',1,''],['Yaourt',3,'c. à soupe']],['Griller poulet','Garnir tortillas','Rouler']],
 ['Wrap végé','🌯','Sandwich',10,'Facile',2,['végétarien','rapide'],[['Tortillas',2,''],['Houmous',4,'c. à soupe'],['Carotte',1,''],['Concombre',1,''],['Salade',1,'']],['Tartiner houmous','Garnir légumes','Rouler']],
 ['Panini','🥪','Sandwich',10,'Facile',2,['italien','rapide'],[['Pain ciabatta',2,''],['Mozzarella',150,'g'],['Tomate',1,''],['Basilic',5,'feuilles']],['Garnir','Griller 5 min']],
@@ -440,20 +448,89 @@ const RAW=[
 ['Poulet BBQ','🍗','Grillade',30,'Facile',4,['été'],[['Poulet',4,'filets'],['Sauce BBQ',150,'ml'],['Ail',2,'gousse'],['Paprika',1,'c. à café']],['Mariner 15 min','Griller 6 min chaque côté']]
 ];
 
+// Termes de recherche des photos (Wikipédia FR | Wikipédia EN), dans l'ordre des recettes
+const PHOTOQ = [["Spaghetti alla carbonara", "Spaghetti alla carbonara"], ["Spaghetti bolognaise", "Spaghetti bolognese"], ["Pesto alla genovese", "Trenette al pesto"], ["Pasta al pomodoro", "Pasta al pomodoro"], ["Pâtes au saumon", "Salmon pasta"], ["Lasagnes", "Lasagne"], ["Lasagnes aux légumes", "Vegetable lasagne"], ["Pâtes aux quatre fromages", "Quattro formaggi"], ["Spaghetti alla puttanesca", "Spaghetti alla puttanesca"], ["Pâtes aux courgettes", "Pasta with zucchini"], ["Pâtes aux champignons", "Mushroom pasta"], ["Spaghetti aglio e olio", "Spaghetti aglio e olio"], ["Penne all'arrabbiata", "Penne all'arrabbiata"], ["Tagliatelles au saumon", "Salmon tagliatelle"], ["Macaroni au fromage", "Macaroni and cheese"], ["Pâtes au thon", "Tuna pasta"], ["Nouilles sautées", "Chow mein"], ["Pasta primavera", "Pasta primavera"], ["Raviolis ricotta épinards", "Ravioli"], ["Carbonara végétarienne", "Spaghetti alla carbonara"], ["Riz sauté aux légumes", "Fried rice"], ["Risotto aux champignons", "Mushroom risotto"], ["Risotto aux crevettes", "Risotto"], ["Riz au curry", "Curry rice"], ["Riz cantonais", "Yangzhou fried rice"], ["Paella", "Paella"], ["Riz pilaf", "Pilaf"], ["Riz aux haricots rouges", "Rice and beans"], ["Riz à la tomate", "Arroz a la mexicana"], ["Riz aux herbes", "Herbed rice"], ["Riz sauté à l'ananas", "Pineapple fried rice"], ["Riz créole", "Arroz blanco"], ["Risotto alla parmigiana", "Risotto"], ["Risotto alla milanese", "Risotto alla milanese"], ["Riz au lait de coco", "Coconut rice"], ["Poulet rôti", "Roast chicken"], ["Steak frites", "Steak frites"], ["Poulet basquaise", "Poulet basquaise"], ["Bœuf bourguignon", "Beef bourguignon"], ["Blanquette de veau", "Blanquette de veau"], ["Curry de poulet", "Chicken curry"], ["Poulet au citron", "Lemon chicken"], ["Escalope milanaise", "Cotoletta alla milanese"], ["Côtelette d'agneau", "Lamb chop"], ["Rôti de porc", "Roast pork"], ["Choucroute garnie", "Choucroute garnie"], ["Cassoulet", "Cassoulet"], ["Chili con carne", "Chili con carne"], ["Taco", "Taco"], ["Hamburger", "Hamburger"], ["Poulet au miel", "Honey chicken"], ["Katsu", "Chicken katsu"], ["Brochette de poulet", "Chicken kebab"], ["Porc sauté", "Stir-fried pork"], ["Cuisse de poulet", "Chicken leg"], ["Poulet tandoori", "Tandoori chicken"], ["Boulette de viande", "Meatball"], ["Bifteck", "Steak"], ["Magret de canard", "Magret"], ["Confit de canard", "Duck confit"], ["Poulet yassa", "Chicken yassa"], ["Poulet Marengo", "Chicken Marengo"], ["Bœuf Stroganov", "Beef Stroganoff"], ["Paprikás csirke", "Chicken paprikash"], ["Saumon grillé", "Grilled salmon"], ["Cabillaud rôti", "Baked cod"], ["Papillote de saumon", "En papillote"], ["Steak de thon", "Tuna steak"], ["Gambas a la plancha", "Gambas al ajillo"], ["Moules marinières", "Moules marinières"], ["Sole meunière", "Sole meunière"], ["Bar en papillote", "European seabass"], ["Sardines grillées", "Grilled sardines"], ["Gravlax", "Gravlax"], ["Curry de crevettes", "Shrimp curry"], ["Cabillaud en papillote", "En papillote"], ["Gratin de poisson", "Fish pie"], ["Poisson pané", "Fish fingers"], ["Tartare de saumon", "Salmon tartare"], ["Croquette de poisson", "Fish cake"], ["Truite aux amandes", "Trout amandine"], ["Coquilles Saint-Jacques", "Scallop"], ["Calamars frits", "Fried calamari"], ["Saumon teriyaki", "Teriyaki"], ["Ratatouille", "Ratatouille"], ["Quiche lorraine", "Quiche Lorraine"], ["Quiche aux légumes", "Quiche"], ["Flamiche", "Leek tart"], ["Gratin dauphinois", "Gratin dauphinois"], ["Gratin de courgettes", "Zucchini gratin"], ["Chana masala", "Chana masala"], ["Dal", "Dal"], ["Falafel", "Falafel"], ["Houmous", "Hummus"], ["Poêlée de légumes", "Stir-fried vegetables"], ["Légumes rôtis", "Roasted vegetables"], ["Chili sin carne", "Vegetarian chili"], ["Burger végétarien", "Veggie burger"], ["Galette de sarrasin", "Galette"], ["Crêpe salée", "Crêpe"], ["Pizza Margherita", "Pizza Margherita"], ["Pizza aux légumes", "Vegetable pizza"], ["Soufflé au fromage", "Cheese soufflé"], ["Tarte à l'oignon", "Onion tart"], ["Crumble de légumes", "Vegetable crumble"], ["Moussaka végétarienne", "Moussaka"], ["Lasagnes végétariennes", "Vegetable lasagne"], ["Bourguignon végétarien", "Mushroom bourguignon"], ["Chou de Bruxelles rôti", "Brussels sprout"], ["Purée de pommes de terre", "Mashed potato"], ["Pommes de terre rôties", "Roast potatoes"], ["Endive braisée", "Braised endive"], ["Gratin de chou-fleur", "Cauliflower cheese"], ["Soupe à l'oignon", "French onion soup"], ["Soupe de légumes", "Vegetable soup"], ["Velouté de potiron", "Pumpkin soup"], ["Velouté de courgettes", "Zucchini soup"], ["Soupe à la tomate", "Tomato soup"], ["Gaspacho", "Gazpacho"], ["Soupe de poisson", "Fish soup"], ["Sopa de ajo", "Garlic soup"], ["Velouté de champignons", "Cream of mushroom soup"], ["Soupe de lentilles", "Lentil soup"], ["Minestrone", "Minestrone"], ["Tom kha kai", "Tom kha kai"], ["Soupe au brocoli", "Broccoli soup"], ["Soupe de citrouille", "Pumpkin soup"], ["Soupe aux pois cassés", "Pea soup"], ["Bouillon de poulet", "Chicken soup"], ["Bortsch", "Borscht"], ["Soupe de carottes", "Carrot soup"], ["Salade niçoise", "Salade niçoise"], ["Salade César", "Caesar salad"], ["Salade de tomates", "Tomato salad"], ["Salade grecque", "Greek salad"], ["Salade de pâtes", "Pasta salad"], ["Salade de riz", "Rice salad"], ["Salade de lentilles", "Lentil salad"], ["Salade de quinoa", "Quinoa salad"], ["Taboulé", "Tabbouleh"], ["Salade de chèvre chaud", "Goat cheese salad"], ["Salade de poulet", "Chicken salad"], ["Salade au thon", "Tuna salad"], ["Mâche", "Valerianella locusta"], ["Salade de fruits de mer", "Seafood salad"], ["Salade de pommes de terre", "Potato salad"], ["Salade Waldorf", "Waldorf salad"], ["Salade de concombre", "Cucumber salad"], ["Salade de pois chiches", "Chickpea salad"], ["Omelette", "Omelette"], ["Omelette aux champignons", "Mushroom omelette"], ["Œufs brouillés", "Scrambled eggs"], ["Œuf poché", "Poached egg"], ["Œuf mimosa", "Deviled egg"], ["Chakchouka", "Shakshouka"], ["Croque-madame", "Croque-madame"], ["Pain perdu", "French toast"], ["Pancake", "Pancake"], ["Gaufre", "Waffle"], ["Crêpe", "Crêpe"], ["Porridge", "Porridge"], ["Muesli", "Muesli"], ["Avocado toast", "Avocado toast"], ["Croque-monsieur", "Croque monsieur"], ["Jambon-beurre", "Jambon-beurre"], ["Sandwich au thon", "Tuna sandwich"], ["Sandwich au poulet", "Chicken sandwich"], ["Wrap au poulet", "Wrap (food)"], ["Wrap végétarien", "Wrap (food)"], ["Panini", "Panini (sandwich)"], ["Bagel saumon", "Lox"], ["Club sandwich", "Club sandwich"], ["BLT", "BLT"], ["Sandwich aux œufs", "Egg sandwich"], ["Burrito", "Burrito"], ["Quesadilla", "Quesadilla"], ["Fajitas", "Fajita"], ["Couscous royal", "Couscous"], ["Tajine de poulet au citron", "Tajine"], ["Tajine d'agneau aux pruneaux", "Tajine"], ["Couscous aux légumes", "Couscous"], ["Pad thaï", "Pad thai"], ["Bún bò Nam Bộ", "Bún bò Nam Bộ"], ["Nem rán", "Chả giò"], ["Sushi", "Sushi"], ["Makizushi", "Makizushi"], ["Onigiri", "Onigiri"], ["Rāmen", "Ramen"], ["Poulet tikka masala", "Chicken tikka masala"], ["Biryani", "Biryani"], ["Naan au fromage", "Naan"], ["Curry vert", "Green curry"], ["Saté", "Satay"], ["Nasi goreng", "Nasi goreng"], ["Moussaka", "Moussaka"], ["Empanada", "Empanada"], ["Taco", "Taco"], ["Tarte aux pommes", "Apple pie"], ["Clafoutis", "Clafoutis"], ["Crumble aux pommes", "Apple crumble"], ["Mousse au chocolat", "Chocolate mousse"], ["Crème brûlée", "Crème brûlée"], ["Tiramisu", "Tiramisu"], ["Fondant au chocolat", "Chocolate lava cake"], ["Brownie", "Chocolate brownie"], ["Cookie", "Chocolate chip cookie"], ["Muffin", "Muffin"], ["Madeleine (gâteau)", "Madeleine (cake)"], ["Cake au citron", "Lemon cake"], ["Charlotte aux fraises", "Charlotte (cake)"], ["Île flottante", "Floating island (dessert)"], ["Riz au lait", "Rice pudding"], ["Panna cotta", "Panna cotta"], ["Banana bread", "Banana bread"], ["Cheesecake", "Cheesecake"], ["Brochette de bœuf", "Shish kebab"], ["Merguez", "Merguez"], ["Côtelette d'agneau grillée", "Lamb chop"], ["Saucisse grillée", "Grilled sausage"], ["Travers de porc", "Spare ribs"], ["Halloumi", "Halloumi"], ["Légumes grillés", "Grilled vegetables"], ["Poulet barbecue", "Barbecue chicken"]];
 // Conversion format compact → objets
 const RECIPES = RAW.map((r, i) => ({
   id: 'r' + (i + 1),
   name: r[0], emoji: r[1], category: r[2], time: r[3], difficulty: r[4], servings: r[5], tags: r[6],
   ingredients: r[7].map(x => ({ name: x[0], qty: x[1], unit: x[2] })),
-  steps: r[8]
+  steps: r[8], q: PHOTOQ[i] || [r[0], r[0]]
 }));
+
+// ============================================================
+// UTILITAIRES
+// ============================================================
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const load = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
+
+// ============================================================
+// PHOTOS DES RECETTES (Wikipédia / Wikimedia Commons, licences libres)
+// 1) titre exact FR puis EN, par lots de 50  2) sinon recherche  — résultat gardé en mémoire
+// ============================================================
+const PH_V = 2;
+let photos = load('recipePhotos', {});
+if (photos._v !== PH_V) photos = { _v: PH_V };
+const savePhotos = () => { try { localStorage.setItem('recipePhotos', JSON.stringify(photos)); } catch (e) {} };
+const WIKI = l => `https://${l}.wikipedia.org/w/api.php?action=query&format=json&origin=*&redirects=1&prop=pageimages&piprop=thumbnail&pithumbsize=480&pilicense=any`;
+async function wikiTitles(lang, titles) {
+  const out = {};
+  for (let i = 0; i < titles.length; i += 50) {
+    const part = titles.slice(i, i + 50);
+    try {
+      const d = await (await fetch(WIKI(lang) + '&titles=' + encodeURIComponent(part.join('|')))).json();
+      const map = {}; part.forEach(t => map[t] = t);
+      (d.query.normalized || []).forEach(n => Object.keys(map).forEach(k => { if (map[k] === n.from) map[k] = n.to; }));
+      (d.query.redirects || []).forEach(n => Object.keys(map).forEach(k => { if (map[k] === n.from) map[k] = n.to; }));
+      const pages = Object.values(d.query.pages || {});
+      part.forEach(t => { const p = pages.find(x => x.title === map[t]); if (p && p.thumbnail) out[t] = { src: p.thumbnail.source, url: `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(p.title)}` }; });
+    } catch (e) { return null; }
+  }
+  return out;
+}
+async function wikiSearch(lang, q) {
+  try {
+    const d = await (await fetch(WIKI(lang) + '&generator=search&gsrlimit=3&gsrsearch=' + encodeURIComponent(q))).json();
+    const p = Object.values((d.query && d.query.pages) || {}).sort((a, b) => a.index - b.index).find(x => x.thumbnail);
+    return p ? { src: p.thumbnail.source, url: `https://${lang}.wikipedia.org/wiki/${encodeURIComponent(p.title)}` } : false;
+  } catch (e) { return null; }
+}
+let photoBusy = false;
+async function loadPhotos() {
+  if (photoBusy || !navigator.onLine) return; photoBusy = true;
+  try {
+    let todo = RECIPES.filter(r => !(r.id in photos));
+    for (const [lang, k] of [['fr', 0], ['en', 1]]) {
+      if (!todo.length) break;
+      const got = await wikiTitles(lang, [...new Set(todo.map(r => r.q[k]))]);
+      if (!got) break;
+      todo.forEach(r => { if (got[r.q[k]]) photos[r.id] = got[r.q[k]]; });
+      todo = todo.filter(r => !(r.id in photos)); savePhotos(); refreshPhotos();
+    }
+    for (const r of todo) { // recherche plein texte pour les dernières
+      let p = await wikiSearch('fr', r.q[0]); if (p === false) p = await wikiSearch('en', r.q[1]);
+      if (p === null) continue; photos[r.id] = p || ''; savePhotos(); refreshPhotos();
+    }
+  } finally { photoBusy = false; }
+}
+function thumbHTML(r, cls = 'recipe-thumb') {
+  const p = photos[r.id];
+  return `<div class="${cls}" data-rid="${r.id}">${p && p.src ? `<img src="${esc(p.src)}" alt="${esc(r.name)}" loading="lazy" onerror="this.remove()">` : ''}<span class="emo">${r.emoji}</span></div>`;
+}
+function refreshPhotos() {
+  document.querySelectorAll('[data-rid]').forEach(el => {
+    const p = photos[el.dataset.rid];
+    if (p && p.src && !el.querySelector('img')) el.insertAdjacentHTML('afterbegin', `<img src="${esc(p.src)}" alt="" loading="lazy" onerror="this.remove()">`);
+  });
+}
+window.addEventListener('online', loadPhotos);
 
 // ============================================================
 // ÉTAT GLOBAL
 // ============================================================
-let inventory = JSON.parse(localStorage.getItem('myInventory')) || [];
-let shoppingList = JSON.parse(localStorage.getItem('myShoppingList')) || [];
-let planning = JSON.parse(localStorage.getItem('myPlanning')) || {};
+let inventory = load('myInventory', []);
+let shoppingList = load('myShoppingList', []);
+let planning = load('myPlanning', {});
 let currentFilter = 'Toutes';
 let currentSlotKey = null;
 
@@ -478,25 +555,24 @@ document.querySelectorAll('nav button').forEach(btn => {
 // INVENTAIRE
 // ============================================================
 function saveInventory() { localStorage.setItem('myInventory', JSON.stringify(inventory)); renderInventory(); }
-function addItem(name, qty = 1, expiry = null) {
+function addItem(name, qty, expiry = null) {
+  const fromForm = !name;
   name = name || document.getElementById('item-name').value;
-  qty = qty || parseInt(document.getElementById('item-qty').value) || 1;
+  qty = qty || (fromForm && parseInt(document.getElementById('item-qty').value)) || 1;
   expiry = expiry || document.getElementById('item-expiry').value || null;
   if (!name || !name.trim()) return;
   const existing = inventory.find(i => i.name.toLowerCase() === name.toLowerCase().trim());
   if (existing) { existing.qty += parseInt(qty); if (expiry) existing.expiry = expiry; }
   else inventory.push({ id: Date.now() + Math.random(), name: name.trim(), qty: parseInt(qty), expiry });
   saveInventory();
-  document.getElementById('item-name').value = '';
-  document.getElementById('item-qty').value = 1;
-  document.getElementById('item-expiry').value = '';
+  if (fromForm) { document.getElementById('item-name').value = ''; document.getElementById('item-qty').value = 1; document.getElementById('item-expiry').value = ''; }
 }
 function removeItem(id) { inventory = inventory.filter(i => i.id !== id); saveInventory(); }
 function updateQty(id, delta) {
   const item = inventory.find(i => i.id === id);
   if (item) { item.qty += delta; if (item.qty <= 0) return removeItem(id); saveInventory(); }
 }
-function getDaysUntilExpiry(expiry) { if (!expiry) return Infinity; return Math.ceil((new Date(expiry) - new Date()) / 86400000); }
+function getDaysUntilExpiry(expiry) { if (!expiry) return Infinity; const [y, m, d] = expiry.split('-').map(Number), t = new Date(); t.setHours(0, 0, 0, 0); return Math.round((new Date(y, m - 1, d) - t) / 86400000); }
 function renderInventory() {
   const list = document.getElementById('inventory-list');
   const empty = document.getElementById('inventory-empty');
@@ -510,10 +586,10 @@ function renderInventory() {
     const days = getDaysUntilExpiry(item.expiry);
     let badge = '';
     if (item.expiry) {
-      if (days <= 2) badge = `<span class="expiry-badge expiry-urgent">⚠️ ${days <= 0 ? 'Expiré' : 'J-' + days}</span>`;
+      if (days <= 2) badge = `<span class="expiry-badge expiry-urgent">⚠️ ${days < 0 ? 'Expiré' : days === 0 ? 'Aujourd’hui' : 'J-' + days}</span>`;
       else badge = `<span class="expiry-badge expiry-ok">✅ ${days}j</span>`;
     }
-    li.innerHTML = `<div style="flex:1"><span class="item-name">${item.name}</span>${badge}<div class="item-meta">${item.expiry ? 'Périme ' + item.expiry : 'Pas de date'}</div></div>
+    li.innerHTML = `<div style="flex:1"><span class="item-name">${esc(item.name)}</span>${badge}<div class="item-meta">${item.expiry ? 'Périme le ' + item.expiry.split('-').reverse().join('/') : 'Pas de date'}</div></div>
       <div style="display:flex;align-items:center;gap:4px">
       <button class="btn-icon" onclick="updateQty(${item.id},-1)">➖</button>
       <span style="font-weight:700;min-width:20px;text-align:center">${item.qty}</span>
@@ -559,7 +635,7 @@ function createRecipeCard(r) {
   card.className = 'recipe-card';
   card.onclick = () => openRecipeModal(r);
   const ings = r.ingredients.slice(0, 3).map(i => i.name).join(', ');
-  card.innerHTML = `<div class="recipe-thumb">${r.emoji}</div>
+  card.innerHTML = `${thumbHTML(r)}
     <div class="info"><div class="title">${r.name}</div>
     <div class="meta">⏱ ${r.time} min • ${r.ingredients.length} ingr.</div></div>`;
   return card;
@@ -567,7 +643,8 @@ function createRecipeCard(r) {
 
 function openRecipeModal(r) {
   const content = document.getElementById('modal-content');
-  content.innerHTML = `
+  const ph = photos[r.id];
+  content.innerHTML = `${thumbHTML(r, 'modal-photo')}${ph && ph.src ? `<p class="credit">Photo d’illustration : <a href="${esc(ph.url)}" target="_blank" rel="noopener">Wikipédia</a> (licence libre)</p>` : ''}
     <h2>${r.emoji} ${r.name}</h2>
     <p style="color:var(--text-light); font-size:.9rem; margin-bottom:12px;">
       <span class="badge">${r.category}</span>
@@ -579,7 +656,7 @@ function openRecipeModal(r) {
     <ul>${r.ingredients.map(i => `<li>${i.qty}${i.unit ? ' ' + i.unit : ''} ${i.name}</li>`).join('')}</ul>
     <h4>👨‍🍳 Préparation</h4>
     <ol>${r.steps.map(s => `<li>${s}</li>`).join('')}</ol>
-    <button class="btn btn-primary" style="margin-top:16px; width:100%;" onclick="addMissingToShopping(${JSON.stringify(r.ingredients).replace(/"/g,'&quot;')})">
+    <button class="btn btn-primary" style="margin-top:16px; width:100%;" onclick="addMissingToShopping('${r.id}')">
       🛒 Ajouter les ingrédients manquants aux courses
     </button>`;
   document.getElementById('recipe-modal').classList.add('open');
@@ -591,6 +668,7 @@ document.querySelectorAll('.modal-overlay').forEach(o => {
 });
 
 function addMissingToShopping(ingredients) {
+  if (typeof ingredients === 'string') ingredients = RECIPES.find(x => x.id === ingredients).ingredients;
   const inv = inventory.map(i => i.name.toLowerCase());
   let added = 0;
   ingredients.forEach(ing => {
@@ -628,7 +706,7 @@ function renderSuggestions() {
     const card = document.createElement('div');
     card.className = 'recipe-card';
     card.onclick = () => openRecipeModal(r);
-    card.innerHTML = `<div class="recipe-thumb">${r.emoji}</div>
+    card.innerHTML = `${thumbHTML(r)}
       <div class="info"><div class="title">${r.name}</div>
       <div class="meta">${pct}% d'ingrédients en stock</div>
       <div class="match-bar"><div class="match-fill" style="width:${pct}%"></div></div></div>`;
@@ -663,9 +741,9 @@ async function openMealDBModal(id) {
   const content = document.getElementById('modal-content');
   content.innerHTML = '<p>Chargement...</p>';
   document.getElementById('recipe-modal').classList.add('open');
-  const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
-  const data = await res.json();
-  const m = data.meals[0];
+  let m;
+  try { const data = await (await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)).json(); m = data.meals && data.meals[0]; } catch (e) {}
+  if (!m) { content.innerHTML = '<p style="color:var(--danger)">Impossible de charger la recette (connexion ?).</p>'; return; }
   const ingredients = [];
   for (let i = 1; i <= 20; i++) {
     const ing = m[`strIngredient${i}`]; const meas = m[`strMeasure${i}`];
@@ -702,7 +780,7 @@ function renderPlanning() {
         const r = RECIPES.find(x => x.id === recipeId);
         if (r) {
           slot.classList.add('filled');
-          slot.innerHTML = `<div class="slot-emoji">${r.emoji}</div><div class="slot-name">${r.name}</div>`;
+          slot.innerHTML = `${thumbHTML(r, 'slot-photo')}<div class="slot-name">${r.name}</div>`;
         }
       } else {
         slot.innerHTML = '<div class="slot-empty">＋</div>';
@@ -726,11 +804,11 @@ function renderPickerList() {
   const list = document.getElementById('picker-list');
   list.innerHTML = '';
   let filtered = RECIPES;
-  if (q) filtered = filtered.filter(r => r.name.toLowerCase().includes(q) || r.tags.some(t => t.includes(q)));
-  filtered.slice(0, 100).forEach(r => {
+  if (q) filtered = filtered.filter(r => r.name.toLowerCase().includes(q) || r.category.toLowerCase().includes(q) || r.tags.some(t => t.includes(q)));
+  filtered.forEach(r => {
     const item = document.createElement('div');
     item.className = 'recipe-picker-item';
-    item.innerHTML = `<span class="emoji">${r.emoji}</span><span class="name">${r.name}</span><span style="font-size:.75rem;color:var(--text-light)">${r.time} min</span>`;
+    item.innerHTML = `${thumbHTML(r, 'pick-photo')}<span class="name">${r.name}<small style="display:block;color:var(--text-light);font-size:.72rem">${r.category}</small></span><span style="font-size:.75rem;color:var(--text-light)">${r.time} min</span>`;
     item.onclick = () => {
       planning[currentSlotKey] = r.id;
       savePlanning();
@@ -761,7 +839,7 @@ function generateShoppingFromPlanning() {
     const r = RECIPES.find(x => x.id === planning[k]);
     if (!r) return;
     r.ingredients.forEach(ing => {
-      const key = ing.name.toLowerCase().trim();
+      const key = ing.name.toLowerCase().trim() + '|' + (ing.unit || '');
       if (!agg[key]) agg[key] = { name: ing.name, qty: 0, unit: ing.unit };
       agg[key].qty += ing.qty;
     });
@@ -771,15 +849,15 @@ function generateShoppingFromPlanning() {
   const container = document.getElementById('gen-content');
   container.innerHTML = '';
   const list = Object.values(agg).sort((a, b) => a.name.localeCompare(b.name));
-  list.forEach(ing => {
+  list.forEach((ing, gi) => {
     const inStock = invNames.some(n => n.includes(ing.name.toLowerCase()) || ing.name.toLowerCase().includes(n));
     const div = document.createElement('div');
     div.className = 'shopping-gen-item';
-    div.innerHTML = `<input type="checkbox" ${inStock ? '' : 'checked'} id="gen-${btoa(ing.name).replace(/=/g,'')}">
-      <label for="gen-${btoa(ing.name).replace(/=/g,'')}">${inStock ? '✅ ' : ''}${ing.name}</label>
-      <span class="qty">${ing.qty}${ing.unit ? ' ' + ing.unit : ''}</span>`;
+    div.innerHTML = `<input type="checkbox" ${inStock ? '' : 'checked'} id="gen-${gi}">
+      <label for="gen-${gi}">${inStock ? '✅ ' : ''}${esc(ing.name)}</label>
+      <span class="qty">${Math.round(ing.qty * 100) / 100}${ing.unit ? ' ' + ing.unit : ''}</span>`;
     div.dataset.name = ing.name;
-    div.dataset.qty = ing.qty + (ing.unit ? ' ' + ing.unit : '');
+    div.dataset.qty = Math.round(ing.qty * 100) / 100 + (ing.unit ? ' ' + ing.unit : '');
     container.appendChild(div);
   });
   // Bouton valider
@@ -792,7 +870,7 @@ function generateShoppingFromPlanning() {
     let added = 0;
     container.querySelectorAll('.shopping-gen-item').forEach(row => {
       const cb = row.querySelector('input[type="checkbox"]');
-      if (cb.checked) {
+      if (cb.checked && !shoppingList.some(s => !s.checked && s.name.toLowerCase() === row.dataset.name.toLowerCase())) {
         shoppingList.push({ id: Date.now() + Math.random(), name: row.dataset.name, qty: row.dataset.qty, checked: false });
         added++;
       }
@@ -834,7 +912,7 @@ function renderShoppingList() {
     const li = document.createElement('li');
     li.className = item.checked ? 'checked' : '';
     li.innerHTML = `<input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleShoppingItem(${item.id})">
-      <span class="item-name" style="flex:1">${item.name}${item.qty ? ' <em style="color:var(--text-light); font-size:.85rem">(' + item.qty + ')</em>' : ''}</span>
+      <span class="item-name" style="flex:1">${esc(item.name)}${item.qty ? ' <em style="color:var(--text-light); font-size:.85rem">(' + esc(item.qty) + ')</em>' : ''}</span>
       <button class="btn-icon" onclick="removeShoppingItem(${item.id})">✕</button>`;
     list.appendChild(li);
   });
@@ -844,6 +922,7 @@ function renderShoppingList() {
 // SCANNER IA (TensorFlow.js)
 // ============================================================
 let model = null;
+const loadScript = src => new Promise((ok, ko) => { if (document.querySelector(`script[src="${src}"]`)) return ok(); const s = document.createElement('script'); s.src = src; s.onload = ok; s.onerror = ko; document.head.appendChild(s); });
 document.getElementById('image-upload').addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
@@ -853,7 +932,7 @@ document.getElementById('image-upload').addEventListener('change', async (e) => 
   img.src = URL.createObjectURL(file);
   img.onload = async () => {
     try {
-      if (!model) model = await mobilenet.load();
+      if (!model) { out.innerHTML = '<p style="color:var(--text-light)">⏳ Chargement du modèle (la première fois seulement)…</p>'; await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1'); await loadScript('https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0'); model = await mobilenet.load(); out.innerHTML = '<p style="color:var(--text-light)">⏳ Analyse...</p>'; }
       const preds = await model.classify(img, 5);
       out.innerHTML = '<p style="font-weight:600; margin-bottom:8px">Objets détectés (cliquez pour ajouter) :</p>';
       preds.forEach(p => {
@@ -866,7 +945,7 @@ document.getElementById('image-upload').addEventListener('change', async (e) => 
         tag.onclick = () => { addItem(name, 1); tag.style.opacity = '.4'; tag.style.pointerEvents = 'none'; };
         out.appendChild(tag);
       });
-    } catch (err) { out.innerHTML = '<p style="color:var(--danger)">Erreur d\'analyse.</p>'; }
+    } catch (err) { out.innerHTML = '<p style="color:var(--danger)">Erreur d\'analyse (connexion internet nécessaire la première fois).</p>'; }
   };
 });
 
@@ -880,6 +959,8 @@ document.addEventListener('DOMContentLoaded', () => {
   renderCategoryFilters();
   renderLibrary();
   if (inventory.length > 0) renderSuggestions();
+  [['item-name', () => addItem()], ['shop-item', addShoppingItem], ['search-query', searchMealDB]].forEach(([id, f]) => { const el = document.getElementById(id); if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') f(); }); });
+  loadPhotos();
 });
 
 // Exposition globale
