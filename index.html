@@ -1,801 +1,906 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mon Garde-Manger • Recettes & Inventaire</title>
-  <style>
-    /* ========== DESIGN SYSTEM PERSONNALISÉ ========== */
-    :root {
-      --primary: #2A9D8F;       /* Vert sauge moderne */
-      --primary-dark: #21867A;
-      --accent: #E9C46A;        /* Jaune doux */
-      --danger: #E76F51;        /* Terracotta pour alertes */
-      --bg: #F8F9FA;
-      --surface: #FFFFFF;
-      --text: #2B2D42;
-      --text-light: #6C757D;
-      --radius: 16px;
-      --shadow: 0 4px 20px rgba(0,0,0,0.06);
-      --transition: all 0.25s ease;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.5;
-      padding-bottom: 80px;
-    }
-    /* ========== HEADER ========== */
-    header {
-      background: var(--surface);
-      padding: 16px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      box-shadow: var(--shadow);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .logo { font-size: 1.4rem; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
-    .logo span { color: var(--accent); }
-    /* ========== NAVIGATION ONGLETS ========== */
-    nav {
-      display: flex;
-      gap: 8px;
-      padding: 12px 16px;
-      background: var(--surface);
-      border-bottom: 1px solid #eee;
-      overflow-x: auto;
-    }
-    nav button {
-      flex: 1;
-      padding: 10px 14px;
-      border: none;
-      background: transparent;
-      color: var(--text-light);
-      font-weight: 600;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: var(--transition);
-      white-space: nowrap;
-    }
-    nav button.active { background: var(--primary); color: white; }
-    nav button:hover:not(.active) { background: #f1f3f5; }
-    /* ========== CONTENU PRINCIPAL ========== */
-    main { padding: 16px; max-width: 900px; margin: 0 auto; }
-    .tab-content { display: none; animation: fadeIn 0.3s ease; }
-    .tab-content.active { display: block; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
-    /* ========== CARTES ========== */
-    .card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      padding: 16px;
-      box-shadow: var(--shadow);
-      margin-bottom: 16px;
-    }
-    .card h3 { font-size: 1.1rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-    /* ========== INVENTAIRE ========== */
-    .inventory-list { list-style: none; }
-    .inventory-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 0;
-      border-bottom: 1px solid #f0f0f0;
-    }
-    .inventory-item:last-child { border-bottom: none; }
-    .item-info { flex: 1; }
-    .item-name { font-weight: 600; }
-    .item-meta { font-size: 0.8rem; color: var(--text-light); }
-    .expiry-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      margin-left: 6px;
-    }
-    .expiry-urgent { background: #FFE5E0; color: var(--danger); }
-    .expiry-ok { background: #E0F2F1; color: var(--primary-dark); }
-    .btn-icon {
-      background: none;
-      border: none;
-      font-size: 1.2rem;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 8px;
-      transition: var(--transition);
-    }
-    .btn-icon:hover { background: #f1f3f5; }
-    /* ========== FORMULAIRES ========== */
-    .form-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-    .form-group input, .form-group select {
-      flex: 1;
-      min-width: 120px;
-      padding: 10px 12px;
-      border: 1.5px solid #e0e0e0;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      transition: var(--transition);
-    }
-    .form-group input:focus { border-color: var(--primary); outline: none; }
-    .btn {
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:hover { background: var(--primary-dark); }
-    .btn-accent { background: var(--accent); color: var(--text); }
-    .btn-accent:hover { filter: brightness(0.95); }
-    .btn-danger { background: var(--danger); color: white; }
-    .btn-sm { padding: 6px 12px; font-size: 0.85rem; }
-    /* ========== RECETTES ========== */
-    .recipe-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; }
-    .recipe-card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transition: var(--transition);
-      cursor: pointer;
-    }
-    .recipe-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
-    .recipe-card img { width: 100%; height: 110px; object-fit: cover; }
-    .recipe-card .info { padding: 10px; }
-    .recipe-card .title { font-size: 0.9rem; font-weight: 700; margin-bottom: 4px; }
-    .match-bar {
-      height: 6px;
-      background: #eee;
-      border-radius: 3px;
-      overflow: hidden;
-      margin-top: 6px;
-    }
-    .match-fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.5s; }
-    /* ========== LISTE DE COURSES ========== */
-    .shopping-list { list-style: none; }
-    .shopping-list li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 0;
-      border-bottom: 1px solid #f0f0f0;
-    }
-    .shopping-list li.checked .item-name { text-decoration: line-through; color: var(--text-light); }
-    .shopping-list input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer; }
-    /* ========== SCANNER IA ========== */
-    .scanner-area {
-      border: 2px dashed var(--primary);
-      border-radius: var(--radius);
-      padding: 20px;
-      text-align: center;
-      cursor: pointer;
-      transition: var(--transition);
-      background: #F0FDFA;
-    }
-    .scanner-area:hover { background: #E0F2F1; }
-    .scanner-area input { display: none; }
-    .scanner-icon { font-size: 2.5rem; margin-bottom: 8px; }
-    .scan-result { margin-top: 12px; font-size: 0.9rem; }
-    .scan-tag {
-      display: inline-block;
-      background: var(--accent);
-      color: var(--text);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      margin: 4px 4px 0 0;
-      cursor: pointer;
-    }
-    /* ========== MODAL RECETTE ========== */
-    .modal-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.5);
-      z-index: 200;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal {
-      background: var(--surface);
-      border-radius: var(--radius);
-      max-width: 500px;
-      width: 100%;
-      max-height: 80vh;
-      overflow-y: auto;
-      padding: 24px;
-      position: relative;
-    }
-    .modal-close {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-    .modal h2 { margin-bottom: 12px; }
-    .modal h4 { margin: 16px 0 8px; color: var(--primary-dark); }
-    .modal ul { padding-left: 20px; margin-bottom: 12px; }
-    .modal li { margin-bottom: 4px; font-size: 0.9rem; }
-    /* ========== ÉTATS VIDES ========== */
-    .empty-state { text-align: center; padding: 30px 10px; color: var(--text-light); }
-    .empty-state .icon { font-size: 3rem; margin-bottom: 10px; opacity: 0.5; }
-    /* ========== RESPONSIVE ========== */
-    @media (max-width: 480px) {
-      .recipe-grid { grid-template-columns: repeat(2, 1fr); }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mon Garde-Manger • 200 recettes</title>
+<style>
+:root{--primary:#2A9D8F;--primary-dark:#21867A;--accent:#E9C46A;--danger:#E76F51;--bg:#F8F9FA;--surface:#FFF;--text:#2B2D42;--text-light:#6C757D;--radius:16px;--shadow:0 4px 20px rgba(0,0,0,.06);--transition:all .25s ease}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.5;padding-bottom:80px}
+header{background:var(--surface);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:var(--shadow);position:sticky;top:0;z-index:100}
+.logo{font-size:1.4rem;font-weight:800;color:var(--primary)}.logo span{color:var(--accent)}
+nav{display:flex;gap:6px;padding:12px 16px;background:var(--surface);border-bottom:1px solid #eee;overflow-x:auto}
+nav button{flex:1;padding:10px 12px;border:none;background:transparent;color:var(--text-light);font-weight:600;border-radius:10px;cursor:pointer;transition:var(--transition);white-space:nowrap;font-size:.9rem}
+nav button.active{background:var(--primary);color:#fff}nav button:hover:not(.active){background:#f1f3f5}
+main{padding:16px;max-width:1000px;margin:0 auto}
+.tab-content{display:none;animation:fadeIn .3s}.tab-content.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--surface);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);margin-bottom:16px}
+.card h3{font-size:1.1rem;margin-bottom:12px}
+.form-group{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.form-group input,.form-group select{flex:1;min-width:120px;padding:10px 12px;border:1.5px solid #e0e0e0;border-radius:10px;font-size:.95rem}
+.form-group input:focus{border-color:var(--primary);outline:none}
+.btn{padding:10px 20px;border:none;border-radius:10px;font-weight:700;cursor:pointer;transition:var(--transition);font-size:.9rem}
+.btn-primary{background:var(--primary);color:#fff}.btn-primary:hover{background:var(--primary-dark)}
+.btn-accent{background:var(--accent);color:var(--text)}.btn-accent:hover{filter:brightness(.95)}
+.btn-danger{background:var(--danger);color:#fff}
+.btn-outline{background:transparent;border:1.5px solid var(--primary);color:var(--primary)}.btn-outline:hover{background:#E0F2F1}
+.btn-sm{padding:6px 12px;font-size:.82rem}
+.inventory-list{list-style:none}
+.inventory-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid #f0f0f0}
+.item-name{font-weight:600}.item-meta{font-size:.8rem;color:var(--text-light)}
+.expiry-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:.72rem;font-weight:700;margin-left:6px}
+.expiry-urgent{background:#FFE5E0;color:var(--danger)}.expiry-ok{background:#E0F2F1;color:var(--primary-dark)}
+.btn-icon{background:none;border:none;font-size:1.1rem;cursor:pointer;padding:4px 8px;border-radius:8px}.btn-icon:hover{background:#f1f3f5}
+.recipe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.recipe-card{background:var(--surface);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);transition:var(--transition);cursor:pointer;display:flex;flex-direction:column}
+.recipe-card:hover{transform:translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,.1)}
+.recipe-thumb{height:90px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;background:linear-gradient(135deg,#E0F2F1,#FFF3E0)}
+.recipe-card .info{padding:10px;flex:1}.recipe-card .title{font-size:.85rem;font-weight:700;margin-bottom:3px;line-height:1.3}
+.recipe-card .meta{font-size:.72rem;color:var(--text-light)}
+.filter-bar{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.filter-chip{padding:6px 12px;border-radius:20px;background:#f1f3f5;border:none;cursor:pointer;font-size:.8rem;font-weight:600;color:var(--text-light)}
+.filter-chip.active{background:var(--primary);color:#fff}
+.planning-grid{display:grid;grid-template-columns:80px 1fr 1fr;gap:6px}
+.planning-header{font-weight:700;font-size:.8rem;color:var(--text-light);text-align:center;padding:8px 0;text-transform:uppercase}
+.planning-day{font-weight:700;padding:10px 6px;display:flex;align-items:center;justify-content:center;background:#f1f3f5;border-radius:10px;font-size:.85rem}
+.planning-slot{background:#FAFAFA;border:1.5px dashed #d0d0d0;border-radius:10px;padding:8px;min-height:60px;cursor:pointer;transition:var(--transition);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;font-size:.78rem}
+.planning-slot:hover{border-color:var(--primary);background:#F0FDFA}
+.planning-slot.filled{background:var(--primary);color:#fff;border-style:solid}
+.planning-slot.filled:hover{background:var(--primary-dark)}
+.planning-slot .slot-emoji{font-size:1.4rem}.planning-slot .slot-name{font-weight:700;line-height:1.15}
+.shopping-list{list-style:none}
+.shopping-list li{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0}
+.shopping-list li.checked .item-name{text-decoration:line-through;color:var(--text-light)}
+.shopping-list input[type="checkbox"]{width:20px;height:20px;accent-color:var(--primary);cursor:pointer}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;justify-content:center;align-items:center;padding:20px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--surface);border-radius:var(--radius);max-width:560px;width:100%;max-height:85vh;overflow-y:auto;padding:24px;position:relative}
+.modal-close{position:absolute;top:12px;right:12px;background:none;border:none;font-size:1.4rem;cursor:pointer}
+.modal h2{margin-bottom:12px;padding-right:30px}.modal h4{margin:16px 0 8px;color:var(--primary-dark)}
+.modal ul,.modal ol{padding-left:20px;margin-bottom:12px}.modal li{margin-bottom:4px;font-size:.9rem}
+.recipe-picker-list{display:flex;flex-direction:column;gap:6px;max-height:50vh;overflow-y:auto;margin-top:12px}
+.recipe-picker-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;cursor:pointer;background:#FAFAFA}
+.recipe-picker-item:hover{background:#F0FDFA}
+.recipe-picker-item .emoji{font-size:1.4rem}
+.recipe-picker-item .name{font-weight:600;flex:1;font-size:.9rem}
+.empty-state{text-align:center;padding:30px 10px;color:var(--text-light)}
+.empty-state .icon{font-size:3rem;margin-bottom:10px;opacity:.5}
+.match-bar{height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-top:6px}
+.match-fill{height:100%;background:var(--primary);border-radius:3px;transition:width .5s}
+.scanner-area{border:2px dashed var(--primary);border-radius:var(--radius);padding:20px;text-align:center;cursor:pointer;background:#F0FDFA}
+.scanner-area:hover{background:#E0F2F1}.scanner-area input{display:none}
+.scanner-icon{font-size:2.5rem;margin-bottom:8px}
+.scan-tag{display:inline-block;background:var(--accent);color:var(--text);padding:4px 10px;border-radius:20px;font-size:.8rem;font-weight:600;margin:4px 4px 0 0;cursor:pointer}
+.shopping-gen-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f0}
+.shopping-gen-item label{flex:1;cursor:pointer;font-size:.9rem}
+.shopping-gen-item .qty{font-weight:700;color:var(--text-light);font-size:.8rem}
+@media(max-width:600px){.planning-grid{grid-template-columns:65px 1fr 1fr;gap:5px}.planning-slot{min-height:55px;padding:5px;font-size:.72rem}.recipe-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">Mon <span>Garde-Manger</span></div>
-    <div style="font-size:0.8rem; color:var(--text-light);">Recettes & Inventaire</div>
-  </header>
+<header>
+  <div class="logo">Mon <span>Garde-Manger</span></div>
+  <div style="font-size:.8rem;color:var(--text-light)" id="recipe-count">200 recettes</div>
+</header>
 
-  <nav>
-    <button class="active" data-tab="tab-inventory">📦 Inventaire</button>
-    <button data-tab="tab-recipes">🍳 Recettes</button>
-    <button data-tab="tab-shopping">🛒 Courses</button>
-    <button data-tab="tab-ai">🤖 Scanner IA</button>
-  </nav>
+<nav>
+  <button class="active" data-tab="tab-inventory">📦 Inventaire</button>
+  <button data-tab="tab-recipes">🍳 Recettes</button>
+  <button data-tab="tab-planning">📅 Planning</button>
+  <button data-tab="tab-shopping">🛒 Courses</button>
+  <button data-tab="tab-ai">🤖 Scanner</button>
+</nav>
 
-  <main>
-
-    <!-- ========== ONGLET INVENTAIRE ========== -->
-    <section id="tab-inventory" class="tab-content active">
-      <div class="card">
-        <h3>➕ Ajouter un produit</h3>
-        <div class="form-group">
-          <input type="text" id="item-name" placeholder="Nom du produit (ex: tomate)" />
-          <input type="number" id="item-qty" placeholder="Qté" min="1" value="1" style="max-width:80px;" />
-          <input type="date" id="item-expiry" />
-          <button class="btn btn-primary" onclick="addItem()">Ajouter</button>
-        </div>
-        <p style="font-size:0.75rem; color:var(--text-light);">Laissez la date vide si le produit n'a pas de péremption proche.</p>
+<main>
+  <section id="tab-inventory" class="tab-content active">
+    <div class="card">
+      <h3>➕ Ajouter un produit</h3>
+      <div class="form-group">
+        <input type="text" id="item-name" placeholder="Nom du produit">
+        <input type="number" id="item-qty" placeholder="Qté" min="1" value="1" style="max-width:80px">
+        <input type="date" id="item-expiry">
+        <button class="btn btn-primary" onclick="addItem()">Ajouter</button>
       </div>
-
-      <div class="card">
-        <h3>📋 Mon inventaire</h3>
-        <ul id="inventory-list" class="inventory-list"></ul>
-        <div id="inventory-empty" class="empty-state" style="display:none;">
-          <div class="icon">🥫</div>
-          <p>Votre inventaire est vide. Ajoutez des produits ou utilisez le scanner IA.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ========== ONGLET RECETTES ========== -->
-    <section id="tab-recipes" class="tab-content">
-      <div class="card">
-        <h3>🔍 Rechercher des recettes</h3>
-        <div class="form-group">
-          <input type="text" id="search-query" placeholder="Ex: poulet, pâtes, curry..." />
-          <button class="btn btn-accent" onclick="searchRecipes()">Chercher</button>
-        </div>
-        <p style="font-size:0.75rem; color:var(--text-light);">Les recettes sont issues de TheMealDB (base internationale gratuite).</p>
-      </div>
-
-      <div class="card">
-        <h3>✨ Suggestions basées sur votre inventaire</h3>
-        <button class="btn btn-primary btn-sm" onclick="suggestFromInventory()" style="margin-bottom:12px;">🔄 Actualiser les suggestions</button>
-        <div id="recipe-suggestions" class="recipe-grid"></div>
-        <div id="suggestions-empty" class="empty-state" style="display:none;">
-          <div class="icon">🍽️</div>
-          <p>Ajoutez des produits à votre inventaire pour voir des suggestions.</p>
-        </div>
-      </div>
-
-      <div id="search-results" class="recipe-grid"></div>
-    </section>
-
-    <!-- ========== ONGLET COURSES ========== -->
-    <section id="tab-shopping" class="tab-content">
-      <div class="card">
-        <h3>🛒 Ma liste de courses</h3>
-        <div class="form-group">
-          <input type="text" id="shop-item" placeholder="Ajouter un article..." />
-          <button class="btn btn-primary" onclick="addShoppingItem()">Ajouter</button>
-        </div>
-        <ul id="shopping-list" class="shopping-list"></ul>
-        <div id="shopping-empty" class="empty-state" style="display:none;">
-          <div class="icon">📝</div>
-          <p>Votre liste de courses est vide.</p>
-        </div>
-        <button class="btn btn-danger btn-sm" style="margin-top:12px;" onclick="clearShoppingList()">🗑️ Vider la liste</button>
-      </div>
-      <div class="card">
-        <h3>💡 Astuce</h3>
-        <p style="font-size:0.9rem; color:var(--text-light);">Lorsque vous consultez une recette, vous pouvez ajouter les ingrédients manquants à votre liste de courses en un clic.</p>
-      </div>
-    </section>
-
-    <!-- ========== ONGLET SCANNER IA ========== -->
-    <section id="tab-ai" class="tab-content">
-      <div class="card">
-        <h3>🤖 Scanner d'ingrédients (IA)</h3>
-        <p style="font-size:0.9rem; color:var(--text-light); margin-bottom:12px;">Prenez une photo de votre frigo ou placard. L'IA identifiera les objets et vous proposera de les ajouter à votre inventaire.</p>
-        <label class="scanner-area" for="image-upload">
-          <div class="scanner-icon">📷</div>
-          <p><strong>Cliquez pour prendre ou importer une photo</strong></p>
-          <p style="font-size:0.8rem; color:var(--text-light);">JPG, PNG • Traitement 100% local</p>
-          <input type="file" id="image-upload" accept="image/*" capture="environment" />
-        </label>
-        <div id="scan-result" class="scan-result"></div>
-      </div>
-      <div class="card">
-        <h3>ℹ️ Comment ça marche ?</h3>
-        <p style="font-size:0.85rem; color:var(--text-light);">Le modèle <strong>MobileNet</strong> de TensorFlow.js analyse l'image directement dans votre navigateur. Il reconnaît des objets génériques (fruits, légumes, viandes, etc.). Cliquez sur une étiquette détectée pour l'ajouter à votre inventaire.</p>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ========== MODAL DÉTAIL RECETTE ========== -->
-  <div class="modal-overlay" id="recipe-modal">
-    <div class="modal">
-      <button class="modal-close" onclick="closeModal()">✕</button>
-      <div id="modal-content"></div>
     </div>
+    <div class="card">
+      <h3>📋 Mon inventaire</h3>
+      <ul id="inventory-list" class="inventory-list"></ul>
+      <div id="inventory-empty" class="empty-state"><div class="icon">🥫</div><p>Votre inventaire est vide.</p></div>
+    </div>
+  </section>
+
+  <section id="tab-recipes" class="tab-content">
+    <div class="card">
+      <h3>✨ Suggérées par mon inventaire</h3>
+      <button class="btn btn-primary btn-sm" onclick="renderSuggestions()" style="margin-bottom:12px">🔄 Actualiser</button>
+      <div id="recipe-suggestions" class="recipe-grid"></div>
+      <div id="suggestions-empty" class="empty-state" style="display:none"><div class="icon">🍽️</div><p>Ajoutez des produits à votre inventaire.</p></div>
+    </div>
+    <div class="card">
+      <h3>📚 Bibliothèque (<span id="lib-count">200</span> recettes)</h3>
+      <div class="form-group"><input type="text" id="library-search" placeholder="Rechercher une recette..." oninput="renderLibrary()"></div>
+      <div class="filter-bar" id="category-filters"></div>
+      <div id="library-grid" class="recipe-grid"></div>
+    </div>
+    <div class="card">
+      <h3>🌍 Recherche en ligne (TheMealDB)</h3>
+      <div class="form-group">
+        <input type="text" id="search-query" placeholder="Ex: chicken, pasta...">
+        <button class="btn btn-accent" onclick="searchMealDB()">Chercher</button>
+      </div>
+      <div id="search-results" class="recipe-grid"></div>
+    </div>
+  </section>
+
+  <section id="tab-planning" class="tab-content">
+    <div class="card">
+      <h3>📅 Ma semaine</h3>
+      <p style="font-size:.85rem;color:var(--text-light);margin-bottom:12px">Cliquez sur une case pour choisir une recette.</p>
+      <div class="planning-grid" id="planning-grid"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:16px">
+        <button class="btn btn-primary" onclick="generateShoppingFromPlanning()">🛒 Générer ma liste</button>
+        <button class="btn btn-outline" onclick="clearPlanning()">🗑️ Vider la semaine</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="tab-shopping" class="tab-content">
+    <div class="card">
+      <h3>🛒 Ma liste de courses</h3>
+      <div class="form-group">
+        <input type="text" id="shop-item" placeholder="Ajouter un article...">
+        <button class="btn btn-primary" onclick="addShoppingItem()">Ajouter</button>
+      </div>
+      <ul id="shopping-list" class="shopping-list"></ul>
+      <div id="shopping-empty" class="empty-state"><div class="icon">📝</div><p>Votre liste est vide.</p></div>
+      <button class="btn btn-danger btn-sm" style="margin-top:12px" onclick="clearShoppingList()">🗑️ Vider</button>
+    </div>
+  </section>
+
+  <section id="tab-ai" class="tab-content">
+    <div class="card">
+      <h3>🤖 Scanner d'ingrédients</h3>
+      <label class="scanner-area" for="image-upload">
+        <div class="scanner-icon">📷</div>
+        <p><strong>Prendre ou importer une photo</strong></p>
+        <input type="file" id="image-upload" accept="image/*" capture="environment">
+      </label>
+      <div id="scan-result" style="margin-top:12px"></div>
+    </div>
+  </section>
+</main>
+
+<div class="modal-overlay" id="recipe-modal">
+  <div class="modal"><button class="modal-close" onclick="closeModal('recipe-modal')">✕</button><div id="modal-content"></div></div>
+</div>
+<div class="modal-overlay" id="picker-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('picker-modal')">✕</button>
+    <h2 id="picker-title">Choisir une recette</h2>
+    <input type="text" id="picker-search" placeholder="Rechercher..." oninput="renderPickerList()" style="width:100%;padding:10px;border:1.5px solid #e0e0e0;border-radius:10px;margin-bottom:8px">
+    <button class="btn btn-outline btn-sm" onclick="removeFromSlot()" style="width:100%;margin-bottom:8px">🗑️ Vider cette case</button>
+    <div class="recipe-picker-list" id="picker-list"></div>
   </div>
+</div>
+<div class="modal-overlay" id="gen-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('gen-modal')">✕</button>
+    <h2>🛒 Ingrédients pour la semaine</h2>
+    <p style="font-size:.85rem;color:var(--text-light);margin-bottom:12px">Décochez ce que vous ne voulez pas ajouter. Les produits déjà en stock sont marqués ✅.</p>
+    <div id="gen-content"></div>
+  </div>
+</div>
 
-  <!-- ========== SCRIPTS ========== -->
-  <!-- TensorFlow.js et MobileNet via CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"></script>
 
-  <script>
-    // ============================================================
-    // 1. GESTION DES ONGLETS
-    // ============================================================
-    document.querySelectorAll('nav button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById(btn.dataset.tab).classList.add('active');
-      });
-    });
+<script>
+// ============================================================
+// BIBLIOTHÈQUE DE 200 RECETTES
+// Format: [nom, emoji, catégorie, minutes, difficulté, portions, tags, ingrédients[[nom,qty,unité]], étapes[]]
+// ============================================================
+const RAW=[
+// ===== PÂTES (20) =====
+['Carbonara','🍝','Pâtes',25,'Facile',4,['italien','rapide'],[['Spaghetti',400,'g'],['Lardons',200,'g'],['Œufs',4,''],['Parmesan',100,'g'],['Ail',2,'gousse']],['Cuire pâtes al dente','Saisir lardons + ail','Mélanger œufs + parmesan hors feu','Servir poivré']],
+['Bolognaise','🍝','Pâtes',40,'Facile',4,['italien','familial'],[['Spaghetti',400,'g'],['Bœuf haché',400,'g'],['Tomates concassées',400,'g'],['Oignon',1,''],['Ail',2,'gousse'],['Carotte',1,'']],['Saisir viande','Ajouter oignon ail carotte','Tomates, mijoter 20 min','Servir sur pâtes']],
+['Pesto','🍝','Pâtes',15,'Facile',4,['végétarien','rapide'],[['Pâtes',400,'g'],['Basilic',50,'g'],['Pignons',50,'g'],['Parmesan',50,'g'],['Ail',1,'gousse'],['Huile olive',100,'ml']],['Mixer basilic pignons parmesan ail huile','Cuire pâtes','Mélanger']],
+['Tomates cerises','🍝','Pâtes',20,'Facile',4,['végétarien','été'],[['Pâtes',400,'g'],['Tomates cerises',300,'g'],['Ail',2,'gousse'],['Basilic',10,'feuilles'],['Huile olive',3,'c. à soupe']],['Cuire pâtes','Poêler ail + tomates 10 min','Mélanger, ajouter basilic']],
+['Saumon crème','🍝','Pâtes',25,'Facile',4,['rapide'],[['Tagliatelles',400,'g'],['Saumon',300,'g'],['Crème',200,'ml'],['Oignon',1,''],['Ciboulette',1,'c. à soupe']],['Cuire pâtes','Saisir saumon + oignon','Ajouter crème, mijoter','Mélanger pâtes']],
+['Lasagnes bolognaise','🍝','Pâtes',60,'Moyen',6,['familial','italien'],[['Lasagnes',12,'feuilles'],['Bœuf haché',500,'g'],['Tomates concassées',800,'g'],['Oignon',1,''],['Lait',500,'ml'],['Beurre',50,'g'],['Farine',50,'g'],['Fromage râpé',150,'g']],['Préparer bolognaise 20 min','Béchamel: beurre+farine+lait','Monter lasagnes','Cuire 35 min 180°C']],
+['Lasagnes légumes','🍝','Pâtes',60,'Moyen',6,['végétarien'],[['Lasagnes',12,'feuilles'],['Courgettes',2,''],['Aubergines',1,''],['Tomates concassées',600,'g'],['Lait',500,'ml'],['Beurre',50,'g'],['Farine',50,'g'],['Fromage râpé',150,'g']],['Griller légumes','Béchamel','Monter lasagnes','35 min 180°C']],
+['4 fromages','🍝','Pâtes',20,'Facile',4,['végétarien'],[['Pâtes',400,'g'],['Crème',200,'ml'],['Mozzarella',100,'g'],['Gorgonzola',100,'g'],['Parmesan',80,'g'],['Emmental',80,'g']],['Cuire pâtes','Fondre fromages + crème','Mélanger']],
+['Puttanesca','🍝','Pâtes',25,'Facile',4,['italien'],[['Spaghetti',400,'g'],['Tomates concassées',400,'g'],['Olives noires',80,'g'],['Câpres',30,'g'],['Anchois',4,''],['Ail',2,'gousse']],['Cuire pâtes','Poêler ail anchois','Ajouter tomates olives câpres','Mélanger']],
+['Courgettes','🍝','Pâtes',25,'Facile',4,['végétarien'],[['Pâtes',400,'g'],['Courgettes',3,''],['Ail',2,'gousse'],['Parmesan',60,'g'],['Huile olive',3,'c. à soupe']],['Cuire pâtes','Poêler courgettes + ail','Mélanger, parmesan']],
+['Champignons','🍝','Pâtes',25,'Facile',4,['végétarien'],[['Pâtes',400,'g'],['Champignons',300,'g'],['Crème',200,'ml'],['Ail',1,'gousse'],['Persil',1,'c. à soupe']],['Cuire pâtes','Sauter champignons','Ajouter crème','Mélanger']],
+['Aglio e olio','🍝','Pâtes',15,'Facile',4,['végétarien','rapide'],[['Spaghetti',400,'g'],['Ail',4,'gousse'],['Huile olive',6,'c. à soupe'],['Persil',2,'c. à soupe'],['Piment',1,'pincée']],['Cuire pâtes','Faire dorer ail dans huile','Mélanger, persil']],
+['Arrabbiata','🍝','Pâtes',20,'Facile',4,['italien','épicé'],[['Penne',400,'g'],['Tomates concassées',400,'g'],['Ail',3,'gousse'],['Piment',1,'c. à café'],['Huile olive',3,'c. à soupe']],['Cuire pâtes','Saisir ail piment','Tomates 10 min','Mélanger']],
+['Tagliatelles saumon','🍝','Pâtes',25,'Facile',4,['rapide'],[['Tagliatelles',400,'g'],['Saumon fumé',200,'g'],['Crème',200,'ml'],['Citron',1,''],['Aneth',1,'c. à soupe']],['Cuire pâtes','Chauffer crème + citron','Ajouter saumon fumé','Mélanger']],
+['Macaroni gratinés','🍝','Pâtes',35,'Facile',4,['familial'],[['Macaroni',400,'g'],['Lait',500,'ml'],['Beurre',50,'g'],['Farine',50,'g'],['Fromage râpé',150,'g']],['Cuire macaroni','Béchamel','Mélanger','Gratiner 15 min 200°C']],
+['Thon','🍝','Pâtes',20,'Facile',4,['rapide'],[['Pâtes',400,'g'],['Thon',2,'boîte'],['Tomates concassées',400,'g'],['Oignon',1,''],['Ail',1,'gousse']],['Cuire pâtes','Saisir oignon ail','Ajouter thon + tomates','Mélanger']],
+['Nouilles sautées','🍝','Pâtes',15,'Facile',4,['asiatique','rapide'],[['Nouilles',300,'g'],['Carotte',2,''],['Chou',200,'g'],['Sauce soja',3,'c. à soupe'],['Huile sésame',1,'c. à soupe']],['Cuire nouilles','Sauter légumes','Ajouter nouilles + soja']],
+['Primavera','🍝','Pâtes',25,'Facile',4,['végétarien','printemps'],[['Pâtes',400,'g'],['Petits pois',150,'g'],['Courgettes',1,''],['Carotte',1,''],['Crème',150,'ml'],['Parmesan',50,'g']],['Cuire pâtes','Blanchir légumes','Mélanger crème + parmesan']],
+['Raviolis ricotta épinards','🍝','Pâtes',30,'Moyen',4,['végétarien'],[['Raviolis',400,'g'],['Ricotta',250,'g'],['Épinards',200,'g'],['Beurre',30,'g'],['Parmesan',50,'g'],['Muscade',1,'pincée']],['Mélanger ricotta épinards muscade','Garnir raviolis','Cuire 3 min','Beurre + parmesan']],
+['Carbonara végé','🍝','Pâtes',20,'Facile',4,['végétarien'],[['Pâtes',400,'g'],['Courgettes',2,''],['Œufs',4,''],['Parmesan',100,'g'],['Poivre',1,'pincée']],['Cuire pâtes','Poêler courgettes','Mélanger œufs + parmesan','Assembler']],
+// ===== RIZ (15) =====
+['Riz sauté légumes','🍚','Riz',20,'Facile',4,['végétarien','rapide'],[['Riz',300,'g'],['Petits pois',150,'g'],['Carotte',2,''],['Œufs',2,''],['Sauce soja',3,'c. à soupe']],['Cuire riz','Sauter légumes','Ajouter riz + œufs','Soja']],
+['Risotto champignons','🍚','Riz',35,'Moyen',4,['végétarien'],[['Riz arborio',300,'g'],['Champignons',300,'g'],['Bouillon',1,'L'],['Vin blanc',100,'ml'],['Parmesan',80,'g'],['Beurre',50,'g']],['Sauter champignons','Nacrer riz','Ajouter vin + bouillon progressivement','Parmesan + beurre']],
+['Risotto crevettes','🍚','Riz',35,'Moyen',4,['fruits de mer'],[['Riz arborio',300,'g'],['Crevettes',300,'g'],['Bouillon',1,'L'],['Vin blanc',100,'ml'],['Parmesan',80,'g'],['Ail',2,'gousse']],['Sauter crevettes + ail','Nacrer riz','Bouillon progressif','Crevettes + parmesan']],
+['Riz curry','🍚','Riz',30,'Facile',4,['indien'],[['Riz',300,'g'],['Poulet',400,'g'],['Curry',2,'c. à soupe'],['Lait coco',200,'ml'],['Oignon',1,'']],['Cuire riz','Saisir poulet + oignon','Curry + lait coco','Mijoter 15 min']],
+['Riz cantonais','🍚','Riz',25,'Facile',4,['asiatique'],[['Riz',300,'g'],['Lardons',150,'g'],['Œufs',3,''],['Petits pois',150,'g'],['Sauce soja',3,'c. à soupe']],['Cuire riz','Saisir lardons','Ajouter œufs brouillés','Riz + petits pois + soja']],
+['Paella','🍚','Riz',45,'Moyen',6,['espagnol'],[['Riz',400,'g'],['Poulet',400,'g'],['Crevettes',200,'g'],['Moules',500,'g'],['Safran',1,'pincée'],['Poivron',1,''],['Petits pois',150,'g']],['Saisir poulet','Ajouter poivron','Riz + safran + eau','Moules + crevettes à la fin']],
+['Riz pilaf','🍚','Riz',25,'Facile',4,['végétarien'],[['Riz',300,'g'],['Oignon',1,''],['Bouillon',600,'ml'],['Beurre',30,'g']],['Saisir oignon','Nacrer riz','Bouillon, couvrir 18 min']],
+['Riz haricots rouges','🍚','Riz',30,'Facile',4,['végétarien','créole'],[['Riz',300,'g'],['Haricots rouges',400,'g'],['Oignon',1,''],['Ail',2,'gousse'],['Tomates concassées',200,'g'],['Cumin',1,'c. à café']],['Cuire riz','Saisir oignon ail cumin','Haricots + tomates','Mijoter 15 min']],
+['Riz tomate','🍚','Riz',25,'Facile',4,['végétarien'],[['Riz',300,'g'],['Tomates concassées',400,'g'],['Oignon',1,''],['Bouillon',500,'ml'],['Huile olive',2,'c. à soupe']],['Saisir oignon','Riz + tomates + bouillon','Couvrir 18 min']],
+['Riz aux herbes','🍚','Riz',20,'Facile',4,['végétarien'],[['Riz',300,'g'],['Persil',3,'c. à soupe'],['Ciboulette',2,'c. à soupe'],['Beurre',30,'g'],['Bouillon',600,'ml']],['Cuire riz au bouillon','Ajouter beurre','Ajouter herbes']],
+['Riz sauté poulet ananas','🍚','Riz',25,'Facile',4,['asiatique'],[['Riz',300,'g'],['Poulet',300,'g'],['Ananas',200,'g'],['Poivron',1,''],['Sauce soja',3,'c. à soupe']],['Cuire riz','Saisir poulet','Ajouter poivron ananas','Riz + soja']],
+['Riz créole','🍚','Riz',30,'Facile',4,['créole'],[['Riz',300,'g'],['Lardons',150,'g'],['Poivron',1,''],['Tomates concassées',200,'g'],['Oignon',1,''],['Curry',1,'c. à café']],['Saisir lardons','Ajouter poivron oignon','Tomates + curry','Riz cuit, mélanger']],
+['Risotto parmesan','🍚','Riz',30,'Moyen',4,['italien','végétarien'],[['Riz arborio',300,'g'],['Bouillon',1,'L'],['Vin blanc',100,'ml'],['Parmesan',150,'g'],['Beurre',50,'g'],['Oignon',1,'']],['Saisir oignon','Nacrer riz','Bouillon progressif','Parmesan + beurre']],
+['Riz safran','🍚','Riz',25,'Facile',4,['espagnol'],[['Riz',300,'g'],['Bouillon',600,'ml'],['Safran',1,'pincée'],['Oignon',1,''],['Huile olive',2,'c. à soupe']],['Saisir oignon','Riz + safran','Bouillon, cuire 18 min']],
+['Riz coco','🍚','Riz',25,'Facile',4,['asiatique','végétarien'],[['Riz',300,'g'],['Lait coco',400,'ml'],['Eau',200,'ml'],['Sucre',1,'c. à café'],['Sel',1,'pincée']],['Rincer riz','Cuire dans lait coco + eau 18 min','Assaisonner']],
+// ===== VIANDES (28) =====
+['Poulet rôti légumes','🍗','Viande',60,'Facile',4,['familial'],[['Poulet entier',1,''],['Pommes de terre',800,'g'],['Carotte',4,''],['Oignon',1,''],['Huile olive',3,'c. à soupe'],['Thym',1,'c. à café']],['Préchauffer 200°C','Couper légumes','Enfourner poulet + légumes 55 min','Arroser jus']],
+['Steak frites','🍔','Viande',30,'Facile',2,['familial'],[['Steak haché',2,''],['Pommes de terre',600,'g'],['Huile',500,'ml'],['Sel',1,'pincée']],['Couper frites','Frire 2 fois','Cuire steaks','Servir']],
+['Poulet basquaise','🍗','Viande',50,'Facile',4,['français'],[['Poulet',4,'cuisses'],['Poivron',2,''],['Tomates concassées',400,'g'],['Oignon',1,''],['Ail',2,'gousse'],['Piment',1,'pincée']],['Dorer poulet','Ajouter poivron oignon','Tomates + ail','Mijoter 30 min']],
+['Bœuf bourguignon','🥩','Viande',120,'Moyen',6,['français','familial'],[['Bœuf',1,'kg'],['Vin rouge',750,'ml'],['Carotte',4,''],['Oignon',2,''],['Champignons',300,'g'],['Lardons',200,'g'],['Farine',2,'c. à soupe']],['Dorer viande + lardons','Fariner','Ajouter vin + légumes','Mijoter 2h']],
+['Blanquette veau','🥩','Viande',90,'Moyen',6,['français'],[['Veau',1,'kg'],['Carotte',4,''],['Oignon',2,''],['Champignons',300,'g'],['Crème',200,'ml'],['Beurre',50,'g'],['Farine',50,'g']],['Cuire veau + légumes 1h','Roux beurre farine','Ajouter bouillon','Crème + champignons']],
+['Poulet curry','🍗','Viande',35,'Facile',4,['indien'],[['Poulet',600,'g'],['Curry',2,'c. à soupe'],['Lait coco',400,'ml'],['Oignon',1,''],['Ail',2,'gousse'],['Gingembre',1,'c. à café']],['Saisir poulet','Oignon ail gingembre','Curry + lait coco','Mijoter 20 min']],
+['Poulet citron','🍗','Viande',30,'Facile',4,['méditerranéen'],[['Poulet',4,'filets'],['Citron',2,''],['Ail',3,'gousse'],['Huile olive',3,'c. à soupe'],['Thym',1,'c. à café']],['Mariner poulet citron ail','Poêler 6 min chaque côté','Arroser jus']],
+['Escalope milanaise','🥩','Viande',25,'Facile',4,['italien'],[['Escalopes',4,''],['Chapelure',150,'g'],['Œufs',2,''],['Farine',100,'g'],['Huile',300,'ml']],['Fariner escalopes','Œuf battu','Chapelure','Frire 3 min chaque côté']],
+['Côtelettes agneau','🥩','Viande',25,'Facile',4,['grillade'],[['Côtelettes',8,''],['Ail',2,'gousse'],['Romarin',1,'c. à café'],['Huile olive',2,'c. à soupe']],['Mariner agneau ail romarin','Griller 4 min chaque côté','Repos 5 min']],
+['Rôti porc','🥩','Viande',90,'Facile',6,['familial'],[['Rôti porc',1.2,'kg'],['Ail',4,'gousse'],['Thym',1,'c. à soupe'],['Pommes de terre',1,'kg'],['Huile olive',3,'c. à soupe']],['Préchauffer 200°C','Piquer ail rôti','Enfourner 1h15','Ajouter patates 40 min']],
+['Choucroute','🥩','Viande',90,'Facile',6,['alsacien'],[['Choucroute cuite',1,'kg'],['Saucisse',4,''],['Lardons',200,'g'],['Pommes de terre',800,'g'],['Vin blanc',250,'ml']],['Faire revenir lardons','Ajouter choucroute + vin','Saucisses + patates','Mijoter 1h']],
+['Cassoulet','🥩','Viande',180,'Moyen',6,['sud-ouest'],[['Haricots blancs',500,'g'],['Confit canard',2,'cuisses'],['Saucisse',4,''],['Lardons',200,'g'],['Tomates concassées',400,'g'],['Ail',3,'gousse']],['Cuire haricots','Saisir viandes','Assembler + tomates','Mijoter 2h']],
+['Chili con carne','🥩','Viande',45,'Facile',4,['mexicain'],[['Bœuf haché',500,'g'],['Haricots rouges',400,'g'],['Tomates concassées',400,'g'],['Oignon',1,''],['Cumin',1,'c. à café'],['Piment',1,'c. à café']],['Saisir viande','Oignon + épices','Tomates + haricots','Mijoter 30 min']],
+['Tacos bœuf','🌮','Viande',30,'Facile',4,['mexicain'],[['Bœuf haché',500,'g'],['Tortillas',8,''],['Tomates',3,''],['Salade',1,''],['Fromage râpé',150,'g'],['Oignon',1,'']],['Saisir viande + épices','Chauffer tortillas','Garnir']],
+['Hamburger maison','🍔','Viande',20,'Facile',4,['rapide'],[['Pain burger',4,''],['Steak haché',4,''],['Cheddar',4,'tranches'],['Tomate',1,''],['Salade',4,'feuilles'],['Oignon',1,'']],['Griller steaks','Toaster pains','Assembler']],
+['Poulet miel','🍗','Viande',30,'Facile',4,['asiatique'],[['Poulet',600,'g'],['Miel',3,'c. à soupe'],['Sauce soja',3,'c. à soupe'],['Ail',2,'gousse'],['Gingembre',1,'c. à café']],['Saisir poulet','Miel soja ail gingembre','Caraméliser']],
+['Poulet katsu','🍗','Viande',35,'Moyen',4,['japonais'],[['Poulet',4,'filets'],['Chapelure panko',150,'g'],['Œufs',2,''],['Farine',100,'g'],['Huile',300,'ml']],['Aplatir poulet','Farine œuf chapelure','Frire 4 min chaque côté']],
+['Brochettes poulet','🍢','Viande',25,'Facile',4,['grillade'],[['Poulet',600,'g'],['Poivron',2,''],['Oignon',1,''],['Huile olive',3,'c. à soupe'],['Paprika',1,'c. à café']],['Mariner poulet','Monter brochettes','Griller 12 min']],
+['Sauté porc','🥩','Viande',25,'Facile',4,['asiatique'],[['Porc',500,'g'],['Poivron',1,''],['Carotte',2,''],['Sauce soja',3,'c. à soupe'],['Miel',1,'c. à soupe']],['Saisir porc','Légumes 5 min','Soja + miel']],
+['Cuisses poulet four','🍗','Viande',50,'Facile',4,['familial'],[['Cuisses poulet',4,''],['Pommes de terre',800,'g'],['Ail',4,'gousse'],['Thym',1,'c. à soupe'],['Huile olive',3,'c. à soupe']],['Préchauffer 200°C','Enfourner 45 min','Retourner à mi-cuisson']],
+['Poulet tandoori','🍗','Viande',40,'Moyen',4,['indien'],[['Poulet',600,'g'],['Yaourt',200,'g'],['Épices tandoori',2,'c. à soupe'],['Citron',1,''],['Ail',2,'gousse']],['Mariner 30 min','Enfourner 25 min 200°C','Servir citron']],
+['Boulettes viande','🥩','Viande',35,'Facile',4,['italien'],[['Bœuf haché',500,'g'],['Chapelure',80,'g'],['Œuf',1,''],['Parmesan',50,'g'],['Tomates concassées',400,'g'],['Ail',1,'gousse']],['Mélanger viande + chapelure + œuf + parmesan','Former boulettes','Mijoter dans tomate 20 min']],
+['Steak grillé','🥩','Viande',15,'Facile',2,['grillade'],[['Steak',2,''],['Beurre',30,'g'],['Ail',2,'gousse'],['Thym',1,'pincée']],['Chauffer poêle','Griller 3 min chaque côté','Beurre ail thym']],
+['Magret canard','🥩','Viande',30,'Moyen',2,['français'],[['Magret',2,''],['Miel',1,'c. à soupe'],['Sel',1,'pincée'],['Poivre',1,'pincée']],['Quadriller gras','Cuire 6 min côté gras','Retourner 3 min','Repos 5 min']],
+['Confit canard','🥩','Viande',20,'Facile',2,['français'],[['Cuisses confites',2,''],['Pommes de terre',600,'g'],['Ail',3,'gousse']],['Réchauffer confit 15 min','Rissoler patates','Servir']],
+['Poulet yassa','🍗','Viande',50,'Moyen',4,['africain'],[['Poulet',4,'cuisses'],['Oignon',4,''],['Citron',3,''],['Moutarde',2,'c. à soupe'],['Ail',3,'gousse']],['Mariner poulet citron moutarde','Caraméliser oignons','Mijoter 30 min']],
+['Poulet marengo','🍗','Viande',50,'Moyen',4,['français'],[['Poulet',4,'cuisses'],['Tomates concassées',400,'g'],['Champignons',200,'g'],['Oignon',1,''],['Ail',2,'gousse'],['Vin blanc',150,'ml']],['Dorer poulet','Ajouter oignon ail','Tomates + vin + champignons','Mijoter 30 min']],
+['Bœuf stroganoff','🥩','Viande',30,'Moyen',4,['russe'],[['Bœuf',500,'g'],['Champignons',300,'g'],['Crème',200,'ml'],['Oignon',1,''],['Moutarde',1,'c. à soupe']],['Saisir bœuf','Champignons + oignon','Crème + moutarde','Mijoter 10 min']],
+['Poulet paprika','🍗','Viande',40,'Facile',4,['hongrois'],[['Poulet',4,'cuisses'],['Paprika',2,'c. à soupe'],['Oignon',1,''],['Crème',200,'ml'],['Bouillon',200,'ml']],['Dorer poulet','Oignon + paprika','Bouillon','Crème, mijoter 20 min']],
+// ===== POISSONS (20) =====
+['Saumon grillé','🐟','Poisson',20,'Facile',4,['rapide'],[['Saumon',4,'pavés'],['Citron',1,''],['Huile olive',2,'c. à soupe'],['Aneth',1,'c. à soupe']],['Chauffer poêle','Griller 4 min chaque côté','Citron + aneth']],
+['Cabillaud four','🐟','Poisson',25,'Facile',4,['rapide'],[['Cabillaud',4,'filets'],['Tomates cerises',200,'g'],['Ail',2,'gousse'],['Huile olive',3,'c. à soupe'],['Thym',1,'c. à café']],['Préchauffer 200°C','Disposer filets + tomates','Huile + ail','Cuire 15 min']],
+['Saumon papillote','🐟','Poisson',20,'Facile',4,['rapide','léger'],[['Saumon',4,'pavés'],['Courgettes',2,''],['Citron',1,''],['Aneth',2,'c. à soupe'],['Huile olive',2,'c. à soupe']],['Préchauffer 200°C','Poser saumon + courgettes sur papier','Citron + aneth','Cuire 12 min']],
+['Thon grillé','🐟','Poisson',15,'Facile',4,['rapide'],[['Thon',4,'steaks'],['Citron',1,''],['Huile olive',3,'c. à soupe'],['Poivre',1,'pincée']],['Chauffer poêle','Griller 3 min chaque côté','Citron']],
+['Crevettes ail','🦐','Poisson',15,'Facile',4,['rapide'],[['Crevettes',500,'g'],['Ail',4,'gousse'],['Persil',2,'c. à soupe'],['Huile olive',4,'c. à soupe'],['Piment',1,'pincée']],['Chauffer huile + ail','Sauter crevettes 3 min','Persil + piment']],
+['Moules marinières','🦐','Poisson',20,'Facile',4,['français'],[['Moules',2,'kg'],['Vin blanc',250,'ml'],['Échalote',2,''],['Persil',3,'c. à soupe'],['Beurre',30,'g']],['Nettoyer moules','Échalotes + beurre','Vin blanc, cuire couvert 5 min','Persil']],
+['Sole meunière','🐟','Poisson',20,'Facile',4,['français'],[['Soles',4,''],['Farine',100,'g'],['Beurre',80,'g'],['Citron',1,''],['Persil',2,'c. à soupe']],['Fariner soles','Cuire beurre 4 min chaque côté','Citron + persil']],
+['Bar aux légumes','🐟','Poisson',30,'Moyen',4,['français'],[['Bar',1,'entier'],['Fenouil',2,''],['Tomates cerises',200,'g'],['Citron',1,''],['Huile olive',3,'c. à soupe']],['Préchauffer 200°C','Disposer bar + légumes','Arroser huile + citron','Cuire 25 min']],
+['Sardines grillées','🐟','Poisson',15,'Facile',4,['été'],[['Sardines',12,''],['Citron',2,''],['Huile olive',2,'c. à soupe'],['Persil',2,'c. à soupe']],['Griller sardines 3 min chaque côté','Citron + huile + persil']],
+['Saumon mariné','🐟','Poisson',15,'Facile',4,['rapide','léger'],[['Saumon',400,'g'],['Citron',2,''],['Aneth',3,'c. à soupe'],['Huile olive',2,'c. à soupe']],['Trancher saumon fin','Mariner citron + aneth 10 min','Huile au service']],
+['Curry crevettes','🦐','Poisson',25,'Facile',4,['indien'],[['Crevettes',400,'g'],['Lait coco',400,'ml'],['Curry',2,'c. à soupe'],['Oignon',1,''],['Ail',2,'gousse']],['Saisir oignon ail','Curry','Lait coco + crevettes','Mijoter 10 min']],
+['Papillote cabillaud citron','🐟','Poisson',20,'Facile',4,['léger'],[['Cabillaud',4,'filets'],['Citron',2,''],['Courgettes',1,''],['Huile olive',2,'c. à soupe'],['Thym',1,'c. à café']],['Préchauffer 200°C','Disposer sur papier','Citron + courgettes','Cuire 15 min']],
+['Gratin poisson','🐟','Poisson',40,'Facile',4,['familial'],[['Poisson blanc',600,'g'],['Lait',500,'ml'],['Beurre',50,'g'],['Farine',50,'g'],['Fromage râpé',150,'g']],['Cuire poisson','Béchamel','Assembler','Gratiner 20 min 200°C']],
+['Poisson pané','🐟','Poisson',20,'Facile',4,['familial'],[['Poisson blanc',600,'g'],['Chapelure',150,'g'],['Œufs',2,''],['Farine',100,'g'],['Huile',300,'ml']],['Fariner','Œuf battu','Chapelure','Frire 3 min chaque côté']],
+['Tartare saumon','🐟','Poisson',15,'Facile',2,['cru','rapide'],[['Saumon frais',300,'g'],['Échalote',1,''],['Citron',1,''],['Ciboulette',2,'c. à soupe'],['Huile olive',1,'c. à soupe']],['Trancher saumon en dés','Échalote + citron + ciboulette','Huile, mélanger']],
+['Croquettes poisson','🐟','Poisson',30,'Facile',4,['familial'],[['Poisson blanc',500,'g'],['Pommes de terre',500,'g'],['Œuf',1,''],['Chapelure',100,'g'],['Persil',2,'c. à soupe']],['Cuire patates + poisson','Écraser, mélanger','Former croquettes','Chapelure + frire']],
+['Truite amandes','🐟','Poisson',20,'Facile',4,['français'],[['Truite',4,'filets'],['Amandes effilées',80,'g'],['Beurre',50,'g'],['Citron',1,''],['Persil',2,'c. à soupe']],['Poêler truite 4 min','Beurre + amandes','Citron + persil']],
+['Saint-Jacques poêlées','🦐','Poisson',15,'Facile',4,['fête'],[['Saint-Jacques',12,''],['Beurre',50,'g'],['Ail',1,'gousse'],['Persil',2,'c. à soupe'],['Citron',1,'']],['Chauffer beurre','Saisir 2 min chaque côté','Ail + persil + citron']],
+['Calamars frits','🦐','Poisson',25,'Facile',4,['espagnol'],[['Calamars',500,'g'],['Farine',150,'g'],['Huile',500,'ml'],['Citron',1,''],['Paprika',1,'c. à café']],['Couper calamars anneaux','Fariner','Frire 2 min','Citron + paprika']],
+['Saumon teriyaki','🐟','Poisson',25,'Facile',4,['japonais'],[['Saumon',4,'pavés'],['Sauce soja',3,'c. à soupe'],['Miel',2,'c. à soupe'],['Gingembre',1,'c. à café'],['Ail',1,'gousse']],['Mélanger soja miel gingembre ail','Mariner saumon 10 min','Poêler 4 min chaque côté']],
+// ===== LÉGUMES / VÉGÉTARIEN (30) =====
+['Ratatouille','🍆','Légumes',50,'Facile',4,['végétarien','été'],[['Aubergine',1,''],['Courgette',2,''],['Poivron',2,''],['Tomate',4,''],['Oignon',1,''],['Ail',3,'gousse']],['Couper légumes','Saisir oignon + poivron','Ajouter aubergine + courgette','Tomates + ail, mijoter 30 min']],
+['Quiche lorraine','🥧','Légumes',50,'Facile',6,['français'],[['Pâte brisée',1,''],['Lardons',200,'g'],['Œufs',4,''],['Crème',200,'ml'],['Lait',100,'ml'],['Muscade',1,'pincée']],['Préchauffer 180°C','Fond de tarte + lardons','Mélange œufs crème lait','Cuire 35 min']],
+['Quiche légumes','🥧','Légumes',50,'Facile',6,['végétarien'],[['Pâte brisée',1,''],['Courgette',1,''],['Poivron',1,''],['Œufs',4,''],['Crème',200,'ml'],['Fromage râpé',100,'g']],['Préchauffer 180°C','Fond + légumes sautés','Œufs + crème + fromage','Cuire 35 min']],
+['Tarte poireaux','🥧','Légumes',50,'Facile',6,['végétarien'],[['Pâte brisée',1,''],['Poireaux',4,''],['Œufs',3,''],['Crème',200,'ml'],['Fromage râpé',100,'g']],['Préchauffer 180°C','Fond de tarte','Poireaux fondus','Œufs + crème + fromage','Cuire 30 min']],
+['Gratin dauphinois','🥔','Légumes',75,'Facile',6,['français'],[['Pommes de terre',1.2,'kg'],['Crème',400,'ml'],['Lait',400,'ml'],['Ail',2,'gousse'],['Muscade',1,'pincée']],['Préchauffer 180°C','Trancher patates','Ail + crème + lait','Cuire 1h']],
+['Gratin courgettes','🥔','Légumes',40,'Facile',4,['végétarien'],[['Courgettes',4,''],['Œufs',3,''],['Crème',200,'ml'],['Fromage râpé',150,'g'],['Ail',1,'gousse']],['Préchauffer 180°C','Trancher courgettes','Œufs + crème','Cuire 25 min']],
+['Curry pois chiches','🥘','Légumes',30,'Facile',4,['végétarien','indien'],[['Pois chiches',400,'g'],['Lait coco',400,'ml'],['Curry',2,'c. à soupe'],['Oignon',1,''],['Ail',2,'gousse'],['Épinards',200,'g']],['Saisir oignon ail','Curry','Pois chiches + lait coco','Épinards 5 min']],
+['Dahl lentilles','🥘','Légumes',35,'Facile',4,['végétarien','indien'],[['Lentilles corail',300,'g'],['Lait coco',400,'ml'],['Curry',2,'c. à soupe'],['Oignon',1,''],['Ail',2,'gousse'],['Tomates concassées',200,'g']],['Saisir oignon ail + curry','Lentilles + tomates + lait coco','Mijoter 25 min']],
+['Falafels','🥙','Légumes',30,'Moyen',4,['végétarien','libanais'],[['Pois chiches',400,'g'],['Oignon',1,''],['Ail',2,'gousse'],['Persil',50,'g'],['Cumin',1,'c. à café'],['Farine',2,'c. à soupe']],['Mixer pois chiches + oignon + ail + persil','Farine + cumin','Former boules','Frire 3 min']],
+['Houmous','🥙','Légumes',10,'Facile',4,['végétarien','libanais'],[['Pois chiches cuits',400,'g'],['Tahini',2,'c. à soupe'],['Citron',1,''],['Ail',2,'gousse'],['Huile olive',3,'c. à soupe']],['Mixer tous ingrédients','Ajuster eau','Servir huile']],
+['Poêlée légumes','🥘','Légumes',20,'Facile',4,['végétarien','rapide'],[['Courgette',1,''],['Poivron',1,''],['Carotte',2,''],['Oignon',1,''],['Huile olive',3,'c. à soupe']],['Couper légumes','Sauter 15 min','Assaisonner']],
+['Légumes rôtis','🥔','Légumes',40,'Facile',4,['végétarien'],[['Patate douce',2,''],['Carotte',4,''],['Oignon',2,''],['Poivron',1,''],['Huile olive',4,'c. à soupe'],['Thym',1,'c. à soupe']],['Préchauffer 200°C','Couper légumes','Huile + thym','Cuire 35 min']],
+['Chili sin carne','🥘','Légumes',40,'Facile',4,['végétarien','mexicain'],[['Haricots rouges',400,'g'],['Tomates concassées',400,'g'],['Poivron',1,''],['Oignon',1,''],['Maïs',200,'g'],['Cumin',1,'c. à café']],['Saisir oignon + poivron','Tomates + haricots + maïs','Mijoter 30 min']],
+['Burger végétarien','🍔','Légumes',30,'Facile',4,['végétarien'],[['Steak végétal',4,''],['Pain burger',4,''],['Tomate',1,''],['Salade',4,'feuilles'],['Cheddar',4,'tranches']],['Griller steaks','Toaster pains','Assembler']],
+['Galettes sarrasin','🥞','Légumes',30,'Facile',4,['breton','végétarien'],[['Farine sarrasin',250,'g'],['Eau',500,'ml'],['Œuf',1,''],['Sel',1,'pincée']],['Mélanger farine eau œuf sel','Repos 1h','Cuire 2 min chaque côté']],
+['Crêpes salées','🥞','Légumes',30,'Facile',4,['végétarien'],[['Farine',250,'g'],['Œufs',3,''],['Lait',500,'ml'],['Beurre',50,'g']],['Mélanger farine œufs lait','Repos 30 min','Cuire']],
+['Pizza margherita','🍕','Légumes',60,'Moyen',4,['italien','végétarien'],[['Pâte pizza',1,''],['Tomates concassées',200,'g'],['Mozzarella',250,'g'],['Basilic',10,'feuilles'],['Huile olive',2,'c. à soupe']],['Préchauffer 250°C','Étaler pâte','Tomates + mozzarella','Cuire 12 min','Basilic']],
+['Pizza légumes','🍕','Légumes',60,'Moyen',4,['végétarien'],[['Pâte pizza',1,''],['Tomates concassées',200,'g'],['Courgette',1,''],['Poivron',1,''],['Mozzarella',200,'g']],['Préchauffer 250°C','Étaler pâte','Garnir','Cuire 12 min']],
+['Soufflé fromage','🧀','Légumes',40,'Difficile',4,['français','végétarien'],[['Œufs',5,''],['Fromage râpé',200,'g'],['Lait',300,'ml'],['Beurre',50,'g'],['Farine',50,'g']],['Béchamel','Jaunes + fromage','Blancs en neige','Cuire 30 min 180°C']],
+['Tarte tatin oignons','🥧','Légumes',50,'Moyen',4,['français','végétarien'],[['Pâte feuilletée',1,''],['Oignon',6,''],['Beurre',50,'g'],['Sucre',2,'c. à soupe'],['Vinaigre balsamique',2,'c. à soupe']],['Caraméliser oignons 25 min','Pâte sur oignons','Cuire 20 min 200°C','Retourner']],
+['Crumble légumes','🥧','Légumes',45,'Facile',4,['végétarien'],[['Courgette',2,''],['Tomate',4,''],['Farine',150,'g'],['Beurre',100,'g'],['Parmesan',80,'g']],['Préchauffer 180°C','Sauter légumes','Crumble farine beurre parmesan','Cuire 30 min']],
+['Moussaka végé','🍆','Légumes',60,'Moyen',6,['grec','végétarien'],[['Aubergine',2,''],['Lentilles',250,'g'],['Tomates concassées',400,'g'],['Lait',500,'ml'],['Beurre',50,'g'],['Farine',50,'g']],['Griller aubergines','Cuire lentilles + tomates','Béchamel','Monter et cuire 30 min']],
+['Lasagnes végé','🍝','Légumes',60,'Moyen',6,['végétarien'],[['Lasagnes',12,'feuilles'],['Courgette',2,''],['Épinards',300,'g'],['Ricotta',250,'g'],['Tomates concassées',600,'g'],['Fromage râpé',150,'g']],['Cuire légumes','Alterner couches','Cuire 30 min 180°C']],
+['Bourguignon végé','🥘','Légumes',60,'Facile',4,['végétarien'],[['Champignons',400,'g'],['Carotte',4,''],['Oignon',2,''],['Vin rouge',400,'ml'],['Farine',2,'c. à soupe']],['Saisir légumes','Fariner','Vin rouge','Mijoter 45 min']],
+['Choux Bruxelles','🥬','Légumes',25,'Facile',4,['végétarien'],[['Choux Bruxelles',500,'g'],['Lardons',100,'g'],['Beurre',30,'g'],['Ail',1,'gousse']],['Cuire choux 8 min','Saisir lardons + ail','Mélanger']],
+['Purée maison','🥔','Légumes',30,'Facile',4,['végétarien'],[['Pommes de terre',1,'kg'],['Lait',200,'ml'],['Beurre',80,'g'],['Muscade',1,'pincée']],['Cuire patates 20 min','Écraser','Lait + beurre + muscade']],
+['Pommes de terre rôties','🥔','Légumes',45,'Facile',4,['végétarien'],[['Pommes de terre',1,'kg'],['Huile olive',4,'c. à soupe'],['Ail',3,'gousse'],['Thym',1,'c. à soupe']],['Préchauffer 200°C','Couper en quartiers','Huile + ail + thym','Cuire 40 min']],
+['Endives braisées','🥬','Légumes',40,'Facile',4,['végétarien'],[['Endives',6,''],['Beurre',50,'g'],['Sucre',1,'c. à soupe'],['Jus citron',1,'c. à soupe']],['Caraméliser endives','Beurre + sucre','Braisées 25 min']],
+['Gratin chou-fleur','🥦','Légumes',40,'Facile',4,['végétarien'],[['Chou-fleur',1,''],['Lait',500,'ml'],['Beurre',50,'g'],['Farine',50,'g'],['Fromage râpé',150,'g']],['Cuire chou-fleur','Béchamel','Assembler','Gratiner 20 min']],
+// ===== SOUPES (18) =====
+['Soupe oignon','🧅','Soupe',45,'Facile',4,['français'],[['Oignon',6,''],['Bouillon',1,'L'],['Pain',4,'tranches'],['Fromage râpé',150,'g'],['Beurre',30,'g']],['Caraméliser oignons 20 min','Bouillon 15 min','Pain + fromage','Gratiner']],
+['Soupe légumes','🥣','Soupe',30,'Facile',4,['végétarien'],[['Carotte',4,''],['Pommes de terre',3,''],['Poireau',2,''],['Bouillon',1,'L'],['Oignon',1,'']],['Couper légumes','Bouillon 25 min','Mixer']],
+['Velouté potiron','🎃','Soupe',30,'Facile',4,['végétarien','automne'],[['Potiron',800,'g'],['Pommes de terre',2,''],['Bouillon',800,'ml'],['Crème',100,'ml'],['Muscade',1,'pincée']],['Cuire potiron + patates','Mixer','Crème + muscade']],
+['Velouté courgettes','🥒','Soupe',25,'Facile',4,['végétarien','été'],[['Courgettes',4,''],['Pommes de terre',2,''],['Bouillon',800,'ml'],['Crème',100,'ml']],['Cuire courgettes + patates','Mixer','Crème']],
+['Soupe tomates','🍅','Soupe',25,'Facile',4,['végétarien'],[['Tomates',800,'g'],['Oignon',1,''],['Ail',2,'gousse'],['Bouillon',500,'ml'],['Basilic',10,'feuilles']],['Saisir oignon ail','Tomates + bouillon','Mixer + basilic']],
+['Gaspacho','🍅','Soupe',15,'Facile',4,['été','espagnol'],[['Tomates',800,'g'],['Concombre',1,''],['Poivron',1,''],['Ail',1,'gousse'],['Huile olive',3,'c. à soupe']],['Mixer tous','Réfrigérer 2h','Servir frais']],
+['Soupe poisson','🐟','Soupe',40,'Moyen',4,['méditerranéen'],[['Poisson blanc',500,'g'],['Tomates concassées',400,'g'],['Oignon',1,''],['Ail',2,'gousse'],['Bouillon',800,'ml'],['Safran',1,'pincée']],['Saisir oignon ail','Tomates + bouillon','Poisson 10 min']],
+['Soupe ail','🧄','Soupe',25,'Facile',4,['végétarien'],[['Ail',12,'gousse'],['Bouillon',1,'L'],['Pain',4,'tranches'],['Huile olive',3,'c. à soupe'],['Persil',2,'c. à soupe']],['Saisir ail','Bouillon','Pain grillé','Persil']],
+['Velouté champignons','🍄','Soupe',30,'Facile',4,['végétarien'],[['Champignons',500,'g'],['Bouillon',800,'ml'],['Crème',150,'ml'],['Oignon',1,''],['Beurre',30,'g']],['Saisir oignon + champignons','Bouillon','Mixer','Crème']],
+['Soupe lentilles','🥣','Soupe',40,'Facile',4,['végétarien'],[['Lentilles',300,'g'],['Carotte',2,''],['Oignon',1,''],['Bouillon',1.5,'L'],['Cumin',1,'c. à café']],['Saisir oignon carotte','Lentilles + bouillon','Mijoter 30 min']],
+['Minestrone','🥣','Soupe',40,'Facile',4,['italien','végétarien'],[['Pâtes',100,'g'],['Haricots blancs',200,'g'],['Carotte',2,''],['Courgette',1,''],['Tomates concassées',400,'g'],['Bouillon',1.5,'L']],['Saisir légumes','Bouillon','Pâtes + haricots','Mijoter 20 min']],
+['Soupe thaïe','🥣','Soupe',25,'Facile',4,['thaï'],[['Lait coco',400,'ml'],['Bouillon',500,'ml'],['Crevettes',200,'g'],['Champignons',150,'g'],['Citronnelle',1,'tige'],['Gingembre',1,'c. à café']],['Chauffer bouillon + citronnelle + gingembre','Lait coco','Champignons + crevettes 5 min']],
+['Soupe brocoli','🥦','Soupe',25,'Facile',4,['végétarien'],[['Brocoli',1,''],['Pommes de terre',2,''],['Bouillon',800,'ml'],['Crème',100,'ml']],['Cuire brocoli + patates','Mixer','Crème']],
+['Soupe citrouille','🎃','Soupe',35,'Facile',4,['automne','végétarien'],[['Citrouille',800,'g'],['Oignon',1,''],['Bouillon',1,'L'],['Crème',100,'ml'],['Cannelle',1,'pincée']],['Cuire citrouille + oignon','Bouillon','Mixer + crème']],
+['Soupe pois cassés','🥣','Soupe',50,'Facile',4,['végétarien'],[['Pois cassés',300,'g'],['Carotte',2,''],['Oignon',1,''],['Bouillon',1.5,'L'],['Lardons',100,'g']],['Saisir lardons','Légumes + pois + bouillon','Mijoter 40 min']],
+['Bouillon poulet','🍲','Soupe',60,'Facile',4,['réconfort'],[['Poulet',500,'g'],['Carotte',2,''],['Oignon',1,''],['Poireau',1,''],['Bouillon',2,'L'],['Herbes',1,'bouquet']],['Mettre tout','Cuire 45 min','Filtrer']],
+['Soupe betterave','🥣','Soupe',30,'Facile',4,['végétarien'],[['Betteraves cuites',500,'g'],['Pommes de terre',2,''],['Oignon',1,''],['Bouillon',800,'ml'],['Crème',100,'ml']],['Cuire légumes','Mixer','Crème']],
+['Soupe carottes gingembre','🥕','Soupe',30,'Facile',4,['végétarien'],[['Carottes',800,'g'],['Oignon',1,''],['Gingembre',1,'c. à soupe'],['Bouillon',1,'L'],['Crème',80,'ml']],['Cuire carottes + oignon','Gingembre + bouillon','Mixer + crème']],
+// ===== SALADES (18) =====
+['Niçoise','🥗','Salade',15,'Facile',2,['été'],[['Tomates',4,''],['Thon',1,'boîte'],['Œufs',2,''],['Olives noires',50,'g'],['Haricots verts',150,'g'],['Huile olive',2,'c. à soupe']],['Cuire œufs durs','Blanchir haricots','Assembler']],
+['César','🥗','Salade',20,'Facile',2,['classique'],[['Laitue',1,''],['Poulet',200,'g'],['Croûtons',100,'g'],['Parmesan',50,'g'],['Sauce césar',3,'c. à soupe']],['Griller poulet','Assembler laitue + poulet','Croûtons + parmesan + sauce']],
+['Salade tomates','🍅','Salade',10,'Facile',2,['été','rapide'],[['Tomates',4,''],['Oignon',1,''],['Basilic',10,'feuilles'],['Huile olive',2,'c. à soupe']],['Trancher tomates + oignon','Basilic + huile']],
+['Grecque','🥗','Salade',10,'Facile',4,['grec'],[['Tomates',3,''],['Concombre',1,''],['Feta',200,'g'],['Olives',80,'g'],['Oignon rouge',1,''],['Huile olive',3,'c. à soupe']],['Couper légumes','Ajouter feta + olives','Huile']],
+['Salade pâtes','🍝','Salade',20,'Facile',4,['été'],[['Pâtes',300,'g'],['Tomates cerises',200,'g'],['Mozzarella',150,'g'],['Basilic',10,'feuilles'],['Huile olive',3,'c. à soupe']],['Cuire pâtes','Refroidir','Mélanger tous']],
+['Salade riz','🍚','Salade',20,'Facile',4,['été'],[['Riz',250,'g'],['Thon',1,'boîte'],['Maïs',150,'g'],['Tomates',2,''],['Huile olive',2,'c. à soupe']],['Cuire riz','Refroidir','Mélanger']],
+['Lentilles','🥗','Salade',25,'Facile',4,['végétarien'],[['Lentilles',250,'g'],['Échalote',1,''],['Carotte',1,''],['Vinaigre',2,'c. à soupe'],['Huile olive',3,'c. à soupe']],['Cuire lentilles','Refroidir','Assaisonner']],
+['Quinoa','🥗','Salade',25,'Facile',4,['végétarien','healthy'],[['Quinoa',250,'g'],['Concombre',1,''],['Tomates',2,''],['Feta',100,'g'],['Huile olive',3,'c. à soupe']],['Cuire quinoa','Refroidir','Mélanger']],
+['Taboulé','🥗','Salade',20,'Facile',4,['libanais','été'],[['Semoule',250,'g'],['Tomates',3,''],['Concombre',1,''],['Menthe',50,'g'],['Citron',2,''],['Huile olive',3,'c. à soupe']],['Hydrater semoule','Couper légumes','Menthe + citron + huile']],
+['Chèvre chaud','🥗','Salade',15,'Facile',2,['français'],[['Mesclun',100,'g'],['Chèvre',2,'crottes'],['Pain',2,'tranches'],['Miel',1,'c. à café'],['Huile olive',2,'c. à soupe']],['Toaster pain + chèvre','Miel','Assembler']],
+['Poulet','🥗','Salade',20,'Facile',2,['rapide'],[['Salade',1,''],['Poulet',300,'g'],['Tomates',2,''],['Maïs',100,'g'],['Huile olive',2,'c. à soupe']],['Griller poulet','Mélanger légumes','Assembler']],
+['Thon','🥗','Salade',10,'Facile',2,['rapide'],[['Salade',1,''],['Thon',1,'boîte'],['Tomates',2,''],['Oignon',1,''],['Olives',50,'g']],['Égoutter thon','Mélanger']],
+['Mâche','🥗','Salade',10,'Facile',2,['végétarien'],[['Mâche',100,'g'],['Noix',50,'g'],['Betterave',1,''],['Vinaigre balsamique',2,'c. à soupe'],['Huile noix',3,'c. à soupe']],['Mélanger','Assaisonner']],
+['Fruits de mer','🦐','Salade',25,'Facile',2,['mer'],[['Crevettes',200,'g'],['Moules',300,'g'],['Salade',1,''],['Citron',1,''],['Huile olive',2,'c. à soupe']],['Cuire fruits de mer','Refroidir','Mélanger']],
+['Pommes de terre','🥔','Salade',25,'Facile',4,['classique'],[['Pommes de terre',800,'g'],['Échalote',1,''],['Moutarde',1,'c. à soupe'],['Vinaigre',2,'c. à soupe'],['Huile olive',4,'c. à soupe']],['Cuire patates','Refroidir','Vinaigrette']],
+['Waldorf','🥗','Salade',15,'Facile',4,['classique'],[['Pomme',3,''],['Céleri',2,'branches'],['Noix',80,'g'],['Mayonnaise',3,'c. à soupe'],['Citron',1,'']],['Couper pommes + céleri','Noix','Mayonnaise']],
+['Concombre','🥒','Salade',10,'Facile',4,['rapide','été'],[['Concombre',2,''],['Yaourt',200,'g'],['Menthe',2,'c. à soupe'],['Ail',1,'gousse'],['Huile olive',1,'c. à soupe']],['Trancher concombre','Yaourt + menthe + ail','Mélanger']],
+['Pois chiches','🥗','Salade',15,'Facile',4,['végétarien'],[['Pois chiches',400,'g'],['Tomates',2,''],['Concombre',1,''],['Feta',100,'g'],['Huile olive',3,'c. à soupe']],['Mélanger tous','Assaisonner']],
+// ===== ŒUFS / PETIT-DÉJ (14) =====
+['Omelette nature','🍳','Œufs',10,'Facile',2,['rapide'],[['Œufs',6,''],['Beurre',20,'g'],['Persil',1,'c. à soupe'],['Sel',1,'pincée']],['Battre œufs','Beurre chaud','Cuire 4 min']],
+['Omelette champignons','🍳','Œufs',15,'Facile',2,['végétarien'],[['Œufs',6,''],['Champignons',250,'g'],['Beurre',20,'g'],['Persil',1,'c. à soupe']],['Sauter champignons','Battre œufs','Cuire ensemble']],
+['Œufs brouillés','🍳','Œufs',10,'Facile',2,['rapide'],[['Œufs',6,''],['Beurre',30,'g'],['Crème',30,'ml'],['Ciboulette',1,'c. à soupe']],['Battre œufs + crème','Cuire doux en remuant','Ciboulette']],
+['Œufs pochés','🍳','Œufs',10,'Moyen',2,['technique'],[['Œufs',2,''],['Vinaigre',1,'c. à soupe'],['Pain',2,'tranches']],['Eau frémissante + vinaigre','Casser œuf délicatement','Cuire 3 min']],
+['Œufs mimosa','🥚','Œufs',15,'Facile',4,['classique'],[['Œufs',6,''],['Mayonnaise',4,'c. à soupe'],['Moutarde',1,'c. à café'],['Ciboulette',1,'c. à soupe']],['Cuire œufs durs','Jaunes + mayo + moutarde','Garnir blancs']],
+['Shakshuka','🍳','Œufs',25,'Facile',2,['moyen-orient'],[['Œufs',4,''],['Tomates concassées',400,'g'],['Poivron',1,''],['Oignon',1,''],['Cumin',1,'c. à café']],['Saisir poivron oignon','Tomates + cumin','Casser œufs','Couvrir 5 min']],
+['Croque-madame','🥪','Œufs',15,'Facile',2,['classique'],[['Pain mie',4,'tranches'],['Jambon',2,'tranches'],['Fromage râpé',100,'g'],['Œufs',2,''],['Beurre',30,'g']],['Beurrer pain','Jambon + fromage','Cuire 5 min','Œufs au plat dessus']],
+['Pain perdu','🍞','Œufs',15,'Facile',4,['dessert','rapide'],[['Pain rassis',8,'tranches'],['Œufs',2,''],['Lait',200,'ml'],['Sucre',50,'g'],['Beurre',30,'g']],['Mélanger œufs lait sucre','Tremper pain','Dorer au beurre']],
+['Pancakes','🥞','Œufs',20,'Facile',4,['dessert','rapide'],[['Farine',250,'g'],['Œufs',2,''],['Lait',300,'ml'],['Sucre',50,'g'],['Levure',2,'c. à café']],['Mélanger tous','Repos 10 min','Cuire 2 min chaque côté']],
+['Gaufres','🧇','Œufs',25,'Facile',4,['dessert'],[['Farine',250,'g'],['Œufs',3,''],['Lait',300,'ml'],['Beurre',100,'g'],['Sucre',50,'g']],['Mélanger','Repos 30 min','Cuire gaufrier']],
+['Crêpes sucrées','🥞','Œufs',25,'Facile',4,['dessert','breton'],[['Farine',250,'g'],['Œufs',4,''],['Lait',500,'ml'],['Sucre',30,'g'],['Beurre',50,'g']],['Mélanger','Repos 1h','Cuire']],
+['Porridge','🥣','Œufs',10,'Facile',2,['healthy','rapide'],[['Flocons avoine',80,'g'],['Lait',300,'ml'],['Miel',2,'c. à soupe'],['Banane',1,'']],['Chauffer lait + flocons 5 min','Miel','Banane']],
+['Muesli maison','🥣','Œufs',5,'Facile',4,['healthy'],[['Flocons avoine',200,'g'],['Noix',80,'g'],['Raisins secs',80,'g'],['Miel',2,'c. à soupe']],['Mélanger','Servir avec lait']],
+['Avocado toast','🥑','Œufs',10,'Facile',2,['rapide','healthy'],[['Pain',2,'tranches'],['Avocat',1,''],['Citron',1,''],['Œuf',2,''],['Piment',1,'pincée']],['Toaster pain','Écraser avocat + citron','Œufs pochés dessus','Piment']],
+// ===== SANDWICHS / WRAPS (14) =====
+['Croque-monsieur','🥪','Sandwich',15,'Facile',2,['classique','rapide'],[['Pain mie',4,'tranches'],['Jambon',2,'tranches'],['Fromage râpé',100,'g'],['Beurre',30,'g']],['Beurrer','Garnir','Cuire 5 min']],
+['Jambon','🥪','Sandwich',5,'Facile',2,['rapide'],[['Baguette',1,''],['Jambon',2,'tranches'],['Beurre',30,'g'],['Cornichons',4,'']],['Couper baguette','Beurre + jambon','Cornichons']],
+['Thon','🥪','Sandwich',10,'Facile',2,['rapide'],[['Pain',4,'tranches'],['Thon',1,'boîte'],['Mayonnaise',3,'c. à soupe'],['Salade',4,'feuilles']],['Mélanger thon + mayo','Garnir']],
+['Poulet','🥪','Sandwich',15,'Facile',2,['rapide'],[['Pain',4,'tranches'],['Poulet',200,'g'],['Salade',4,'feuilles'],['Tomate',1,''],['Mayonnaise',2,'c. à soupe']],['Griller poulet','Assembler']],
+['Wrap poulet','🌯','Sandwich',15,'Facile',2,['rapide','healthy'],[['Tortillas',2,''],['Poulet',200,'g'],['Salade',1,''],['Tomate',1,''],['Yaourt',3,'c. à soupe']],['Griller poulet','Garnir tortillas','Rouler']],
+['Wrap végé','🌯','Sandwich',10,'Facile',2,['végétarien','rapide'],[['Tortillas',2,''],['Houmous',4,'c. à soupe'],['Carotte',1,''],['Concombre',1,''],['Salade',1,'']],['Tartiner houmous','Garnir légumes','Rouler']],
+['Panini','🥪','Sandwich',10,'Facile',2,['italien','rapide'],[['Pain ciabatta',2,''],['Mozzarella',150,'g'],['Tomate',1,''],['Basilic',5,'feuilles']],['Garnir','Griller 5 min']],
+['Bagel saumon','🥯','Sandwich',10,'Facile',2,['rapide'],[['Bagel',2,''],['Saumon fumé',100,'g'],['Fromage frais',100,'g'],['Ciboulette',1,'c. à soupe']],['Toaster bagel','Fromage + saumon','Ciboulette']],
+['Club sandwich','🥪','Sandwich',15,'Facile',2,['classique'],[['Pain mie',6,'tranches'],['Poulet',200,'g'],['Lardons',100,'g'],['Tomate',1,''],['Mayonnaise',3,'c. à soupe']],['Griller poulet + lardons','Assembler 3 étages']],
+['BLT','🥪','Sandwich',10,'Facile',2,['rapide'],[['Pain',4,'tranches'],['Lardons',150,'g'],['Salade',4,'feuilles'],['Tomate',1,''],['Mayonnaise',2,'c. à soupe']],['Griller lardons','Assembler']],
+['Sandwich œufs','🥪','Sandwich',10,'Facile',2,['rapide'],[['Pain',4,'tranches'],['Œufs',3,''],['Mayonnaise',3,'c. à soupe'],['Ciboulette',1,'c. à soupe']],['Œufs durs','Écraser + mayo','Garnir']],
+['Burrito','🌯','Sandwich',20,'Facile',2,['mexicain'],[['Tortillas',2,''],['Bœuf haché',200,'g'],['Haricots rouges',100,'g'],['Riz',100,'g'],['Fromage râpé',80,'g']],['Cuire viande','Assembler','Rouler']],
+['Quesadilla','🌮','Sandwich',15,'Facile',2,['mexicain'],[['Tortillas',4,''],['Fromage râpé',150,'g'],['Poulet',200,'g'],['Poivron',1,'']],['Garnir','Cuire 3 min chaque côté']],
+['Fajitas','🌮','Sandwich',20,'Facile',2,['mexicain'],[['Tortillas',4,''],['Poulet',300,'g'],['Poivron',1,''],['Oignon',1,''],['Épices fajita',2,'c. à café']],['Griller poulet + légumes','Épices','Garnir tortillas']],
+// ===== MONDE (20) =====
+['Couscous royal','🍲','Monde',60,'Moyen',6,['maghrebin'],[['Semoule',500,'g'],['Agneau',500,'g'],['Poulet',400,'g'],['Merguez',4,''],['Carotte',4,''],['Courgette',2,''],['Pois chiches',200,'g']],['Cuire viandes','Légumes 30 min','Semoule + bouillon']],
+['Tajine poulet citron','🍲','Monde',50,'Facile',4,['marocain'],[['Poulet',4,'cuisses'],['Citron confit',1,''],['Oignon',2,''],['Ail',3,'gousse'],['Cumin',1,'c. à café'],['Olives',80,'g']],['Saisir poulet','Oignon ail épices','Eau + citron + olives','Mijoter 30 min']],
+['Tajine agneau pruneaux','🍲','Monde',60,'Moyen',4,['marocain'],[['Agneau',600,'g'],['Pruneaux',150,'g'],['Oignon',2,''],['Cannelle',1,'bâton'],['Miel',2,'c. à soupe'],['Amandes',50,'g']],['Saisir agneau','Oignon cannelle','Eau, mijoter 40 min','Pruneaux + miel + amandes']],
+['Couscous végé','🍲','Monde',40,'Facile',4,['végétarien','maghrebin'],[['Semoule',300,'g'],['Pois chiches',200,'g'],['Carotte',3,''],['Courgette',2,''],['Navet',1,''],['Tomate',2,'']],['Cuire légumes en bouillon','Semoule','Assembler']],
+['Pad thaï','🍜','Monde',25,'Moyen',4,['thaï'],[['Nouilles riz',300,'g'],['Crevettes',300,'g'],['Œufs',2,''],['Sauce soja',3,'c. à soupe'],['Cacahuètes',50,'g'],['Citron vert',1,'']],['Tremper nouilles','Sauter crevettes + œufs','Nouilles + soja','Cacahuètes + citron']],
+['Bo bun','🍜','Monde',30,'Facile',4,['vietnamien'],[['Nouilles riz',300,'g'],['Bœuf',300,'g'],['Carotte',2,''],['Concombre',1,''],['Salade',1,''],['Nems',4,'']],['Cuire nouilles','Griller bœuf','Assembler avec légumes','Nems coupés']],
+['Nems','🥟','Monde',40,'Moyen',4,['vietnamien'],[['Galette riz',10,''],['Porc haché',300,'g'],['Carotte',2,''],['Champignons noirs',50,'g'],['Vermicelles',100,'g']],['Réhydrater galettes','Mélanger farce','Rouler','Frire']],
+['Sushi simplifié','🍣','Monde',40,'Moyen',4,['japonais'],[['Riz sushi',300,'g'],['Vinaigre riz',3,'c. à soupe'],['Saumon',200,'g'],['Avocat',1,''],['Nori',4,'feuilles']],['Cuire riz + vinaigre','Étaler sur nori','Garnir saumon avocat','Rouler']],
+['Maki concombre','🍣','Monde',30,'Moyen',4,['japonais','végétarien'],[['Riz sushi',300,'g'],['Vinaigre riz',3,'c. à soupe'],['Concombre',1,''],['Nori',4,'feuilles']],['Cuire riz','Étaler','Garnir','Rouler']],
+['Onigiri','🍙','Monde',30,'Facile',4,['japonais'],[['Riz',300,'g'],['Thon',1,'boîte'],['Mayonnaise',2,'c. à soupe'],['Nori',2,'feuilles']],['Cuire riz','Mélanger thon + mayo','Former triangles','Entourer nori']],
+['Ramen','🍜','Monde',40,'Moyen',4,['japonais'],[['Nouilles ramen',300,'g'],['Bouillon poulet',1.5,'L'],['Œufs',4,''],['Porc',300,'g'],['Ciboule',4,''],['Sauce soja',3,'c. à soupe']],['Bouillon 20 min','Cuire porc','Cuire œufs mollets','Nouilles + garnitures']],
+['Poulet tikka masala','🍗','Monde',40,'Moyen',4,['indien'],[['Poulet',600,'g'],['Yaourt',200,'g'],['Épices tikka',2,'c. à soupe'],['Tomates concassées',400,'g'],['Crème',150,'ml']],['Mariner poulet 20 min','Griller poulet','Sauce tomate + crème','Poulet dedans']],
+['Biryani poulet','🍚','Monde',60,'Difficile',6,['indien'],[['Riz basmati',400,'g'],['Poulet',600,'g'],['Yaourt',200,'g'],['Épices biryani',2,'c. à soupe'],['Oignon',2,''],['Safran',1,'pincée']],['Mariner poulet','Cuire riz à moitié','Alterner couches','Cuire 25 min couvert']],
+['Naan fromage','🫓','Monde',30,'Moyen',4,['indien'],[['Farine',300,'g'],['Yaourt',100,'g'],['Levure',1,'sachet'],['Fromage râpé',150,'g'],['Beurre',30,'g']],['Pâte + levée 30 min','Étaler + fromage','Cuire poêle 2 min']],
+['Curry vert thaï','🍛','Monde',30,'Facile',4,['thaï'],[['Poulet',500,'g'],['Pâte curry vert',2,'c. à soupe'],['Lait coco',400,'ml'],['Aubergine thaï',200,'g'],['Basilic thaï',10,'feuilles']],['Saisir poulet','Pâte curry','Lait coco','Mijoter 15 min']],
+['Poulet satay','🍢','Monde',30,'Facile',4,['indonésien'],[['Poulet',500,'g'],['Beurre cacahuète',100,'g'],['Lait coco',200,'ml'],['Sauce soja',2,'c. à soupe'],['Citron vert',1,'']],['Brochettes poulet','Griller','Sauce cacahuète + lait coco']],
+['Nasi goreng','🍚','Monde',25,'Facile',4,['indonésien'],[['Riz',300,'g'],['Poulet',300,'g'],['Œufs',2,''],['Sauce soja',3,'c. à soupe'],['Ciboule',3,'']],['Cuire riz','Sauter poulet','Ajouter riz + œufs','Soja']],
+['Moussaka','🍆','Monde',60,'Moyen',6,['grec'],[['Aubergine',2,''],['Bœuf haché',500,'g'],['Tomates concassées',400,'g'],['Lait',500,'ml'],['Beurre',50,'g'],['Farine',50,'g']],['Griller aubergines','Viande + tomates','Béchamel','Monter + cuire 30 min']],
+['Empanadas','🥟','Monde',40,'Moyen',4,['argentin'],[['Pâte feuilletée',2,''],['Bœuf haché',300,'g'],['Oignon',1,''],['Œufs',2,''],['Cumin',1,'c. à café']],['Cuire farce','Découper disques','Garnir + refermer','Cuire 20 min 200°C']],
+['Tacos mexicains','🌮','Monde',25,'Facile',4,['mexicain'],[['Tortillas',8,''],['Bœuf haché',400,'g'],['Haricots rouges',200,'g'],['Tomate',2,''],['Fromage râpé',150,'g'],['Épices tacos',2,'c. à café']],['Cuire viande + épices','Ré lacunes','Garnir tortillas']],
+// ===== DESSERTS (18) =====
+['Tarte pommes','🥧','Dessert',60,'Facile',6,['classique'],[['Pâte brisée',1,''],['Pommes',6,''],['Sucre',100,'g'],['Cannelle',1,'c. à café'],['Beurre',30,'g']],['Préchauffer 180°C','Étaler pâte','Trancher pommes','Sucre + cannelle','Cuire 40 min']],
+['Clafoutis','🍒','Dessert',50,'Facile',6,['français'],[['Cerises',500,'g'],['Œufs',4,''],['Lait',300,'ml'],['Farine',100,'g'],['Sucre',100,'g']],['Préchauffer 180°C','Mélanger œufs lait farine sucre','Cerises','Cuire 35 min']],
+['Crumble pommes','🍎','Dessert',40,'Facile',6,['classique'],[['Pommes',6,''],['Farine',150,'g'],['Beurre',100,'g'],['Sucre',100,'g'],['Cannelle',1,'c. à café']],['Préchauffer 180°C','Trancher pommes','Sabler farine beurre sucre','Cuire 30 min']],
+['Mousse chocolat','🍫','Dessert',20,'Facile',4,['classique'],[['Chocolat noir',200,'g'],['Œufs',6,''],['Sucre',30,'g'],['Beurre',20,'g']],['Fondre chocolat','Jaunes + chocolat','Blancs en neige','Incorporer délicatement','Réfrigérer 3h']],
+['Crème brûlée','🍮','Dessert',40,'Moyen',4,['français'],[['Jaunes œufs',6,''],['Crème',500,'ml'],['Sucre',100,'g'],['Vanille',1,'gousse']],['Chauffer crème + vanille','Jaunes + sucre','Mélanger','Cuire 1h 100°C','Caraméliser']],
+['Tiramisu','🍰','Dessert',30,'Facile',6,['italien'],[['Mascarpone',250,'g'],['Œufs',3,''],['Sucre',80,'g'],['Biscuits cuillère',20,''],['Café',200,'ml'],['Cacao',2,'c. à soupe']],['Jaunes + sucre + mascarpone','Blancs en neige','Tremper biscuits','Alterner','Réfrigérer 4h']],
+['Fondant chocolat','🍫','Dessert',25,'Facile',6,['classique'],[['Chocolat',200,'g'],['Beurre',150,'g'],['Œufs',4,''],['Sucre',150,'g'],['Farine',80,'g']],['Préchauffer 200°C','Fondre chocolat + beurre','Œufs + sucre','Farine','Cuire 12 min']],
+['Brownie','🍫','Dessert',40,'Facile',8,['américain'],[['Chocolat',200,'g'],['Beurre',150,'g'],['Œufs',3,''],['Sucre',200,'g'],['Farine',120,'g'],['Noix',80,'g']],['Préchauffer 180°C','Fondre chocolat + beurre','Mélanger + farine + noix','Cuire 25 min']],
+['Cookies','🍪','Dessert',30,'Facile',12,['américain'],[['Farine',250,'g'],['Beurre',125,'g'],['Sucre',150,'g'],['Œuf',1,''],['Chocolat pépites',100,'g']],['Préchauffer 180°C','Crémer beurre + sucre','Ajouter œuf + farine + pépites','Boules','Cuire 12 min']],
+['Muffins','🧁','Dessert',30,'Facile',8,['américain'],[['Farine',250,'g'],['Sucre',150,'g'],['Œufs',2,''],['Lait',150,'ml'],['Beurre fondu',100,'g'],['Levure',1,'sachet']],['Préchauffer 180°C','Mélanger secs + liquides','Moules','Cuire 20 min']],
+['Madeleines','🍰','Dessert',30,'Facile',12,['français'],[['Farine',150,'g'],['Œufs',2,''],['Sucre',100,'g'],['Beurre fondu',100,'g'],['Levure',1,'c. à café'],['Citron',1,'zeste']],['Préchauffer 200°C','Mélanger','Moules','Cuire 10 min']],
+['Cake citron','🍋','Dessert',50,'Facile',8,['classique'],[['Farine',250,'g'],['Sucre',200,'g'],['Œufs',3,''],['Beurre',150,'g'],['Citron',2,''],['Levure',1,'sachet']],['Préchauffer 180°C','Mélanger','Cuire 45 min']],
+['Charlotte fraises','🍓','Dessert',30,'Moyen',6,['français'],[['Biscuits cuillère',20,''],['Fraises',500,'g'],['Crème',400,'ml'],['Mascarpone',250,'g'],['Sucre',100,'g']],['Monter crème + mascarpone','Monter charlotte','Réfrigérer 4h']],
+['Île flottante','🍮','Dessert',30,'Moyen',4,['français'],[['Œufs',4,''],['Lait',500,'ml'],['Sucre',100,'g'],['Vanille',1,'gousse']],['Crème anglaise','Blancs en neige','Cuire vapeur','Napper']],
+['Riz au lait','🍚','Dessert',40,'Facile',4,['classique'],[['Riz rond',150,'g'],['Lait',1,'L'],['Sucre',80,'g'],['Vanille',1,'gousse']],['Cuire riz dans lait','Sucre + vanille','Mijoter 30 min']],
+['Panna cotta','🍮','Dessert',20,'Facile',4,['italien'],[['Crème',500,'ml'],['Sucre',80,'g'],['Gélatine',3,'feuilles'],['Vanille',1,'gousse']],['Chauffer crème + sucre','Gélatine','Moules','Réfrigérer 4h']],
+['Banana bread','🍌','Dessert',60,'Facile',8,['américain'],[['Bananes mûres',3,''],['Farine',250,'g'],['Sucre',150,'g'],['Œufs',2,''],['Beurre fondu',100,'g'],['Levure',1,'sachet']],['Préchauffer 180°C','Écraser bananes','Mélanger','Cuire 50 min']],
+['Cheesecake','🍰','Dessert',30,'Moyen',8,['américain'],[['Biscuits',200,'g'],['Beurre fondu',100,'g'],['Cream cheese',500,'g'],['Sucre',150,'g'],['Œufs',3,'']],['Base biscuits + beurre','Mélange cheese sucre œufs','Cuire 50 min 160°C','Réfrigérer 4h']],
+// ===== GRILLADES (8) =====
+['Brochettes bœuf','🍢','Grillade',20,'Facile',4,['été'],[['Bœuf',500,'g'],['Poivron',1,''],['Oignon',1,''],['Huile olive',3,'c. à soupe'],['Paprika',1,'c. à café']],['Mariner','Monter brochettes','Griller 10 min']],
+['Merguez','🌭','Grillade',15,'Facile',4,['été'],[['Merguez',8,''],['Huile olive',1,'c. à soupe']],['Piquer merguez','Griller 12 min en tournant']],
+['Côtelettes agneau grill','🥩','Grillade',20,'Facile',4,['été'],[['Côtelettes',8,''],['Ail',2,'gousse'],['Romarin',1,'c. à café'],['Huile olive',3,'c. à soupe']],['Mariner 15 min','Griller 4 min chaque côté']],
+['Saucisses grillées','🌭','Grillade',15,'Facile',4,['été'],[['Saucisses',8,''],['Huile',1,'c. à soupe']],['Griller 12 min en tournant']],
+['Côtes porc BBQ','🥩','Grillade',30,'Facile',4,['américain'],[['Côtes porc',1,'kg'],['Sauce BBQ',200,'ml'],['Paprika',1,'c. à café'],['Ail',2,'gousse']],['Mariner 20 min','Griller 25 min en badigeonnant']],
+['Halloumi grillé','🧀','Grillade',10,'Facile',4,['végétarien'],[['Halloumi',300,'g'],['Huile olive',2,'c. à soupe'],['Citron',1,''],['Thym',1,'c. à café']],['Trancher','Griller 2 min chaque côté','Citron + thym']],
+['Légumes grillés','🥔','Grillade',20,'Facile',4,['végétarien'],[['Courgette',2,''],['Aubergine',1,''],['Poivron',2,''],['Huile olive',4,'c. à soupe']],['Trancher','Huile','Griller 5 min chaque côté']],
+['Poulet BBQ','🍗','Grillade',30,'Facile',4,['été'],[['Poulet',4,'filets'],['Sauce BBQ',150,'ml'],['Ail',2,'gousse'],['Paprika',1,'c. à café']],['Mariner 15 min','Griller 6 min chaque côté']]
+];
 
-    // ============================================================
-    // 2. INVENTAIRE (localStorage)
-    // ============================================================
-    let inventory = JSON.parse(localStorage.getItem('myInventory')) || [];
+// Conversion format compact → objets
+const RECIPES = RAW.map((r, i) => ({
+  id: 'r' + (i + 1),
+  name: r[0], emoji: r[1], category: r[2], time: r[3], difficulty: r[4], servings: r[5], tags: r[6],
+  ingredients: r[7].map(x => ({ name: x[0], qty: x[1], unit: x[2] })),
+  steps: r[8]
+}));
 
-    function saveInventory() {
-      localStorage.setItem('myInventory', JSON.stringify(inventory));
-      renderInventory();
+// ============================================================
+// ÉTAT GLOBAL
+// ============================================================
+let inventory = JSON.parse(localStorage.getItem('myInventory')) || [];
+let shoppingList = JSON.parse(localStorage.getItem('myShoppingList')) || [];
+let planning = JSON.parse(localStorage.getItem('myPlanning')) || {};
+let currentFilter = 'Toutes';
+let currentSlotKey = null;
+
+const DAYS = ['Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche'];
+const MEALS = ['Déjeuner','Dîner'];
+
+// ============================================================
+// ONGLETS
+// ============================================================
+document.querySelectorAll('nav button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'tab-planning') renderPlanning();
+    if (btn.dataset.tab === 'tab-recipes') { renderLibrary(); renderSuggestions(); }
+  });
+});
+
+// ============================================================
+// INVENTAIRE
+// ============================================================
+function saveInventory() { localStorage.setItem('myInventory', JSON.stringify(inventory)); renderInventory(); }
+function addItem(name, qty = 1, expiry = null) {
+  name = name || document.getElementById('item-name').value;
+  qty = qty || parseInt(document.getElementById('item-qty').value) || 1;
+  expiry = expiry || document.getElementById('item-expiry').value || null;
+  if (!name || !name.trim()) return;
+  const existing = inventory.find(i => i.name.toLowerCase() === name.toLowerCase().trim());
+  if (existing) { existing.qty += parseInt(qty); if (expiry) existing.expiry = expiry; }
+  else inventory.push({ id: Date.now() + Math.random(), name: name.trim(), qty: parseInt(qty), expiry });
+  saveInventory();
+  document.getElementById('item-name').value = '';
+  document.getElementById('item-qty').value = 1;
+  document.getElementById('item-expiry').value = '';
+}
+function removeItem(id) { inventory = inventory.filter(i => i.id !== id); saveInventory(); }
+function updateQty(id, delta) {
+  const item = inventory.find(i => i.id === id);
+  if (item) { item.qty += delta; if (item.qty <= 0) return removeItem(id); saveInventory(); }
+}
+function getDaysUntilExpiry(expiry) { if (!expiry) return Infinity; return Math.ceil((new Date(expiry) - new Date()) / 86400000); }
+function renderInventory() {
+  const list = document.getElementById('inventory-list');
+  const empty = document.getElementById('inventory-empty');
+  list.innerHTML = '';
+  if (inventory.length === 0) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  inventory.sort((a, b) => getDaysUntilExpiry(a.expiry) - getDaysUntilExpiry(b.expiry));
+  inventory.forEach(item => {
+    const li = document.createElement('li');
+    li.className = 'inventory-item';
+    const days = getDaysUntilExpiry(item.expiry);
+    let badge = '';
+    if (item.expiry) {
+      if (days <= 2) badge = `<span class="expiry-badge expiry-urgent">⚠️ ${days <= 0 ? 'Expiré' : 'J-' + days}</span>`;
+      else badge = `<span class="expiry-badge expiry-ok">✅ ${days}j</span>`;
     }
+    li.innerHTML = `<div style="flex:1"><span class="item-name">${item.name}</span>${badge}<div class="item-meta">${item.expiry ? 'Périme ' + item.expiry : 'Pas de date'}</div></div>
+      <div style="display:flex;align-items:center;gap:4px">
+      <button class="btn-icon" onclick="updateQty(${item.id},-1)">➖</button>
+      <span style="font-weight:700;min-width:20px;text-align:center">${item.qty}</span>
+      <button class="btn-icon" onclick="updateQty(${item.id},1)">➕</button>
+      <button class="btn-icon" onclick="removeItem(${item.id})">🗑️</button></div>`;
+    list.appendChild(li);
+  });
+}
 
-    function addItem(name, qty = 1, expiry = null) {
-      if (!name || name.trim() === '') return;
-      const existing = inventory.find(i => i.name.toLowerCase() === name.toLowerCase().trim());
-      if (existing) {
-        existing.qty += parseInt(qty);
-        if (expiry) existing.expiry = expiry;
-      } else {
-        inventory.push({
-          id: Date.now(),
-          name: name.trim(),
-          qty: parseInt(qty),
-          expiry: expiry || null
-        });
-      }
-      saveInventory();
-      document.getElementById('item-name').value = '';
-      document.getElementById('item-qty').value = 1;
-      document.getElementById('item-expiry').value = '';
+// ============================================================
+// BIBLIOTHÈQUE DE RECETTES
+// ============================================================
+function getAllCategories() {
+  const cats = new Set(RECIPES.map(r => r.category));
+  return ['Toutes', ...Array.from(cats).sort()];
+}
+
+function renderCategoryFilters() {
+  const bar = document.getElementById('category-filters');
+  bar.innerHTML = '';
+  getAllCategories().forEach(cat => {
+    const b = document.createElement('button');
+    b.className = 'filter-chip' + (cat === currentFilter ? ' active' : '');
+    b.textContent = cat;
+    b.onclick = () => { currentFilter = cat; renderCategoryFilters(); renderLibrary(); };
+    bar.appendChild(b);
+  });
+}
+
+function renderLibrary() {
+  const grid = document.getElementById('library-grid');
+  const q = (document.getElementById('library-search').value || '').toLowerCase().trim();
+  let list = RECIPES.filter(r => currentFilter === 'Toutes' || r.category === currentFilter);
+  if (q) list = list.filter(r => r.name.toLowerCase().includes(q) || r.tags.some(t => t.includes(q)));
+  document.getElementById('lib-count').textContent = list.length;
+  grid.innerHTML = '';
+  if (list.length === 0) { grid.innerHTML = '<p style="color:var(--text-light); padding:20px;">Aucune recette trouvée.</p>'; return; }
+  list.forEach(r => grid.appendChild(createRecipeCard(r)));
+}
+
+function createRecipeCard(r) {
+  const card = document.createElement('div');
+  card.className = 'recipe-card';
+  card.onclick = () => openRecipeModal(r);
+  const ings = r.ingredients.slice(0, 3).map(i => i.name).join(', ');
+  card.innerHTML = `<div class="recipe-thumb">${r.emoji}</div>
+    <div class="info"><div class="title">${r.name}</div>
+    <div class="meta">⏱ ${r.time} min • ${r.ingredients.length} ingr.</div></div>`;
+  return card;
+}
+
+function openRecipeModal(r) {
+  const content = document.getElementById('modal-content');
+  content.innerHTML = `
+    <h2>${r.emoji} ${r.name}</h2>
+    <p style="color:var(--text-light); font-size:.9rem; margin-bottom:12px;">
+      <span class="badge">${r.category}</span>
+      <span class="badge">⏱ ${r.time} min</span>
+      <span class="badge">${r.difficulty}</span>
+      <span class="badge">${r.servings} pers.</span>
+    </p>
+    <h4>🧾 Ingrédients</h4>
+    <ul>${r.ingredients.map(i => `<li>${i.qty}${i.unit ? ' ' + i.unit : ''} ${i.name}</li>`).join('')}</ul>
+    <h4>👨‍🍳 Préparation</h4>
+    <ol>${r.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+    <button class="btn btn-primary" style="margin-top:16px; width:100%;" onclick="addMissingToShopping(${JSON.stringify(r.ingredients).replace(/"/g,'&quot;')})">
+      🛒 Ajouter les ingrédients manquants aux courses
+    </button>`;
+  document.getElementById('recipe-modal').classList.add('open');
+}
+
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(o => {
+  o.addEventListener('click', e => { if (e.target === e.currentTarget) o.classList.remove('open'); });
+});
+
+function addMissingToShopping(ingredients) {
+  const inv = inventory.map(i => i.name.toLowerCase());
+  let added = 0;
+  ingredients.forEach(ing => {
+    const name = ing.name.toLowerCase();
+    const inStock = inv.some(n => n.includes(name) || name.includes(n));
+    if (!inStock && !shoppingList.some(s => s.name.toLowerCase() === name)) {
+      shoppingList.push({ id: Date.now() + Math.random(), name: ing.name, qty: ing.qty + (ing.unit ? ' ' + ing.unit : ''), checked: false });
+      added++;
     }
+  });
+  saveShoppingList();
+  closeModal('recipe-modal');
+  alert(added > 0 ? `✅ ${added} ingrédient(s) ajouté(s).` : '⚠️ Tous les ingrédients sont déjà en stock !');
+  if (added > 0) document.querySelector('[data-tab="tab-shopping"]').click();
+}
 
-    function removeItem(id) {
-      inventory = inventory.filter(i => i.id !== id);
-      saveInventory();
-    }
+// ============================================================
+// SUGGESTIONS BASÉES SUR L'INVENTAIRE
+// ============================================================
+function renderSuggestions() {
+  const grid = document.getElementById('recipe-suggestions');
+  const empty = document.getElementById('suggestions-empty');
+  if (inventory.length === 0) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  const invNames = inventory.map(i => i.name.toLowerCase());
+  const scored = RECIPES.map(r => {
+    const owned = r.ingredients.filter(ing => invNames.some(n => n.includes(ing.name.toLowerCase()) || ing.name.toLowerCase().includes(n))).length;
+    const pct = Math.round((owned / r.ingredients.length) * 100);
+    return { r, pct };
+  }).filter(x => x.pct > 0).sort((a, b) => b.pct - a.pct).slice(0, 8);
 
-    function updateQty(id, delta) {
-      const item = inventory.find(i => i.id === id);
-      if (item) {
-        item.qty += delta;
-        if (item.qty <= 0) return removeItem(id);
-        saveInventory();
-      }
-    }
+  grid.innerHTML = '';
+  if (scored.length === 0) { grid.innerHTML = '<p style="color:var(--text-light)">Aucune correspondance trouvée. Ajoutez plus de produits.</p>'; return; }
+  scored.forEach(({ r, pct }) => {
+    const card = document.createElement('div');
+    card.className = 'recipe-card';
+    card.onclick = () => openRecipeModal(r);
+    card.innerHTML = `<div class="recipe-thumb">${r.emoji}</div>
+      <div class="info"><div class="title">${r.name}</div>
+      <div class="meta">${pct}% d'ingrédients en stock</div>
+      <div class="match-bar"><div class="match-fill" style="width:${pct}%"></div></div></div>`;
+    grid.appendChild(card);
+  });
+}
 
-    function getDaysUntilExpiry(expiry) {
-      if (!expiry) return Infinity;
-      const diff = new Date(expiry) - new Date();
-      return Math.ceil(diff / (1000 * 60 * 60 * 24));
-    }
-
-    function renderInventory() {
-      const list = document.getElementById('inventory-list');
-      const empty = document.getElementById('inventory-empty');
-      list.innerHTML = '';
-      if (inventory.length === 0) {
-        empty.style.display = 'block';
-        return;
-      }
-      empty.style.display = 'none';
-      // Trier par date de péremption (les plus urgents d'abord)
-      inventory.sort((a, b) => getDaysUntilExpiry(a.expiry) - getDaysUntilExpiry(b.expiry));
-
-      inventory.forEach(item => {
-        const li = document.createElement('li');
-        li.className = 'inventory-item';
-        const days = getDaysUntilExpiry(item.expiry);
-        let badge = '';
-        if (item.expiry) {
-          if (days <= 2) badge = `<span class="expiry-badge expiry-urgent">⚠️ ${days <= 0 ? 'Expiré' : 'J-'+days}</span>`;
-          else badge = `<span class="expiry-badge expiry-ok">✅ ${days}j</span>`;
-        }
-        li.innerHTML = `
-          <div class="item-info">
-            <span class="item-name">${item.name}</span>
-            ${badge}
-            <div class="item-meta">${item.expiry ? 'Périme le ' + item.expiry : 'Pas de date'}</div>
-          </div>
-          <div style="display:flex; align-items:center; gap:4px;">
-            <button class="btn-icon" onclick="updateQty(${item.id}, -1)">➖</button>
-            <span style="font-weight:700; min-width:20px; text-align:center;">${item.qty}</span>
-            <button class="btn-icon" onclick="updateQty(${item.id}, 1)">➕</button>
-            <button class="btn-icon" onclick="removeItem(${item.id})">🗑️</button>
-          </div>
-        `;
-        list.appendChild(li);
-      });
-    }
-
-    // ============================================================
-    // 3. RECETTES (TheMealDB API)
-    // ============================================================
-    const MEALDB_BASE = 'https://www.themealdb.com/api/json/v1/1';
-
-    async function searchRecipes() {
-      const query = document.getElementById('search-query').value.trim();
-      const container = document.getElementById('search-results');
-      if (!query) { container.innerHTML = '<p style="color:var(--text-light);">Entrez un mot-clé.</p>'; return; }
-
-      container.innerHTML = '<p style="color:var(--text-light);">Chargement...</p>';
-      try {
-        const res = await fetch(`${MEALDB_BASE}/search.php?s=${encodeURIComponent(query)}`);
-        const data = await res.json();
-        if (!data.meals) { container.innerHTML = '<p style="color:var(--text-light);">Aucune recette trouvée.</p>'; return; }
-        container.innerHTML = '';
-        data.meals.forEach(meal => {
-          container.appendChild(createRecipeCard(meal, 'search'));
-        });
-      } catch (e) {
-        container.innerHTML = '<p style="color:var(--danger);">Erreur de connexion à l\'API.</p>';
-      }
-    }
-
-    // Suggérer des recettes à partir de l'inventaire
-    async function suggestFromInventory() {
-      const container = document.getElementById('recipe-suggestions');
-      const empty = document.getElementById('suggestions-empty');
-      if (inventory.length === 0) {
-        container.innerHTML = '';
-        empty.style.display = 'block';
-        return;
-      }
-      empty.style.display = 'none';
-      container.innerHTML = '<p style="color:var(--text-light);">Recherche de recettes...</p>';
-
-      // Prendre les 3 premiers ingrédients (les plus urgents) pour la recherche
-      const topIngredients = inventory.slice(0, 3).map(i => i.name.split(' ')[0]); // Simplification
-      const recipesMap = new Map();
-
-      try {
-        for (const ing of topIngredients) {
-          const res = await fetch(`${MEALDB_BASE}/filter.php?i=${encodeURIComponent(ing)}`);
-          const data = await res.json();
-          if (data.meals) {
-            data.meals.forEach(meal => {
-              if (!recipesMap.has(meal.idMeal)) {
-                recipesMap.set(meal.idMeal, meal);
-              }
-            });
-          }
-        }
-
-        if (recipesMap.size === 0) {
-          container.innerHTML = '<p style="color:var(--text-light);">Aucune recette trouvée avec ces ingrédients. Essayez d\'en ajouter d\'autres.</p>';
-          return;
-        }
-
-        container.innerHTML = '';
-        // Afficher jusqu'à 6 suggestions
-        [...recipesMap.values()].slice(0, 6).forEach(meal => {
-          container.appendChild(createRecipeCard(meal, 'suggestion'));
-        });
-
-      } catch (e) {
-        container.innerHTML = '<p style="color:var(--danger);">Erreur lors de la recherche.</p>';
-      }
-    }
-
-    function createRecipeCard(meal, source) {
+// ============================================================
+// RECHERCHE EN LIGNE (TheMealDB)
+// ============================================================
+async function searchMealDB() {
+  const q = document.getElementById('search-query').value.trim();
+  const out = document.getElementById('search-results');
+  if (!q) return;
+  out.innerHTML = '<p style="color:var(--text-light)">Chargement...</p>';
+  try {
+    const res = await fetch(`https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(q)}`);
+    const data = await res.json();
+    if (!data.meals) { out.innerHTML = '<p style="color:var(--text-light)">Aucune recette trouvée.</p>'; return; }
+    out.innerHTML = '';
+    data.meals.forEach(m => {
       const card = document.createElement('div');
       card.className = 'recipe-card';
-      card.onclick = () => openRecipeModal(meal.idMeal);
-
-      // Calculer le taux de correspondance avec l'inventaire
-      let matchPercent = 0;
-      if (source === 'suggestion') {
-        // Simulation basée sur le nombre d'ingrédients de l'inventaire
-        // Dans une vraie app, on comparerait les listes d'ingrédients.
-        matchPercent = Math.min(100, Math.round((inventory.length / 5) * 100));
-      }
-
-      card.innerHTML = `
-        <img src="${meal.strMealThumb}" alt="${meal.strMeal}" loading="lazy" />
-        <div class="info">
-          <div class="title">${meal.strMeal}</div>
-          ${source === 'suggestion' ? `
-            <div style="font-size:0.75rem; color:var(--text-light);">Correspondance</div>
-            <div class="match-bar"><div class="match-fill" style="width:${matchPercent}%"></div></div>
-          ` : ''}
-        </div>
-      `;
-      return card;
-    }
-
-    // ============================================================
-    // 4. MODAL DÉTAIL RECETTE
-    // ============================================================
-    async function openRecipeModal(id) {
-      const modal = document.getElementById('recipe-modal');
-      const content = document.getElementById('modal-content');
-      content.innerHTML = '<p>Chargement...</p>';
-      modal.classList.add('open');
-
-      try {
-        const res = await fetch(`${MEALDB_BASE}/lookup.php?i=${id}`);
-        const data = await res.json();
-        const meal = data.meals[0];
-        if (!meal) { content.innerHTML = '<p>Recette introuvable.</p>'; return; }
-
-        // Extraire les ingrédients
-        const ingredients = [];
-        for (let i = 1; i <= 20; i++) {
-          const ing = meal[`strIngredient${i}`];
-          const measure = meal[`strMeasure${i}`];
-          if (ing && ing.trim()) {
-            ingredients.push(`${measure ? measure + ' ' : ''}${ing}`);
-          }
-        }
-
-        // Instructions (découper par étapes)
-        const steps = meal.strInstructions
-          ? meal.strInstructions.split(/\r?\n/).filter(s => s.trim())
-          : ['Aucune instruction disponible.'];
-
-        content.innerHTML = `
-          <h2>${meal.strMeal}</h2>
-          <img src="${meal.strMealThumb}" style="width:100%; border-radius:12px; margin-bottom:12px;" />
-          <p style="font-size:0.85rem; color:var(--text-light);">${meal.strCategory || ''} • ${meal.strArea || ''}</p>
-          
-          <h4>🧾 Ingrédients</h4>
-          <ul>${ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
-          
-          <h4>👨‍🍳 Préparation</h4>
-          <ol>${steps.map(s => `<li>${s}</li>`).join('')}</ol>
-          
-          <button class="btn btn-primary" style="margin-top:16px; width:100%;" onclick="addMissingToShopping(${JSON.stringify(ingredients).replace(/"/g, '&quot;')})">
-            🛒 Ajouter les ingrédients à ma liste de courses
-          </button>
-        `;
-      } catch (e) {
-        content.innerHTML = '<p style="color:var(--danger);">Erreur de chargement.</p>';
-      }
-    }
-
-    function closeModal() {
-      document.getElementById('recipe-modal').classList.remove('open');
-    }
-
-    // Fermer la modal en cliquant à l'extérieur
-    document.getElementById('recipe-modal').addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) closeModal();
+      card.onclick = () => openMealDBModal(m.idMeal);
+      card.innerHTML = `<img src="${m.strMealThumb}" style="width:100%;height:90px;object-fit:cover"><div class="info"><div class="title">${m.strMeal}</div><div class="meta">${m.strCategory || ''}</div></div>`;
+      out.appendChild(card);
     });
+  } catch (e) { out.innerHTML = '<p style="color:var(--danger)">Erreur réseau.</p>'; }
+}
 
-    // Ajouter les ingrédients manquants à la liste de courses
-    function addMissingToShopping(ingredients) {
-      const inventoryNames = inventory.map(i => i.name.toLowerCase());
-      let added = 0;
-      ingredients.forEach(ing => {
-        // Nettoyer le nom (retirer les quantités)
-        const cleanName = ing.replace(/^[\d\s\/.,]+/, '').replace(/^(g|kg|ml|l|cl|cuillère|cuillères|pincée|sachet|boîte|tranche|tranches)\s*/i, '').trim();
-        if (cleanName && !inventoryNames.some(n => cleanName.toLowerCase().includes(n) || n.includes(cleanName.toLowerCase()))) {
-          addShoppingItemDirect(cleanName);
-          added++;
+async function openMealDBModal(id) {
+  const content = document.getElementById('modal-content');
+  content.innerHTML = '<p>Chargement...</p>';
+  document.getElementById('recipe-modal').classList.add('open');
+  const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+  const data = await res.json();
+  const m = data.meals[0];
+  const ingredients = [];
+  for (let i = 1; i <= 20; i++) {
+    const ing = m[`strIngredient${i}`]; const meas = m[`strMeasure${i}`];
+    if (ing && ing.trim()) ingredients.push(`${meas || ''} ${ing}`.trim());
+  }
+  const steps = (m.strInstructions || '').split(/\r?\n/).filter(s => s.trim());
+  content.innerHTML = `<h2>${m.strMeal}</h2>
+    <img src="${m.strMealThumb}" style="width:100%;border-radius:12px;margin-bottom:12px">
+    <p style="color:var(--text-light);font-size:.85rem">${m.strCategory||''} • ${m.strArea||''}</p>
+    <h4>🧾 Ingrédients</h4><ul>${ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
+    <h4>👨‍🍳 Préparation</h4><ol>${steps.map(s => `<li>${s}</li>`).join('')}</ol>`;
+}
+
+// ============================================================
+// PLANNING
+// ============================================================
+function savePlanning() { localStorage.setItem('myPlanning', JSON.stringify(planning)); }
+
+function renderPlanning() {
+  const grid = document.getElementById('planning-grid');
+  grid.innerHTML = '';
+  // En-tête
+  grid.appendChild(Object.assign(document.createElement('div'), { className: 'planning-header', textContent: '' }));
+  MEALS.forEach(m => grid.appendChild(Object.assign(document.createElement('div'), { className: 'planning-header', textContent: m })));
+  // Jours
+  DAYS.forEach(day => {
+    grid.appendChild(Object.assign(document.createElement('div'), { className: 'planning-day', textContent: day }));
+    MEALS.forEach(meal => {
+      const key = `${day}|${meal}`;
+      const slot = document.createElement('div');
+      slot.className = 'planning-slot';
+      const recipeId = planning[key];
+      if (recipeId) {
+        const r = RECIPES.find(x => x.id === recipeId);
+        if (r) {
+          slot.classList.add('filled');
+          slot.innerHTML = `<div class="slot-emoji">${r.emoji}</div><div class="slot-name">${r.name}</div>`;
         }
-      });
-      closeModal();
-      if (added > 0) {
-        alert(`${added} ingrédient(s) ajouté(s) à votre liste de courses.`);
-        // Basculer vers l'onglet courses
-        document.querySelector('[data-tab="tab-shopping"]').click();
       } else {
-        alert('Tous les ingrédients semblent déjà être dans votre inventaire !');
+        slot.innerHTML = '<div class="slot-empty">＋</div>';
       }
-    }
+      slot.onclick = () => openPicker(key);
+      grid.appendChild(slot);
+    });
+  });
+}
 
-    // ============================================================
-    // 5. LISTE DE COURSES (localStorage)
-    // ============================================================
-    let shoppingList = JSON.parse(localStorage.getItem('myShoppingList')) || [];
+function openPicker(key) {
+  currentSlotKey = key;
+  document.getElementById('picker-title').textContent = 'Choisir pour ' + key.replace('|', ' – ');
+  document.getElementById('picker-search').value = '';
+  renderPickerList();
+  document.getElementById('picker-modal').classList.add('open');
+}
 
-    function saveShoppingList() {
-      localStorage.setItem('myShoppingList', JSON.stringify(shoppingList));
-      renderShoppingList();
-    }
+function renderPickerList() {
+  const q = document.getElementById('picker-search').value.toLowerCase().trim();
+  const list = document.getElementById('picker-list');
+  list.innerHTML = '';
+  let filtered = RECIPES;
+  if (q) filtered = filtered.filter(r => r.name.toLowerCase().includes(q) || r.tags.some(t => t.includes(q)));
+  filtered.slice(0, 100).forEach(r => {
+    const item = document.createElement('div');
+    item.className = 'recipe-picker-item';
+    item.innerHTML = `<span class="emoji">${r.emoji}</span><span class="name">${r.name}</span><span style="font-size:.75rem;color:var(--text-light)">${r.time} min</span>`;
+    item.onclick = () => {
+      planning[currentSlotKey] = r.id;
+      savePlanning();
+      closeModal('picker-modal');
+      renderPlanning();
+    };
+    list.appendChild(item);
+  });
+}
 
-    function addShoppingItem() {
-      const input = document.getElementById('shop-item');
-      const name = input.value.trim();
-      if (!name) return;
-      shoppingList.push({ id: Date.now(), name, checked: false });
-      input.value = '';
-      saveShoppingList();
-    }
+function removeFromSlot() {
+  if (currentSlotKey) { delete planning[currentSlotKey]; savePlanning(); closeModal('picker-modal'); renderPlanning(); }
+}
 
-    function addShoppingItemDirect(name) {
-      // Éviter les doublons
-      if (shoppingList.some(i => i.name.toLowerCase() === name.toLowerCase())) return;
-      shoppingList.push({ id: Date.now() + Math.random(), name, checked: false });
-      saveShoppingList();
-    }
+function clearPlanning() {
+  if (confirm('Vider tout le planning ?')) { planning = {}; savePlanning(); renderPlanning(); }
+}
 
-    function toggleShoppingItem(id) {
-      const item = shoppingList.find(i => i.id === id);
-      if (item) {
-        item.checked = !item.checked;
-        saveShoppingList();
+// ============================================================
+// GÉNÉRATION LISTE DE COURSES DEPUIS PLANNING
+// ============================================================
+function generateShoppingFromPlanning() {
+  const keys = Object.keys(planning);
+  if (keys.length === 0) { alert('Le planning est vide.'); return; }
+  // Agréger les ingrédients
+  const agg = {};
+  keys.forEach(k => {
+    const r = RECIPES.find(x => x.id === planning[k]);
+    if (!r) return;
+    r.ingredients.forEach(ing => {
+      const key = ing.name.toLowerCase().trim();
+      if (!agg[key]) agg[key] = { name: ing.name, qty: 0, unit: ing.unit };
+      agg[key].qty += ing.qty;
+    });
+  });
+  // Afficher modale
+  const invNames = inventory.map(i => i.name.toLowerCase());
+  const container = document.getElementById('gen-content');
+  container.innerHTML = '';
+  const list = Object.values(agg).sort((a, b) => a.name.localeCompare(b.name));
+  list.forEach(ing => {
+    const inStock = invNames.some(n => n.includes(ing.name.toLowerCase()) || ing.name.toLowerCase().includes(n));
+    const div = document.createElement('div');
+    div.className = 'shopping-gen-item';
+    div.innerHTML = `<input type="checkbox" ${inStock ? '' : 'checked'} id="gen-${btoa(ing.name).replace(/=/g,'')}">
+      <label for="gen-${btoa(ing.name).replace(/=/g,'')}">${inStock ? '✅ ' : ''}${ing.name}</label>
+      <span class="qty">${ing.qty}${ing.unit ? ' ' + ing.unit : ''}</span>`;
+    div.dataset.name = ing.name;
+    div.dataset.qty = ing.qty + (ing.unit ? ' ' + ing.unit : '');
+    container.appendChild(div);
+  });
+  // Bouton valider
+  const btn = document.createElement('button');
+  btn.className = 'btn btn-primary';
+  btn.style.marginTop = '16px';
+  btn.style.width = '100%';
+  btn.textContent = '✅ Ajouter les articles cochés à ma liste';
+  btn.onclick = () => {
+    let added = 0;
+    container.querySelectorAll('.shopping-gen-item').forEach(row => {
+      const cb = row.querySelector('input[type="checkbox"]');
+      if (cb.checked) {
+        shoppingList.push({ id: Date.now() + Math.random(), name: row.dataset.name, qty: row.dataset.qty, checked: false });
+        added++;
       }
-    }
+    });
+    saveShoppingList();
+    closeModal('gen-modal');
+    alert(`✅ ${added} article(s) ajouté(s) à la liste.`);
+    document.querySelector('[data-tab="tab-shopping"]').click();
+  };
+  container.appendChild(btn);
+  document.getElementById('gen-modal').classList.add('open');
+}
 
-    function removeShoppingItem(id) {
-      shoppingList = shoppingList.filter(i => i.id !== id);
-      saveShoppingList();
-    }
+// ============================================================
+// LISTE DE COURSES
+// ============================================================
+function saveShoppingList() { localStorage.setItem('myShoppingList', JSON.stringify(shoppingList)); renderShoppingList(); }
+function addShoppingItem() {
+  const input = document.getElementById('shop-item');
+  const name = input.value.trim();
+  if (!name) return;
+  shoppingList.push({ id: Date.now() + Math.random(), name, checked: false });
+  input.value = '';
+  saveShoppingList();
+}
+function toggleShoppingItem(id) {
+  const item = shoppingList.find(i => i.id === id);
+  if (item) { item.checked = !item.checked; saveShoppingList(); }
+}
+function removeShoppingItem(id) { shoppingList = shoppingList.filter(i => i.id !== id); saveShoppingList(); }
+function clearShoppingList() { if (confirm('Vider la liste ?')) { shoppingList = []; saveShoppingList(); } }
+function renderShoppingList() {
+  const list = document.getElementById('shopping-list');
+  const empty = document.getElementById('shopping-empty');
+  list.innerHTML = '';
+  if (shoppingList.length === 0) { empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  shoppingList.forEach(item => {
+    const li = document.createElement('li');
+    li.className = item.checked ? 'checked' : '';
+    li.innerHTML = `<input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleShoppingItem(${item.id})">
+      <span class="item-name" style="flex:1">${item.name}${item.qty ? ' <em style="color:var(--text-light); font-size:.85rem">(' + item.qty + ')</em>' : ''}</span>
+      <button class="btn-icon" onclick="removeShoppingItem(${item.id})">✕</button>`;
+    list.appendChild(li);
+  });
+}
 
-    function clearShoppingList() {
-      if (confirm('Vider toute la liste de courses ?')) {
-        shoppingList = [];
-        saveShoppingList();
-      }
-    }
-
-    function renderShoppingList() {
-      const list = document.getElementById('shopping-list');
-      const empty = document.getElementById('shopping-empty');
-      list.innerHTML = '';
-      if (shoppingList.length === 0) {
-        empty.style.display = 'block';
-        return;
-      }
-      empty.style.display = 'none';
-      shoppingList.forEach(item => {
-        const li = document.createElement('li');
-        li.className = item.checked ? 'checked' : '';
-        li.innerHTML = `
-          <input type="checkbox" ${item.checked ? 'checked' : ''} onchange="toggleShoppingItem(${item.id})" />
-          <span class="item-name" style="flex:1;">${item.name}</span>
-          <button class="btn-icon" onclick="removeShoppingItem(${item.id})">✕</button>
-        `;
-        list.appendChild(li);
+// ============================================================
+// SCANNER IA (TensorFlow.js)
+// ============================================================
+let model = null;
+document.getElementById('image-upload').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const out = document.getElementById('scan-result');
+  out.innerHTML = '<p style="color:var(--text-light)">⏳ Analyse...</p>';
+  const img = new Image();
+  img.src = URL.createObjectURL(file);
+  img.onload = async () => {
+    try {
+      if (!model) model = await mobilenet.load();
+      const preds = await model.classify(img, 5);
+      out.innerHTML = '<p style="font-weight:600; margin-bottom:8px">Objets détectés (cliquez pour ajouter) :</p>';
+      preds.forEach(p => {
+        const name = p.className.split(',')[0].trim();
+        const conf = Math.round(p.probability * 100);
+        if (conf < 15) return;
+        const tag = document.createElement('span');
+        tag.className = 'scan-tag';
+        tag.textContent = `${name} (${conf}%)`;
+        tag.onclick = () => { addItem(name, 1); tag.style.opacity = '.4'; tag.style.pointerEvents = 'none'; };
+        out.appendChild(tag);
       });
-    }
+    } catch (err) { out.innerHTML = '<p style="color:var(--danger)">Erreur d\'analyse.</p>'; }
+  };
+});
 
-    // ============================================================
-    // 6. SCANNER IA (TensorFlow.js MobileNet)
-    // ============================================================
-    let model = null;
+// ============================================================
+// INITIALISATION
+// ============================================================
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('recipe-count').textContent = RECIPES.length + ' recettes';
+  renderInventory();
+  renderShoppingList();
+  renderCategoryFilters();
+  renderLibrary();
+  if (inventory.length > 0) renderSuggestions();
+});
 
-    async function loadModel() {
-      if (!model) {
-        model = await mobilenet.load();
-      }
-      return model;
-    }
-
-    document.getElementById('image-upload').addEventListener('change', async (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      const resultDiv = document.getElementById('scan-result');
-      resultDiv.innerHTML = '<p style="color:var(--text-light);">⏳ Analyse de l\'image en cours...</p>';
-
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      img.onload = async () => {
-        try {
-          const m = await loadModel();
-          const predictions = await m.classify(img, 5); // Top 5
-          if (predictions.length === 0) {
-            resultDiv.innerHTML = '<p>Aucun objet reconnu. Essayez une autre photo.</p>';
-            return;
-          }
-
-          resultDiv.innerHTML = '<p style="font-weight:600; margin-bottom:8px;">Objets détectés (cliquez pour ajouter) :</p>';
-          predictions.forEach(p => {
-            // Nettoyer le nom de la classe (ex: "Granny Smith" -> "Granny Smith")
-            const className = p.className.split(',')[0].trim();
-            const confidence = Math.round(p.probability * 100);
-            if (confidence < 20) return; // Ignorer les prédictions très faibles
-
-            const tag = document.createElement('span');
-            tag.className = 'scan-tag';
-            tag.textContent = `${className} (${confidence}%)`;
-            tag.onclick = () => {
-              addItem(className, 1);
-              tag.style.opacity = '0.4';
-              tag.style.pointerEvents = 'none';
-            };
-            resultDiv.appendChild(tag);
-          });
-
-          // Ajouter un bouton pour tout ajouter
-          const addAllBtn = document.createElement('button');
-          addAllBtn.className = 'btn btn-accent btn-sm';
-          addAllBtn.style.marginTop = '12px';
-          addAllBtn.textContent = '➕ Tout ajouter à l\'inventaire';
-          addAllBtn.onclick = () => {
-            predictions.forEach(p => {
-              if (p.probability > 0.2) {
-                addItem(p.className.split(',')[0].trim(), 1);
-              }
-            });
-            resultDiv.innerHTML += '<p style="color:var(--primary); font-weight:600;">✅ Ingrédients ajoutés !</p>';
-          };
-          resultDiv.appendChild(addAllBtn);
-
-        } catch (err) {
-          console.error(err);
-          resultDiv.innerHTML = '<p style="color:var(--danger);">Erreur lors de l\'analyse. Réessayez.</p>';
-        }
-      };
-    });
-
-    // ============================================================
-    // 7. INITIALISATION
-    // ============================================================
-    document.addEventListener('DOMContentLoaded', () => {
-      renderInventory();
-      renderShoppingList();
-      // Suggérer automatiquement des recettes au chargement si l'inventaire n'est pas vide
-      if (inventory.length > 0) {
-        suggestFromInventory();
-      }
-    });
-
-    // Rendre les fonctions accessibles globalement (pour les onclick inline)
-    window.addItem = addItem;
-    window.removeItem = removeItem;
-    window.updateQty = updateQty;
-    window.searchRecipes = searchRecipes;
-    window.suggestFromInventory = suggestFromInventory;
-    window.openRecipeModal = openRecipeModal;
-    window.closeModal = closeModal;
-    window.addMissingToShopping = addMissingToShopping;
-    window.addShoppingItem = addShoppingItem;
-    window.toggleShoppingItem = toggleShoppingItem;
-    window.removeShoppingItem = removeShoppingItem;
-    window.clearShoppingList = clearShoppingList;
-  </script>
+// Exposition globale
+window.addItem = addItem;
+window.removeItem = removeItem;
+window.updateQty = updateQty;
+window.renderLibrary = renderLibrary;
+window.renderSuggestions = renderSuggestions;
+window.openRecipeModal = openRecipeModal;
+window.closeModal = closeModal;
+window.addMissingToShopping = addMissingToShopping;
+window.searchMealDB = searchMealDB;
+window.renderPickerList = renderPickerList;
+window.removeFromSlot = removeFromSlot;
+window.clearPlanning = clearPlanning;
+window.generateShoppingFromPlanning = generateShoppingFromPlanning;
+window.addShoppingItem = addShoppingItem;
+window.toggleShoppingItem = toggleShoppingItem;
+window.removeShoppingItem = removeShoppingItem;
+window.clearShoppingList = clearShoppingList;
+window.addItemDirect = (n, q) => addItem(n, q);
+</script>
 </body>
-</html>
+</html>e
